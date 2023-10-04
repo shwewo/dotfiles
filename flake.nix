@@ -66,7 +66,7 @@
         ./modules/moldova/age.nix
         ./modules/moldova/socks.nix
         agenix.nixosModules.default
-      ];x 
+      ];
     };
   };
 }

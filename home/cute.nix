@@ -20,7 +20,7 @@ let
       '');
 in {
   nixpkgs.config.allowUnfree = true;
-  home.username = "meow";
+  home.username = "cute";
   home.stateVersion = "22.11";
 
   home.packages = with pkgs; [
@@ -117,6 +117,7 @@ in {
     enable = true;
     extensions = with pkgs.vscode-extensions; [
       matklad.rust-analyzer
+      bbenoist.nix
     ];
   };
 
