@@ -46,4 +46,7 @@
       credentialsFile = "/run/agenix/cloudflared";
     };
   };
+  
+  systemd.services.cloudflared-tunnel-unified.serviceConfig.Restart = lib.mkForce "on-failure";
+  systemd.services.cloudflared-tunnel-unified.serviceConfig.RestartSec = lib.mkForce 60;
 }
