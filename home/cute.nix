@@ -132,7 +132,7 @@ in {
     enable = true;
     
     shellAliases = {
-      r = "sudo nixos-rebuild switch --flake ~/Dropbox/Dev/dotfiles/";
+      r = "sudo nixos-rebuild switch --flake ~/dev/dotfiles/";
     };
     shellInit = ''
         set fish_cursor_normal block
