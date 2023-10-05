@@ -50,6 +50,7 @@
     size = 8*1024;
   } ];
 
+  boot.tmp.cleanOnBoot = true;
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;
   hardware.opengl.driSupport32Bit = true;

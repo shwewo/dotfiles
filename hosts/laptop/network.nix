@@ -38,15 +38,4 @@
   };
   
   systemd.services.NetworkManager-wait-online.enable = false;
-  services.tailscale.enable = true;
-  services.cloudflared.enable = true;
-  services.cloudflared.tunnels = {
-    "unified" = {
-      default = "http_status:404";
-      credentialsFile = "/run/agenix/cloudflared";
-    };
-  };
-  
-  systemd.services.cloudflared-tunnel-unified.serviceConfig.Restart = lib.mkForce "on-failure";
-  systemd.services.cloudflared-tunnel-unified.serviceConfig.RestartSec = lib.mkForce 60;
 }

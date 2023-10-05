@@ -19,8 +19,8 @@
       modules = [
         ./hosts/laptop/system.nix
         ./hosts/laptop/hardware.nix
+        ./hosts/laptop/network.nix
         ./hosts/generic.nix
-        ./modules/laptop/network.nix
         ./modules/laptop/age.nix
         ./modules/laptop/socks.nix
         ./modules/laptop/services.nix
@@ -44,9 +44,9 @@
       modules = [
         ./hosts/oracle-cloud/system.nix
         ./hosts/oracle-cloud/hardware.nix
+        ./hosts/oracle-cloud/network.nix
         ./hosts/generic.nix
         ./modules/oracle-cloud/age.nix
-        ./modules/oracle-cloud/network.nix
         ./modules/oracle-cloud/socks.nix
         agenix.nixosModules.default
       ];
@@ -61,8 +61,8 @@
       modules = [
         ./hosts/moldova/system.nix
         ./hosts/moldova/hardware.nix
+        ./hosts/moldova/network.nix
         ./hosts/generic.nix
-        ./modules/moldova/network.nix
         ./modules/moldova/age.nix
         ./modules/moldova/socks.nix
         agenix.nixosModules.default
