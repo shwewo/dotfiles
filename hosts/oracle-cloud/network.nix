@@ -20,6 +20,7 @@
       ClientAliveInterval 500
       ClientAliveCountMax 50 
     '';
+    settings.X11Forwarding = true;
     ports = [ 34812 ];
   };
   
