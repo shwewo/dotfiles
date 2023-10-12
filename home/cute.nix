@@ -35,7 +35,6 @@ in {
     xclip
     scrot
     xautomation
-    caffeine-ng
     localsend
     gitleaks
     pre-commit
@@ -52,7 +51,6 @@ in {
     wget
     nodejs
     nmap
-    cloudflared
     htop
     killall
     lsof
@@ -98,7 +96,6 @@ in {
     neofetch
     krita
     winetricks
-    tor-browser-bundle-bin
     papirus-icon-theme
     shadowsocks-libev
     shadowsocks-v2ray-plugin
@@ -108,7 +105,6 @@ in {
     signal-desktop
     rustup
     tdesktop
-    qFlipper
     (callPackage ../derivations/audiorelay.nix {})
     (callPackage ../derivations/spotify.nix {})
   ];

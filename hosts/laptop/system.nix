@@ -68,6 +68,7 @@
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   environment.systemPackages = with pkgs; [
+    tor-browser-bundle-bin
     idevicerestore
     libimobiledevice
     ifuse
