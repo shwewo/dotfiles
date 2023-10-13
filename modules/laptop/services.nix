@@ -85,15 +85,10 @@
       RestartSec = "5";
       User="cute";
       Type="simple";
-      ExecStart="/etc/yubinotify";
       Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1003/bus";
     };
     path = with pkgs; [ gnupg ];
-  };
-
-  environment.etc."yubinotify" = {
-    mode = "0555";
-    text = ''
+    script = ''
       #!/bin/sh
 
       ${pkgs.yubikey-touch-detector}/bin/yubikey-touch-detector -stdout | while read line; do
