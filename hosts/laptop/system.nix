@@ -4,6 +4,8 @@
   system.stateVersion = "22.11";
   time.timeZone = "Europe/Moscow";
 
+  security.sudo.wheelNeedsPassword = false;
+
   virtualisation = {
     podman = {
       enable = true;

@@ -11,7 +11,7 @@
     wireguard_sweden = { file = ../../secrets/laptop/wireguard_sweden.age; owner = "root"; group = "root"; };
     cloudflared = { file = ../../secrets/laptop/cloudflared.age; owner = "cloudflared"; group = "cloudflared"; };
     rclone = { file = ../../secrets/laptop/rclone.age; owner = "cute"; group = "users"; }; 
-    cloudbackup = { file = ../../secrets/laptop/cloudbackup.age; owner = "cute"; group = "users"; }; 
+    backup = { file = ../../secrets/laptop/backup.age; owner = "cute"; group = "users"; }; 
     precise = { file = ../../secrets/laptop/precise.age; owner = "cute"; group = "users"; };
     blogrs = { file = ../../secrets/laptop/.blogrs.age; owner = "cute"; group = "users"; };
     blogrs_webhook = { file = ../../secrets/laptop/.blogrs_webhook.age; owner = "cute"; group = "users"; };

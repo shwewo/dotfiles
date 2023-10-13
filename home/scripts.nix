@@ -1,15 +1,6 @@
 { inputs, home, config, lib, pkgs, specialArgs, ... }: 
 
 {
-  xdg.dataFile."backup" = {
-    enable = true;
-    executable = true;
-    text = ''
-      #!/bin/sh
-      
-    '';
-  }; 
-
   xdg.dataFile."xfceunhide" = {
     enable = true;
     executable = true;
@@ -35,33 +26,50 @@
     '';
   };
 
+  # xdg.dataFile."backup_libvirt" = {
+  #   enable = true;
+  #   executable = true;
+  #   text = ''
+  #     #!/bin/sh
+  #     if [ -z "$1" ]; then
+  #       echo "Please provide a directory to a backup archive";
+  #       notify-send "Backup" "Libvirt backup failure" --icon=drive-harddisk;
+  #       exit 1
+  #     fi;
+
+  #     DIRECTORY="$1";
+  #     LIBVIRT_DIRECTORY="/var/lib/libvirt";                                                                                                                                                   
+  #     sudo 7z a -mhe=on "$DIRECTORY/libvirt.7z" /var/lib/libvirt/ -p$(cat /run/agenix/backup);
+  #     sync;
+  #     echo "Backup complete";
+  #     notify-send "Backup" "Libvirt backup complete" --icon=drive-harddisk;
+  #   '';
+  # }; 
+
   xdg.dataFile."cloudsync" = {
     enable = true;
     executable = true;
     text = ''
       #!/bin/sh
-      tmux new-session -s cloudsync sh -c "
-        enc_pass=\$(cat /run/agenix/cloudbackup);
-        notify-send \"Syncing\" \"Compressing sync folder\" --icon=globe
-        7z a -mhe=on /tmp/Sync.7z ~/Dropbox/Sync -p\"\$enc_pass\";
+      notify-send "Syncing" "Compressing sync folder" --icon=globe
+      7z a -mhe=on /tmp/Sync.7z ~/Dropbox/Sync -p$(cat /run/agenix/backup)
 
-        rclone_pass=\$(cat /run/agenix/rclone);
-        notify-send \"Syncing\" \"Syncing koofr\" --icon=globe;
-        echo \"Syncing koofr...\";
-        RCLONE_CONFIG_PASS=\"\$rclone_pass\" rclone -vvvv copy /tmp/Sync.7z koofr:;
+      rclone_pass=$(cat /run/agenix/rclone);
+      notify-send "Syncing" "Syncing koofr" --icon=globe;
+      echo "Syncing koofr...";
+      RCLONE_CONFIG_PASS="$rclone_pass" rclone -vvvv copy /tmp/Sync.7z koofr:
 
-        notify-send \"Syncing\" \"Syncing pcloud\" --icon=globe;
-        echo \"Syncing pcloud...\";
-        RCLONE_CONFIG_PASS=\"\$rclone_pass\" rclone -vvvv copy /tmp/Sync.7z pcloud:;
+      notify-send "Syncing" "Syncing pcloud" --icon=globe
+      echo "Syncing pcloud..."
+      RCLONE_CONFIG_PASS="$rclone_pass" rclone -vvvv copy /tmp/Sync.7z pcloud:
 
-        notify-send \"Syncing\" \"Syncing mega\" --icon=globe;
-        echo \"Syncing mega...\";
-        RCLONE_CONFIG_PASS=\"\$rclone_pass\" rclone -vvvv copy /tmp/Sync.7z mega:;
+      notify-send "Syncing" "Syncing mega" --icon=globe
+      echo "Syncing mega..."
+      RCLONE_CONFIG_PASS="$rclone_pass" rclone -vvvv copy /tmp/Sync.7z mega:
 
-        echo \"Sync complete\";
-        notify-send \"Syncing\" \"Cloud sync complete\" --icon=globe;
-        sleep infinity;
-      "
+      echo "Sync complete"
+      notify-send "Syncing" "Cloud sync complete" --icon=globe
+      sleep infinity
     '';
   };
 
@@ -70,22 +78,19 @@
     executable = true;
     text = ''
       #!/bin/sh
-      tmux new-session -s fitsync sh -c "
-        if [ ! -f ~/Dropbox/Sync/recovery.kdbx ]; then
-          echo \"Warning, recovery keys database not found!\";
-          exit
-        fi;
+      if [ ! -f "/home/cute/Dropbox/Sync/recovery.kdbx" ]; then
+        echo "Warning, 'recovery keys' database not found!"
+        exit
+      fi
 
-        fusermount -uz ~/.encryptedfit;
-        gocryptfs -passfile=/run/agenix/cloudbackup /run/media/cute/samsungfit/Encrypted ~/.encryptedfit && \
-        rsync -r -t -v --progress -s ~/Dropbox --delete ~/.encryptedfit/ --exclude \"Sync/\" --exclude \".dropbox.cache\" && \
-        rsync -r -t -v --progress -s ~/Dropbox/Sync --delete /run/media/cute/samsungfit && \
-        sync && \
-        fusermount -uz ~/.encryptedfit && \
-        echo \"Sync complete\";
-        notify-send \"Syncing\" \"USB sync complete\" --icon=usb;
-        sleep infinity;
-      "
+      fusermount -uz ~/.encryptedfit
+      gocryptfs -passfile=/run/agenix/backup /run/media/cute/samsungfit/Encrypted ~/.encryptedfit && \
+      rsync -r -t -v --progress -s ~/Dropbox --delete ~/.encryptedfit/ --exclude "Sync/" --exclude ".dropbox.cache" && \
+      rsync -r -t -v --progress -s ~/Dropbox/Sync --delete /run/media/cute/samsungfit && \
+      sync && \
+      fusermount -uz ~/.encryptedfit && \
+      echo "Sync complete"
+      notify-send "Syncing" "USB sync complete" --icon=usb
     '';
   };
 
