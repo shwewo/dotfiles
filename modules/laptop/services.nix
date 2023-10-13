@@ -105,6 +105,10 @@
     '';
   };
 
+  systemd.tmpfiles.rules = [
+    "d /var/www/torrents 0776 qbit users"
+  ];
+
   users.users.qbit = {
     group = "users";
     isSystemUser = true;

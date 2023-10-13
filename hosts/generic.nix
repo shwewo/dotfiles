@@ -7,7 +7,6 @@
     extraGroups = [ "networkmanager" "wheel" "audio" "libvirtd" "wireshark" "dialout" ];
     openssh.authorizedKeys.keys = [ 
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ9blPuLoJkCfTl88JKpqnSUmybCm7ci5EgWAUvfEmwb cute@laptop" 
-      "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNNj+6tHUp8IUuARTW8dBvBstDnQ8A1KxdzBnv0KWNuM8+w/5W7Xf+I4bTljTmpKmI2xsWVKqVZncFeNL63pPDQ=" # z8
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAZX2ByyBbuOfs6ndbzn/hbLaCAFiMXFsqbjplmx9GfVTx2T1aaDKFRNFtQU1rv6y3jyQCrEbjgvIjdCM4ptDf8=" # ipod
     ];
   };
@@ -38,6 +37,7 @@
     wget
     htop
     any-nix-shell
+    inputs.agenix.packages.x86_64-linux.default
   ];
 
   security.wrappers = {
@@ -47,5 +47,4 @@
   };
 
   security.rtkit.enable = true;
-  security.sudo.wheelNeedsPassword = false;
 }

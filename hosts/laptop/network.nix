@@ -36,6 +36,19 @@
       checkReversePath = "loose";
     };
   };
+
+  systemd.services.dnscrypt-watch = {
+    enable = true;
+    description = "Monitor DNS state"; 
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Restart = "on-failure";
+      RestartSec = "5";
+    };
+    path = with pkgs; [ dnsutils ];
+    script = ''
+    '';
+  };
   
   systemd.services.NetworkManager-wait-online.enable = false;
 }
