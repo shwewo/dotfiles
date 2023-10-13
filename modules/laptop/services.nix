@@ -91,7 +91,7 @@
     path = with pkgs; [ gnupg ];
   };
 
-  environment.etc."yubinotify"  = {
+  environment.etc."yubinotify" = {
     mode = "0555";
     text = ''
       #!/bin/sh
