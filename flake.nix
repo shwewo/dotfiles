@@ -1,7 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.05";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
@@ -33,10 +33,11 @@
         ./modules/laptop/nginx.nix
         home-manager.nixosModules.home-manager
         agenix.nixosModules.default
-        { 
+        {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.cute = import ./home/cute.nix;        
+          home-manager.users.cute = import ./home/cute.nix;
+          home-manager.extraSpecialArgs = { inherit inputs; }; 
         }
       ];
     };

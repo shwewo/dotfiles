@@ -13,10 +13,10 @@
     usePredictableInterfaceNames = true;
     firewall.checkReversePath = "loose";
     interfaces.eth0.ipv4.addresses = [ {
-      address = inputs.meow.network.moldovaIP;
+      address = inputs.meow.hosts.moldova.network.ip;
       prefixLength = 24;
     } ];
-    defaultGateway = inputs.meow.network.moldovaGateway;
+    defaultGateway = inputs.meow.hosts.moldova.network.gateway;
     nameservers = [ "1.1.1.1" ];
       firewall = {
       enable = true;

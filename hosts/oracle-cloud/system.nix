@@ -47,7 +47,7 @@
     settings = {
       service.DISABLE_REGISTRATION = true;
       server = {
-        DOMAIN = inputs.meow.network.giteaDomain;
+        DOMAIN = inputs.meow.hosts.oracle-cloud.gitea.domain;
         DISABLE_SSH = true;
       };
     };

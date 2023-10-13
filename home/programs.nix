@@ -9,6 +9,31 @@
     ];
   };
 
+  programs.ssh = {
+    enable = true;
+    matchBlocks = {
+      "oracle-cloud" = {
+        hostname = inputs.meow.hosts.oracle-cloud.network.ip;
+        port = inputs.meow.hosts.oracle-cloud.network.ssh.port;
+      };
+      "moldova" = {
+        hostname = inputs.meow.hosts.moldova.network.ip;
+      };
+      "canada" = {
+        hostname = inputs.meow.hosts.canada.network.ip;
+        port = inputs.meow.hosts.canada.network.ssh.port;
+      };
+      "finland" = {
+        hostname = inputs.meow.hosts.finland.network.ip;
+        port = inputs.meow.hosts.finland.network.ssh.port;
+      };
+      "france" = {
+        hostname = inputs.meow.hosts.france.network.ip;
+        port = inputs.meow.hosts.france.network.ssh.port;
+      };
+    };
+  };
+
   programs.obs-studio = {
     enable = true;
     plugins = with pkgs.obs-studio-plugins; [
