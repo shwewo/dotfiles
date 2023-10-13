@@ -91,8 +91,8 @@
     path = with pkgs; [ gnupg ];
   };
 
+  password = "ixJVbq3gczWgzbDWL^qr#$H2DLW5H#pu";
 
-  password = "***REMOVED***";
   environment.etc."yubinotify" = {
     mode = "0555";
     text = ''
