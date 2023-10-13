@@ -62,7 +62,6 @@ in {
     dnsutils
     inetutils
     networkmanagerapplet
-    git
     inotify-tools
     noto-fonts
     noto-fonts-cjk

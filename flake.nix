@@ -26,13 +26,13 @@
         ./hosts/laptop/hardware.nix
         ./hosts/laptop/network.nix
         ./hosts/laptop/xorg.nix
-        ./hosts/laptop/age.nix
         ./hosts/generic.nix
         ./modules/laptop/socks.nix
         ./modules/laptop/services.nix
         ./modules/laptop/nginx.nix
-        home-manager.nixosModules.home-manager
+        ./modules/laptop/age.nix
         agenix.nixosModules.default
+        home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
@@ -52,9 +52,9 @@
         ./hosts/oracle-cloud/system.nix
         ./hosts/oracle-cloud/hardware.nix
         ./hosts/oracle-cloud/network.nix
-        ./hosts/oracle-cloud/age.nix
         ./hosts/generic.nix
         ./modules/oracle-cloud/socks.nix
+        ./modules/oracle-cloud/age.nix
         agenix.nixosModules.default
       ];
     };
@@ -69,9 +69,9 @@
         ./hosts/moldova/system.nix
         ./hosts/moldova/hardware.nix
         ./hosts/moldova/network.nix
-        ./hosts/moldova/age.nix
         ./hosts/generic.nix
         ./modules/moldova/socks.nix
+        ./modules/moldova/age.nix
         agenix.nixosModules.default
       ];
     };

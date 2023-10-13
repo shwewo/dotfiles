@@ -1,6 +1,15 @@
 { inputs, home, config, lib, pkgs, specialArgs, ... }: 
 
 {
+  xdg.dataFile."backup" = {
+    enable = true;
+    executable = true;
+    text = ''
+      #!/bin/sh
+      
+    '';
+  }; 
+
   xdg.dataFile."xfceunhide" = {
     enable = true;
     executable = true;

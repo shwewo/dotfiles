@@ -141,11 +141,11 @@
     },
     "meow": {
       "locked": {
-        "lastModified": 1697166887,
-        "narHash": "sha256-qj+ZTzBH47u9y8oovJPQPw7a+dm3U2d1IBESduL9KWs=",
+        "lastModified": 1697167507,
+        "narHash": "sha256-OBBHSz7PIE1beMfbsDpl59puQ2LKRy8s69ahSu/z1Oo=",
         "ref": "refs/heads/main",
-        "rev": "3cae0b636f3261e8c10eb46694f31bc152959da6",
-        "revCount": 2,
+        "rev": "5e71c3f923132db5d7795f26aa49c82bda1d657f",
+        "revCount": 3,
         "type": "git",
         "url": "ssh://git@github.com/shwewo/meow"
       },

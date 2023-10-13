@@ -8,6 +8,12 @@
       bbenoist.nix
     ];
   };
+  
+  programs.git = {
+    enable = true;
+    userName  = "shwewo";
+    userEmail = "shwewo@gmail.com";
+  };
 
   programs.ssh = {
     enable = true;
