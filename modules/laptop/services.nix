@@ -86,7 +86,7 @@
       User="cute";
       Type="simple";
       ExecStart="/etc/yubinotify";
-      Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus";
+      Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1003/bus";
     };
     path = with pkgs; [ gnupg ];
   };
