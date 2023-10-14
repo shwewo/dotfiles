@@ -36,6 +36,7 @@
   programs.wireshark.enable = true;
   programs.darling.enable = true;
   programs.wireshark.package = pkgs.wireshark;
+  programs.gamemode.enable = true;
   programs.steam.enable = true;
   programs.noisetorch.enable = true;
 
