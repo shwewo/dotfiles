@@ -29,6 +29,7 @@ in {
   ];
 
   home.packages = with pkgs; [
+    spotdl
     wmctrl
     xdotool
     p7zip
