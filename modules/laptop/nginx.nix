@@ -26,7 +26,6 @@
       autoindex on;
       index  ___i;
       autoindex_format json;
-      disable_symlinks off;
     '';
     locations."/".extraConfig = ''
       root /var/www/filebrowser;

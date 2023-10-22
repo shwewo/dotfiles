@@ -37,18 +37,31 @@
     };
   };
 
-  systemd.services.dnscrypt-watch = {
-    enable = true;
-    description = "Monitor DNS state"; 
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Restart = "on-failure";
-      RestartSec = "5";
-    };
-    path = with pkgs; [ dnsutils ];
-    script = ''
-    '';
-  };
+  # systemd.services.dnscrypt-watch = {
+  #   enable = true;
+  #   description = "Monitor DNS state";
+  #   after = [ "network-online.target" ];
+  #   wantedBy = [ "multi-user.target" ];
+  #   serviceConfig = {
+  #     Restart = "on-failure";
+  #     RestartSec = "5";
+  #   };
+  #   path = with pkgs; [ dnsutils ];
+  #   script = ''
+  #     #!/bin/sh
+      
+  #     while true; do
+  #       output=$(nslookup cloudflare.com)
+
+  #       if ! [ $? -eq 0 ]; then
+  #         echo "DNS is not working..."
+  #         sudo -u cute DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1003/bus notify-send -t 2000 -i computer "Network" "DNS is down, restarting..."
+  #       fi
+
+  #       sleep 10
+  #     done
+  #   '';
+  # };
   
   systemd.services.NetworkManager-wait-online.enable = false;
 }
