@@ -47,6 +47,9 @@
   sound.enable = true;
 
   environment.systemPackages = with pkgs; [
+    android-tools
+    signify
+    android-udev-rules
     tor-browser-bundle-bin
     idevicerestore
     libimobiledevice
