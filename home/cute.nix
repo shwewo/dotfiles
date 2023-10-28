@@ -29,6 +29,7 @@ in {
   ];
 
   home.packages = with pkgs; [
+    cinny-desktop
     element-desktop
     spotdl
     wmctrl

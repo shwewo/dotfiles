@@ -47,6 +47,7 @@
   sound.enable = true;
 
   environment.systemPackages = with pkgs; [
+    smartmontools
     android-tools
     signify
     android-udev-rules

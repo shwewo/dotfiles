@@ -101,7 +101,7 @@
   };
 
   systemd.tmpfiles.rules = [
-    "d /var/www/torrents 0755 qbit users"
+    "d /var/www/torrents 0775 qbit users"
   ];
 
   users.users.qbit = {
