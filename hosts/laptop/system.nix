@@ -67,6 +67,7 @@
     yubikey-manager-qt
     yubikey-manager
     yubico-pam
+    inputs.agenix.packages.x86_64-linux.default
     inputs.nix-search-cli.packages.x86_64-linux.default
   ];
 }

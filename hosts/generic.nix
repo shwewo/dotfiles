@@ -37,7 +37,6 @@
     wget
     htop
     any-nix-shell
-    inputs.agenix.packages.x86_64-linux.default
   ];
 
   security.wrappers = {
