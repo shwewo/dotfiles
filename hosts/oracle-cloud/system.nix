@@ -10,6 +10,7 @@
       enable = true;
       dockerCompat = true;
     };
+    libvirtd.enable = true;
     oci-containers.containers = {
       docker-ipsec-vpn-server = {
         image = "hwdsl2/ipsec-vpn-server";
