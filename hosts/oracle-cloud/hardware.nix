@@ -5,9 +5,9 @@
     [ (modulesPath + "/profiles/qemu-guest.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "virtio_pci" "usbhid" ];
+  boot.initrd.availableKernelModules = [ "virtio_pci" "usbhid" "kvm" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "bochs_drm" ];
+  boot.kernelModules = [ "bochs_drm" "kvm" ];
   boot.extraModulePackages = [ ];
   boot.kernelParams = [
     "console=ttyS0"
