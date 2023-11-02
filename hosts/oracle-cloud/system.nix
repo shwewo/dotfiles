@@ -1,4 +1,4 @@
-{ inputs, config, pkgs, lib, args, ... }: 
+{ inputs, config, pkgs, lib, args, ... }:
 {
   system.stateVersion = "22.11";
   time.timeZone = "Europe/Amsterdam";
@@ -14,7 +14,7 @@
     oci-containers.containers = {
       docker-ipsec-vpn-server = {
         image = "hwdsl2/ipsec-vpn-server";
-        ports = [ 
+        ports = [
           "500:500/udp"
           "4500:4500/udp"
         ];
@@ -37,7 +37,7 @@
           NEKO_PASSWORD = inputs.meow.hosts.oracle-cloud.neko.user;
           NEKO_PASSWORD_ADMIN = inputs.meow.hosts.oracle-cloud.neko.admin;
           NEKO_EPR = "52000-52100";
-          NEKO_NAT1TO1 = inputs.meow.hosts.oracle-cloud.network.ip;
+          NEKO_ICELITE = "true";
         };
       };
     };

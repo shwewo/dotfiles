@@ -8,8 +8,11 @@
     nameservers = [ "1.1.1.1" "1.1.0.1" ];
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 80 443 4040 23 ];
+      allowedTCPPorts = [ 80 443 4040 23 8080 ];
       allowedUDPPorts = [ 61385 53 4500 500 ];
+      allowedUDPPortRanges = [ 
+        { from = 52000; to = 52100; } 
+      ];
       checkReversePath = "loose";
     };
   };
