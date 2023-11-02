@@ -9,6 +9,7 @@
     firewall = {
       enable = true;
       allowedTCPPorts = [ 
+        443
         # mediamtx (hls, rtsp, webrtc, rtmp)
         8554 
         8000 
