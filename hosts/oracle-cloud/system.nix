@@ -26,6 +26,20 @@
           "--privileged"
         ];
       };
+      neko = {
+        image = "ghcr.io/m1k1o/neko/arm-firefox:latest";
+        ports = [
+          "8080:8080"
+          "52000-52100:52000-52100/udp"
+        ];
+        environment = {
+          NEKO_SCREEN = "1920x1080@30";
+          NEKO_PASSWORD = inputs.meow.hosts.oracle-cloud.neko.user;
+          NEKO_PASSWORD_ADMIN = inputs.meow.hosts.oracle-cloud.neko.admin;
+          NEKO_EPR = 52000-52100;
+          NEKO_NAT1TO1 = inputs.meow.hosts.oracle-cloud.network.ip;
+        };
+      };
     };
   };
 

@@ -29,6 +29,7 @@ in {
   ];
 
   home.packages = with pkgs; [
+    google-chrome
     cinny-desktop
     element-desktop
     spotdl
@@ -74,6 +75,7 @@ in {
     trayscale
     libnotify
     weechat
+    firefox
     util-linux
     prismlauncher
     distrobox
