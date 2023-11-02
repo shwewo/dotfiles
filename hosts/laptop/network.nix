@@ -29,8 +29,9 @@
     interfaces."wlp1s0".proxyARP = true;
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 59100 4780 1935 554 ];
-      allowedUDPPorts = [ 61385 59100 59200 64083 554 ];
+      allowedTCPPorts = [ 4780 ];
+      # allowedTCPPorts = [ 59100 4780 1935 554 ];
+      # allowedUDPPorts = [ 61385 59100 59200 64083 554 ];
       allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
       allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
       checkReversePath = "loose";

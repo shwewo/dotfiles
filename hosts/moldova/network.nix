@@ -20,8 +20,11 @@
     nameservers = [ "1.1.1.1" ];
       firewall = {
       enable = true;
-      allowedTCPPorts = [ 80 443 23 ];
+      allowedTCPPorts = [ 80 443 23 8080 ];
       allowedUDPPorts = [ 53 ];
+      allowedUDPPortRanges = [ 
+        { from = 52000; to = 52100; } 
+      ];
     };
   };
   services.cloudflared.enable = true;

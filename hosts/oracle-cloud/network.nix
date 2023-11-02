@@ -8,11 +8,32 @@
     nameservers = [ "1.1.1.1" "1.1.0.1" ];
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 80 443 4040 23 8080 ];
-      allowedUDPPorts = [ 61385 53 4500 500 ];
-      allowedUDPPortRanges = [ 
-        { from = 52000; to = 52100; } 
+      allowedTCPPorts = [ 
+        # mediamtx (hls, rtsp, webrtc, rtmp)
+        8554 
+        8000 
+        8001 
+        1935 
+        8888 
+        8889 
+        8890 
       ];
+      allowedUDPPorts = [ 
+        # mediamtx (hls, rtsp, webrtc, rtmp)
+        8554 
+        8000 
+        8001 
+        1935 
+        8888 
+        8889 
+        8890 
+        # ipsec
+        4500
+        500
+      ];
+      # allowedUDPPortRanges = [ 
+      #   { from = 52000; to = 52100; } 
+      # ];
       checkReversePath = "loose";
     };
   };

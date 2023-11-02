@@ -4,6 +4,10 @@
   time.timeZone = "Europe/Amsterdam";
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+ 
+  environment.systemPackages = with pkgs; [
+    mediamtx
+  ];
 
   virtualisation = {
     podman = {
@@ -39,6 +43,9 @@
       #     NEKO_EPR = "52000-52100";
       #     NEKO_ICELITE = "true";
       #   };
+      #   extraOptions = [
+      #     "--privileged"
+      #   ];
       # };
     };
   };
