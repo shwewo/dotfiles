@@ -10,7 +10,6 @@
       enable = true;
       allowedTCPPorts = [ 
         443
-        8080
         # mediamtx (hls, rtsp, webrtc, rtmp)
         8554 
         8000 
