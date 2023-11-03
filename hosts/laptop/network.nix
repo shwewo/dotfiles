@@ -32,6 +32,13 @@
       allowedTCPPorts = [
         # qbittorrent
         4780 
+        # audiorelay
+        59100
+      ];
+      allowedUDPPorts = [
+        # audiorelay
+        59100
+        59200
       ];
       # allowedTCPPorts = [ 59100 4780 1935 554 ];
       # allowedUDPPorts = [ 61385 59100 59200 64083 554 ];
