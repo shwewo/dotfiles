@@ -31,7 +31,7 @@
         ];
       };
       neko = {
-        image = "ghcr.io/m1k1o/neko/arm-firefox:latest";
+        image = "ghcr.io/m1k1o/neko/arm-xfce:latest";
         ports = [
           "8080:8080"
           "52000-52100:52000-52100/udp"
@@ -45,6 +45,7 @@
         };
         extraOptions = [
           "--network=host"
+          "--privileged"
         ];
       };
     };
