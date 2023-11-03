@@ -43,7 +43,7 @@
           NEKO_EPR = "52000-52100";
           NEKO_ICELITE = "true";
           NEKO_NAT1TO1 = inputs.meow.hosts.oracle-cloud.network.ip;
-          NEKO_IMPLICIT_CONTROL = "true";
+          NEKO_CONTROL_PROTECTION = "true";
         };
         extraOptions = [
           "--network=host"
