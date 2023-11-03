@@ -31,7 +31,7 @@
         ];
       };
       neko = {
-        image = "ghcr.io/m1k1o/neko/arm-xfce:latest";
+        image = "ghcr.io/m1k1o/neko/arm-ungoogled-chromium:latest";
         ports = [
           "8080:8080"
           "52000-52100:52000-52100/udp"
@@ -42,10 +42,10 @@
           NEKO_PASSWORD_ADMIN = inputs.meow.hosts.oracle-cloud.neko.admin;
           NEKO_EPR = "52000-52100";
           NEKO_ICELITE = "true";
+          NEKO_NAT1TO1 = inputs.meow.hosts.oracle-cloud.network.ip;
         };
         extraOptions = [
           "--network=host"
-          "--privileged"
         ];
       };
     };
