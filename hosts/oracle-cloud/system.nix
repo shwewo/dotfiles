@@ -46,6 +46,7 @@
         };
         extraOptions = [
           "--network=host"
+          "--privileged"
         ];
       };
     };
