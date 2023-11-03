@@ -10,6 +10,7 @@
       enable = true;
       allowedTCPPorts = [ 
         443
+        8080
         # mediamtx (hls, rtsp, webrtc, rtmp)
         8554 
         8000 
@@ -32,9 +33,9 @@
         4500
         500
       ];
-      # allowedUDPPortRanges = [ 
-      #   { from = 52000; to = 52100; } 
-      # ];
+      allowedUDPPortRanges = [ 
+        { from = 52000; to = 52100; } 
+      ];
       checkReversePath = "loose";
     };
   };
