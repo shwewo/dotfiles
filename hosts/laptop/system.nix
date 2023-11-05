@@ -34,7 +34,6 @@
   services.printing.drivers = with pkgs; [ foo2zjs fxlinuxprint ];  
   
   programs.wireshark.enable = true;
-  programs.darling.enable = true;
   programs.wireshark.package = pkgs.wireshark;
   programs.gamemode.enable = true;
   programs.steam.enable = true;
@@ -47,10 +46,6 @@
   sound.enable = true;
 
   environment.systemPackages = with pkgs; [
-    smartmontools
-    android-tools
-    signify
-    android-udev-rules
     tor-browser-bundle-bin
     idevicerestore
     libimobiledevice

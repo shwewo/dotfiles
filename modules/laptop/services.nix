@@ -76,29 +76,29 @@
   #   script = ''syncthing'';
   # };
 
-  systemd.services.yubinotify = {
-    enable = true;
-    description = "yubinotify";
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Restart = "always";
-      RestartSec = "5";
-      User="cute";
-      Type="simple";
-      Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1003/bus";
-    };
-    path = with pkgs; [ gnupg ];
-    script = ''
-      #!/bin/sh
+  # systemd.services.yubinotify = {
+  #   enable = true;
+  #   description = "yubinotify";
+  #   wantedBy = [ "multi-user.target" ];
+  #   serviceConfig = {
+  #     Restart = "always";
+  #     RestartSec = "5";
+  #     User="cute";
+  #     Type="simple";
+  #     Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1003/bus";
+  #   };
+  #   path = with pkgs; [ gnupg ];
+  #   script = ''
+  #     #!/bin/sh
 
-      ${pkgs.yubikey-touch-detector}/bin/yubikey-touch-detector -stdout | while read line; do
-      if [[ $line == U2F_1* ]]; then
-        ${pkgs.libnotify}/bin/notify-send "YubiKey" "Waiting for touch..." --icon=fingerprint -t 8000
-      fi
+  #     ${pkgs.yubikey-touch-detector}/bin/yubikey-touch-detector -stdout | while read line; do
+  #     if [[ $line == U2F_1* ]]; then
+  #       ${pkgs.libnotify}/bin/notify-send "YubiKey" "Waiting for touch..." --icon=fingerprint -t 8000
+  #     fi
 
-      done
-    '';
-  };
+  #     done
+  #   '';
+  # };
 
   systemd.tmpfiles.rules = [
     "d /var/www/torrents 0775 qbit users"

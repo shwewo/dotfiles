@@ -33,7 +33,7 @@
   #     #!/bin/sh
   #     if [ -z "$1" ]; then
   #       echo "Please provide a directory to a backup archive";
-  #       notify-send "Backup" "Libvirt backup failure" --icon=drive-harddisk;
+  #       ${pkgs.libnotify}/bin/notify-send "Backup" "Libvirt backup failure" --icon=drive-harddisk;
   #       exit 1
   #     fi;
 
@@ -42,7 +42,7 @@
   #     sudo 7z a -mhe=on "$DIRECTORY/libvirt.7z" /var/lib/libvirt/ -p$(cat /run/agenix/backup);
   #     sync;
   #     echo "Backup complete";
-  #     notify-send "Backup" "Libvirt backup complete" --icon=drive-harddisk;
+  #     ${pkgs.libnotify}/bin/notify-send "Backup" "Libvirt backup complete" --icon=drive-harddisk;
   #   '';
   # }; 
 
@@ -51,24 +51,24 @@
     executable = true;
     text = ''
       #!/bin/sh
-      notify-send "Syncing" "Compressing sync folder" --icon=globe
-      7z a -mhe=on /tmp/Sync.7z ~/Dropbox/Sync -p$(cat /run/agenix/backup)
+      ${pkgs.libnotify}/bin/notify-send "Syncing" "Compressing sync folder" --icon=globe
+      ${pkgs.p7zip}/bin/7z a -mhe=on /tmp/Sync.7z ~/Dropbox/Sync -p$(cat /run/agenix/backup)
 
       rclone_pass=$(cat /run/agenix/rclone);
-      notify-send "Syncing" "Syncing koofr" --icon=globe;
+      ${pkgs.libnotify}/bin/notify-send "Syncing" "Syncing koofr" --icon=globe;
       echo "Syncing koofr...";
       RCLONE_CONFIG_PASS="$rclone_pass" rclone -vvvv copy /tmp/Sync.7z koofr:
 
-      notify-send "Syncing" "Syncing pcloud" --icon=globe
+      ${pkgs.libnotify}/bin/notify-send "Syncing" "Syncing pcloud" --icon=globe
       echo "Syncing pcloud..."
       RCLONE_CONFIG_PASS="$rclone_pass" rclone -vvvv copy /tmp/Sync.7z pcloud:
 
-      notify-send "Syncing" "Syncing mega" --icon=globe
+      ${pkgs.libnotify}/bin/notify-send "Syncing" "Syncing mega" --icon=globe
       echo "Syncing mega..."
       RCLONE_CONFIG_PASS="$rclone_pass" rclone -vvvv copy /tmp/Sync.7z mega:
 
       echo "Sync complete"
-      notify-send "Syncing" "Cloud sync complete" --icon=globe
+      ${pkgs.libnotify}/bin/notify-send "Syncing" "Cloud sync complete" --icon=globe
       sleep infinity
     '';
   };
@@ -84,13 +84,13 @@
       fi
 
       fusermount -uz ~/.encryptedfit
-      gocryptfs -passfile=/run/agenix/backup /run/media/cute/samsungfit/Encrypted ~/.encryptedfit && \
-      rsync -r -t -v --progress -s ~/Dropbox --delete ~/.encryptedfit/ --exclude "Sync/" --exclude ".dropbox.cache" && \
-      rsync -r -t -v --progress -s ~/Dropbox/Sync --delete /run/media/cute/samsungfit && \
+      ${pkgs.gocryptfs}/bin/gocryptfs -passfile=/run/agenix/backup /run/media/cute/samsungfit/Encrypted ~/.encryptedfit && \
+      ${pkgs.rsync}/bin/rsync -r -t -v --progress -s ~/Dropbox --delete ~/.encryptedfit/ --exclude "Sync/" --exclude ".dropbox.cache" && \
+      ${pkgs.rsync}/bin/rsync -r -t -v --progress -s ~/Dropbox/Sync --delete /run/media/cute/samsungfit && \
       sync && \
       fusermount -uz ~/.encryptedfit && \
       echo "Sync complete"
-      notify-send "Syncing" "USB sync complete" --icon=usb
+      ${pkgs.libnotify}/bin/notify-send "Syncing" "USB sync complete" --icon=usb
     '';
   };
 
@@ -110,9 +110,9 @@
       else
           # If the application is running, focus on it
           # Get the window ID associated with the PID
-          WIN_ID=$(xdotool search --pid "$APP_PID" | head -1)
+          WIN_ID=$(${pkgs.xdotool}/bin/xdotool search --pid "$APP_PID" | head -1)
           if [[ -n $WIN_ID ]]; then
-              xdotool windowactivate "$WIN_ID"
+              ${pkgs.xdotool}/bin/xdotool windowactivate "$WIN_ID"
           fi
       fi
     '';
@@ -156,5 +156,29 @@
         nix run nixpkgs#"$1" -- "''\${@:2}"
       fi
     '';
-  }; 
+  };
+
+  xdg.dataFile."yubinotify" = {
+    enable = true;
+    executable = true;
+    text = ''
+      #!/bin/sh
+
+      ${pkgs.yubikey-touch-detector}/bin/yubikey-touch-detector -stdout | while read line; do
+      if [[ $line == U2F_1* ]]; then
+        ${pkgs.libnotify}/bin/${pkgs.libnotify}/bin/notify-send "YubiKey" "Waiting for touch..." --icon=fingerprint -t 8000
+      fi
+
+      done
+    '';
+  };
+
+  xdg.dataFile."screenshot" = {
+    enable = true;
+    executable = true;
+    text = ''
+      #!/bin/sh
+      ${pkgs.scrot}/bin/scrot -fs - | ${pkgs.xclip}/bin/xclip -selection clipboard -t image/png
+    '';
+  };
 }

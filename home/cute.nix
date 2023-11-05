@@ -29,91 +29,81 @@ in {
   ];
 
   home.packages = with pkgs; [
-    google-chrome
-    cinny-desktop
-    element-desktop
-    spotdl
-    wmctrl
-    xdotool
+    # Browsers
+    google-chrome # ikr
+    ungoogled-chromium # i have bipolar disorder
+    librewolf
+    firefox
+    # Files
+    gocryptfs
+    dropbox
+    localsend
+    gnome.nautilus
+    gnome.file-roller
     p7zip
     rclone
-    obsidian
-    gocryptfs
-    scrcpy
-    sqlite
-    xclip
-    scrot
-    xautomation
-    localsend
-    gitleaks
-    pre-commit
-    pavucontrol
-    pasystray
-    playerctl
-    pamixer
-    gnome.file-roller
-    gnome.gnome-disk-utility
-    gnome.nautilus
-    librewolf
     unzip
     zip
-    wget
-    nodejs
-    nmap
+    inotify-tools
+    spotdl
+    # Git
+    gitleaks
+    pre-commit
+    # Messengers
+    element-desktop
+    signal-desktop
+    tdesktop
+    discord
+    weechat
+    # Administration
+    pavucontrol
+    gnome.gnome-disk-utility
+    usbutils
+    pciutils
+    networkmanagerapplet
+    util-linux
+    libnotify
+    lm_sensors
     htop
     killall
     lsof
     dnsutils
     inetutils
-    networkmanagerapplet
-    inotify-tools
+    virt-manager
+    neofetch
+    # Utilities
+    obsidian
+    scrcpy
+    trayscale
+    gnome.zenity
+    distrobox
+    libreoffice
+    android-tools
+    lua5_4
+    translate-shell
+    # Network
+    nmap
+    wget
+    remmina
+    # Games
+    lutris
+    steam-run
+    prismlauncher
+    # Graphics
+    krita
+    inkscape
+    ffmpeg
+    imagemagick
+    v4l-utils
+    flameshot
+    # Other stuff
+    monero-gui
+    openjfx11
+    openjdk11 
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
-    imagemagick
-    libsixel
-    trayscale
-    libnotify
-    weechat
-    firefox
-    util-linux
-    prismlauncher
-    distrobox
-    lutris
-    steam-run
-    android-tools
-    android-studio
-    remmina
-    usbutils
-    pciutils
-    lm_sensors
-    monero-gui
-    openjfx11
-    openjdk11
-    gnome.zenity
-    libreoffice
-    lrzsz
-    ungoogled-chromium
-    mediamtx
-    inkscape
-    ffmpeg
-    v4l-utils
-    dropbox
-    wireguard-tools
-    lua5_4
-    neofetch
-    krita
-    winetricks
-    papirus-icon-theme
-    shadowsocks-libev
-    shadowsocks-v2ray-plugin
-    virt-manager
-    discord
-    flameshot
-    signal-desktop
-    rustup
-    tdesktop
-    translate-shell
+
     (callPackage ../derivations/audiorelay.nix {})
     (callPackage ../derivations/spotify.nix {})
   ];
