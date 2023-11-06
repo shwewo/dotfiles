@@ -14,7 +14,7 @@
     fi
   '';
 
-  services.nginx.enable = false;
+  services.nginx.enable = true;
   services.nginx.virtualHosts."share" = {
     forceSSL = false;
     listen = [{port = 8081;  addr="127.0.0.1"; ssl=false;}];
