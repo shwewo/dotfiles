@@ -5,4 +5,5 @@ in {
   "reality.age".publicKeys = [ cute ];
   "cloudflared.age".publicKeys = [ cute ];
   "wireguard.age".publicKeys = [ cute ];
+  "neko.age".publicKeys = [ cute ];
 }
