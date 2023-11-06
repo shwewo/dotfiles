@@ -29,7 +29,6 @@
         ./hosts/generic.nix
         ./modules/laptop/socks.nix
         ./modules/laptop/services.nix
-        ./modules/laptop/nginx.nix
         ./modules/laptop/age.nix
         agenix.nixosModules.default
         home-manager.nixosModules.home-manager

@@ -55,6 +55,8 @@
       sign = "~/.local/share/sign";
       mc = "steam-run java -jar ~/Dropbox/Software/minecraft.jar";
       run = "~/.local/share/run";
+      fru = "trans ru:en";
+      fen = "trans en:ru";
     };
     shellInit = ''
         set fish_cursor_normal block

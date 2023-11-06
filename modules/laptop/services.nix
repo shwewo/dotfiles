@@ -1,6 +1,36 @@
 { stable, inputs, config, pkgs, lib, ... }:
 
 {
+  systemd.tmpfiles.rules = [
+    "d /var/www/torrents 0775 qbit users"
+  ];
+
+  users.users.qbit = {
+    group = "users";
+    isSystemUser = true;
+    createHome = true;
+    home = "/var/lib/qbit";
+  };
+  users.groups.qbit = {
+    gid = 10000;
+  };
+
+  systemd.services.qbitnox = {
+    wantedBy = [ "multi-user.target" ];
+    after = [ "network-online.target" ];
+    serviceConfig = {
+      Restart = "always";
+      RestartSec = 10;
+      User = "qbit";
+      Group = "qbit";
+    };
+    script = ''
+      ${pkgs.qbittorrent-nox}/bin/qbittorrent-nox
+    '';
+  };
+
+  services.tailscale.enable = true;
+
   services.minidlna = {
     enable = true;
     openFirewall = true;
@@ -52,16 +82,16 @@
     StateDirectory = "dnscrypt-proxy";
   };
 
-  services.ttyd.enable = true;
-  systemd.services.ttyd.script = lib.mkForce ''
-    ${pkgs.ttyd}/bin/ttyd \
-      --port 7681 \
-      --interface lo \
-      --client-option enableZmodem=true \
-      --client-option enableSixel=true \
-      --client-option 'theme={"background": "#171717", "black": "#3F3F3F", "red": "#705050", "green": "#60B48A", "yellow": "#DFAF8F", "blue": "#9AB8D7", "magenta": "#DC8CC3", "cyan": "#8CD0D3", "white": "#DCDCCC", "brightBlack": "#709080", "brightRed": "#DCA3A3", "brightGreen": "#72D5A3", "brightYellow": "#F0DFAF", "brightBlue": "#94BFF3", "brightMagenta": "#EC93D3", "brightCyan": "#93E0E3", "brightWhite": "#FFFFFF"}' \
-      ${pkgs.shadow}/bin/login
-  '';
+  # services.ttyd.enable = false;
+  # systemd.services.ttyd.script = lib.mkForce ''
+  #   ${pkgs.ttyd}/bin/ttyd \
+  #     --port 7681 \
+  #     --interface lo \
+  #     --client-option enableZmodem=true \
+  #     --client-option enableSixel=true \
+  #     --client-option 'theme={"background": "#171717", "black": "#3F3F3F", "red": "#705050", "green": "#60B48A", "yellow": "#DFAF8F", "blue": "#9AB8D7", "magenta": "#DC8CC3", "cyan": "#8CD0D3", "white": "#DCDCCC", "brightBlack": "#709080", "brightRed": "#DCA3A3", "brightGreen": "#72D5A3", "brightYellow": "#F0DFAF", "brightBlue": "#94BFF3", "brightMagenta": "#EC93D3", "brightCyan": "#93E0E3", "brightWhite": "#FFFFFF"}' \
+  #     ${pkgs.shadow}/bin/login
+  # '';
 
   # systemd.services.syncthing = {
   #   enable = false;
@@ -100,40 +130,14 @@
   #   '';
   # };
 
-  systemd.tmpfiles.rules = [
-    "d /var/www/torrents 0775 qbit users"
-  ];
-
-  users.users.qbit = {
-    group = "users";
-    isSystemUser = true;
-    createHome = true;
-    home = "/var/lib/qbit";
-  };
-
-  systemd.services.qbitnox = {
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network-online.target" ];
-    serviceConfig = {
-      Restart = "always";
-      RestartSec = 10;
-      User = "qbit";
-      Group = "users";
-    };
-    script = ''
-      ${pkgs.qbittorrent-nox}/bin/qbittorrent-nox
-    '';
-  };
-
-  services.tailscale.enable = true;
-  services.cloudflared.enable = true;
-  services.cloudflared.tunnels = {
-    "unified" = {
-      default = "http_status:404";
-      credentialsFile = "/run/agenix/cloudflared";
-    };
-  };
+  # services.cloudflared.enable = false;
+  # services.cloudflared.tunnels = {
+  #   "unified" = {
+  #     default = "http_status:404";
+  #     credentialsFile = "/run/agenix/cloudflared";
+  #   };
+  # };
   
-  systemd.services.cloudflared-tunnel-unified.serviceConfig.Restart = lib.mkForce "on-failure";
-  systemd.services.cloudflared-tunnel-unified.serviceConfig.RestartSec = lib.mkForce 60;
+  # systemd.services.cloudflared-tunnel-unified.serviceConfig.Restart = lib.mkForce "on-failure";
+  # systemd.services.cloudflared-tunnel-unified.serviceConfig.RestartSec = lib.mkForce 60;
 }

@@ -31,7 +31,22 @@
     xfce.xfce4-clipman-plugin
     xfce.xfce4-weather-plugin
     xfce.xfce4-pulseaudio-plugin
+    xfce.xfce4-xkb-plugin
   ];
+  
+  i18n.inputMethod = {
+    # enabled = "fcitx5";
+    # fcitx5.addons = with pkgs; [
+    #   fcitx5-rime
+    #   fcitx5-chinese-addons
+    # ];
 
+    # 我现在用 ibus
+    enabled = "ibus";
+    ibus.engines = with pkgs.ibus-engines; [
+      libpinyin
+      rime
+    ];
+  };
   programs.thunar.enable = lib.mkForce false;
 }
