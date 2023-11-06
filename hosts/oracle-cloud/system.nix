@@ -30,7 +30,7 @@
       neko = {
         image = "ghcr.io/m1k1o/neko/arm-chromium:latest";
         ports = [
-          "127:0.0.1:8080:8080"
+          "127.0.0.1:8080:8080"
           "52000-52100:52000-52100/udp"
         ];
         environment = {
