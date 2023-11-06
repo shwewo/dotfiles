@@ -53,6 +53,7 @@
         ./hosts/oracle-cloud/network.nix
         ./hosts/generic.nix
         ./modules/oracle-cloud/socks.nix
+        ./modules/oracle-cloud/nginx.nix
         ./modules/oracle-cloud/age.nix
         agenix.nixosModules.default
       ];
