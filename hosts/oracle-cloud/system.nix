@@ -45,9 +45,9 @@
           NEKO_NAT1TO1 = inputs.meow.hosts.oracle-cloud.network.ip;
           NEKO_CONTROL_PROTECTION = "true";
         };
-        extraOptions = [
-          "--network=host"
-        ];
+        # extraOptions = [
+        #   "--network=host"
+        # ];
       };
     };
   };
