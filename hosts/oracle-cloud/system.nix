@@ -10,10 +10,7 @@
   ];
 
   virtualisation = {
-    podman = {
-      enable = true;
-      dockerCompat = true;
-    };
+    podman.enable = true;
     libvirtd.enable = true;
     oci-containers.containers = {
       docker-ipsec-vpn-server = {
@@ -33,7 +30,7 @@
       neko = {
         image = "ghcr.io/m1k1o/neko/arm-chromium:latest";
         ports = [
-          "8080:8080"
+          "127:0.0.1:8080:8080"
           "52000-52100:52000-52100/udp"
         ];
         environment = {
