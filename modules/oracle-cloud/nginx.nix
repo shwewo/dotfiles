@@ -2,8 +2,8 @@
 
 {
   systemd.tmpfiles.rules = [
-    "d /var/www/internal 0660 nginx nginx"
-    "d /var/www/html 0774 nginx users"
+    "d /var/www/internal 550 nginx nginx"
+    "d /var/www/html 774 nginx users"
   ];
 
   system.activationScripts.nginx_filebrowser = ''
