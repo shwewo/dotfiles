@@ -46,9 +46,6 @@
       allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
       checkReversePath = "loose";
     };
-    hosts = {
-      "0.0.0.0" = [ "windowsupdate.microsoft.com" "update.microsoft.com" "windowsupdate.com" "download.windowsupdate.com" "download.microsoft.com" "download.windowsupdate.com" "wustat.windows.com" "ntservicepack.microsoft.com" "stats.microsoft.com" ];
-    };
   };
 
   # systemd.services.dnscrypt-watch = {

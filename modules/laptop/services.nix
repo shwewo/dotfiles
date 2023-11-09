@@ -21,6 +21,7 @@
     serviceConfig = {
       Restart = "always";
       RestartSec = 10;
+      RuntimeMaxSec=86400;
       User = "qbit";
       Group = "qbit";
     };
