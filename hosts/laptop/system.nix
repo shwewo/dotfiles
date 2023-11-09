@@ -13,9 +13,6 @@
     };
     spiceUSBRedirection.enable = true;
     libvirtd.enable = true;
-    libvirtd.extraConfig = ''
-      dnsmasq_dns_resolver = 'yes'
-    '';
   };
 
   services.pipewire = {
@@ -23,6 +20,13 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+  };
+
+  boot.loader.systemd-boot.extraEntries = {
+    "windows.conf" = ''
+      title Windows
+      efi /efi/microsoft/bootx64.efi
+    '';
   };
 
   services.usbmuxd = {
