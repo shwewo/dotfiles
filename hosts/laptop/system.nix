@@ -13,6 +13,9 @@
     };
     spiceUSBRedirection.enable = true;
     libvirtd.enable = true;
+    libvirtd.extraConfig = ''
+      dnsmasq_dns_resolver = 'yes'
+    '';
   };
 
   services.pipewire = {
