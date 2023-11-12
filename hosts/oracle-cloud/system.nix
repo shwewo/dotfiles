@@ -43,7 +43,7 @@
       neko-xfce = {
         image = "ghcr.io/m1k1o/neko/arm-xfce:latest";
         ports = [
-          "127.0.0.1:8081:8080"
+          "127.0.0.1:9090:8080"
           "55000-55100:55000-55100/udp"
         ];
         environment = {
