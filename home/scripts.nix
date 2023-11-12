@@ -166,7 +166,7 @@
 
       ${pkgs.yubikey-touch-detector}/bin/yubikey-touch-detector -stdout | while read line; do
       if [[ $line == U2F_1* ]]; then
-        ${pkgs.libnotify}/bin/${pkgs.libnotify}/bin/notify-send "YubiKey" "Waiting for touch..." --icon=fingerprint -t 8000
+        ${pkgs.libnotify}/bin/notify-send "YubiKey" "Waiting for touch..." --icon=fingerprint -t 8000
       fi
 
       done
