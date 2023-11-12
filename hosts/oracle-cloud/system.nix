@@ -23,7 +23,7 @@
           "--privileged"
         ];
       };
-      neko_chromium = {
+      neko-chromium = {
         image = "ghcr.io/m1k1o/neko/arm-chromium:latest";
         ports = [
           "127.0.0.1:8080:8080"
@@ -40,11 +40,11 @@
           "/run/agenix/neko_chromium"
         ];
       };
-      neko_xfce = {
+      neko-xfce = {
         image = "ghcr.io/m1k1o/neko/arm-xfce:latest";
         ports = [
           "127.0.0.1:8081:8080"
-          "55000-55100:55100-55100/udp"
+          "55000-55100:55000-55100/udp"
         ];
         environment = {
           NEKO_SCREEN = "1920x1080@30";
