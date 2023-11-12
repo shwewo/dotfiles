@@ -64,6 +64,10 @@
     chmod 755 /home/minecraft/
   '';
 
+  environment.systemPackages = with pkgs; [
+    mediamtx
+  ];
+
   users.users.minecraft = {
     isNormalUser = true;
     extraGroups = [ "minecraft" ];
