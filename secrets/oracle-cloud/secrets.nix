@@ -5,6 +5,6 @@ in {
   "reality.age".publicKeys = [ cute ];
   "cloudflared.age".publicKeys = [ cute ];
   "wireguard.age".publicKeys = [ cute ];
-  "neko-chromium.age".publicKeys = [ cute ];
-  "neko-xfce.age".publicKeys = [ cute ];
+  "neko_chromium.age".publicKeys = [ cute ];
+  "neko_xfce.age".publicKeys = [ cute ];
 }

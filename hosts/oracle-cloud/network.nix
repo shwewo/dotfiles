@@ -34,6 +34,7 @@
       ];
       allowedUDPPortRanges = [ 
         { from = 52000; to = 52100; } 
+        { from = 55000; to = 55100; } 
       ];
       checkReversePath = "loose";
     };

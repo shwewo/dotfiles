@@ -37,6 +37,13 @@
         hostname = inputs.meow.hosts.france.network.ip;
         port = inputs.meow.hosts.france.network.ssh.port;
       };
+      "nyadesk" = {
+        hostname = "192.168.50.150";
+      };
+      "nyalapt" = {
+        hostname = "192.168.50.219";
+        port = 55755;
+      };
     };
   };
 
