@@ -22,18 +22,6 @@
     pulse.enable = true;
   };
 
-  boot.loader.systemd-boot.extraEntries = {
-    "windows.conf" = ''
-      title Windows
-      efi /efi/microsoft/bootx64.efi
-    '';
-  };
-
-  #services.usbmuxd = {
-  #  enable = true;
-  #  package = stable.usbmuxd;
-  #};
-
   services.tlp.enable = true;
   services.flatpak.enable = true;
   services.yubikey-agent.enable = true;

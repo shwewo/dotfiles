@@ -20,6 +20,7 @@
     settings.PasswordAuthentication = false;
   };
 
+  users.groups.no-net = {};
   networking = {
     nameservers = [ "127.0.0.1" "::1" ];
     networkmanager.dns = "none";
@@ -45,6 +46,9 @@
       allowedTCPPortRanges = [ { from = 1714; to = 1764; } ]; # kde connect
       allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
       checkReversePath = "loose";
+      extraCommands = ''
+        iptables -A OUTPUT -m owner --gid-owner no-net -j REJECT
+      '';
     };
   };
 

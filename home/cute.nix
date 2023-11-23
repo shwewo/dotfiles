@@ -30,9 +30,8 @@ in {
 
   home.packages = with pkgs; [
     # Browsers
-    google-chrome # ikr
+    # google-chrome # ikr
     ungoogled-chromium # i have bipolar disorder
-    librewolf
     firefox
     # Files
     gocryptfs
@@ -51,10 +50,8 @@ in {
     pre-commit
     # Messengers
     element-desktop
-    signal-desktop
     tdesktop
     discord
-    weechat
     # Administration
     pavucontrol
     gnome.gnome-disk-utility
@@ -106,7 +103,6 @@ in {
 
     (callPackage ../derivations/audiorelay.nix {})
     (callPackage ../derivations/spotify.nix {})
-    (callPackage ../derivations/crealityprint.nix {})
   ];
 
   xdg.desktopEntries = {
