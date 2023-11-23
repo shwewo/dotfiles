@@ -36,7 +36,10 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.cute = import ./home/cute.nix;
-          home-manager.extraSpecialArgs = { inherit inputs; }; 
+          home-manager.extraSpecialArgs = { 
+            inherit inputs;
+            stable = inputs.nixpkgs-stable.legacyPackages."x86_64-linux";
+          }; 
         }
       ];
     };

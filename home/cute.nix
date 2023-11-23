@@ -1,4 +1,4 @@
-{ inputs, home, config, lib, pkgs, specialArgs, ... }:
+{ stable, inputs, home, config, lib, pkgs, specialArgs, ... }:
 
 let
   schema = pkgs.gsettings-desktop-schemas;
@@ -45,7 +45,7 @@ in {
     unzip
     zip
     inotify-tools
-    spotdl
+    stable.spotdl
     # Git
     gitleaks
     pre-commit
@@ -74,7 +74,7 @@ in {
     # Utilities
     obsidian
     scrcpy
-    trayscale
+    stable.trayscale
     gnome.zenity
     distrobox
     libreoffice
@@ -106,6 +106,7 @@ in {
 
     (callPackage ../derivations/audiorelay.nix {})
     (callPackage ../derivations/spotify.nix {})
+    (callPackage ../derivations/crealityprint.nix {})
   ];
 
   xdg.desktopEntries = {
