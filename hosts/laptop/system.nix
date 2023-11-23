@@ -29,10 +29,10 @@
     '';
   };
 
-  services.usbmuxd = {
-    enable = true;
-    package = pkgs.usbmuxd;
-  };
+  #services.usbmuxd = {
+  #  enable = true;
+  #  package = stable.usbmuxd;
+  #};
 
   services.tlp.enable = true;
   services.flatpak.enable = true;
@@ -53,6 +53,7 @@
   sound.enable = true;
 
   environment.systemPackages = with pkgs; [
+    appimage-run
     tor-browser-bundle-bin
     idevicerestore
     libimobiledevice
