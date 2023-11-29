@@ -57,17 +57,18 @@
           "/run/agenix/neko_xfce"
         ];
       };
-      dcef = {
-        image = "docker.io/slada/dcef:main";
-        workdir = "/discord_data";
-        volumes = [
-          "dcef_cache:/dcef/cache"
-          "/var/www/html/discord_data:/discord_data"
-        ];
-        ports = [
-          "127.0.0.1:21011:21011"
-        ];
-      };
+      # not supported on arm, fuck this then
+      # dcef = {
+      #   image = "docker.io/slada/dcef:main";
+      #   workdir = "/discord_data";
+      #   volumes = [
+      #     "dcef_cache:/dcef/cache"
+      #     "/var/www/html/discord_data:/discord_data"
+      #   ];
+      #   ports = [
+      #     "127.0.0.1:21011:21011"
+      #   ];
+      # };
     };
   };
 
