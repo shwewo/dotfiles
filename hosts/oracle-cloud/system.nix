@@ -60,6 +60,7 @@
       dcef = {
         image = "docker.io/slada/dcef:main";
         workdir = "/var/www/html/discord_data";
+        user = "nobody:no-net";
         volumes = [
           "dcef_cache:/dcef/cache"
         ];
