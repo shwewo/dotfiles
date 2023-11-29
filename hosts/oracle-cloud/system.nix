@@ -60,7 +60,6 @@
       dcef = {
         image = "docker.io/slada/dcef:main";
         workdir = "/var/www/html/discord_data";
-        user = "nobody:no-net";
         volumes = [
           "dcef_cache:/dcef/cache"
         ];
@@ -70,6 +69,8 @@
       };
     };
   };
+
+  systemd.services.podman-dcef.serviceConfig.Group = lib.mkForce "no-net";
 
   system.activationScripts.foo_home_read = pkgs.lib.stringAfter [ "users" ] ''
     chmod 755 /home/minecraft/
