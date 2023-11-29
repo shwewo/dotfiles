@@ -18,6 +18,9 @@
   programs.ssh = {
     enable = true;
     matchBlocks = {
+      "debian" = {
+        hostname = "192.168.122.222"; 
+      };
       "oracle-cloud" = {
         hostname = inputs.meow.hosts.oracle-cloud.network.ip;
         port = inputs.meow.hosts.oracle-cloud.network.ssh.port;

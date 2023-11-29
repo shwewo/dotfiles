@@ -57,6 +57,16 @@
           "/run/agenix/neko_xfce"
         ];
       };
+      dcef = {
+        image = "docker.io/slada/dcef:main";
+        workdir = "/var/www/html/discord_data";
+        volumes = [
+          "dcef_cache:/dcef/cache"
+        ];
+        ports = [
+          "127.0.0.1:21011:21011"
+        ];
+      };
     };
   };
 

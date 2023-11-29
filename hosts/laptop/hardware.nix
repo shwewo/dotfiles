@@ -10,10 +10,11 @@
  
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  boot.loader.efi.efiSysMountPoint = "/boot";
   boot.kernelParams = ["quiet"];
   boot.initrd.availableKernelModules = [ "kvm-amd" "vfat" "nls_cp437" "nls_iso8859-1" "usbhid" "nvme" "xhci_pci" ];
   boot.initrd.kernelModules = [ "amdgpu" ];
+  boot.plymouth.enable = true;
   boot.initrd.luks = {
     yubikeySupport = true;
     devices."cryptroot" = {
@@ -42,7 +43,7 @@
       fsType = "ext4";
     };
 
-  fileSystems."/boot/efi" =
+  fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/58B4-7151";
       fsType = "vfat";
     };

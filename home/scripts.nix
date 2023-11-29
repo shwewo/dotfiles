@@ -182,6 +182,43 @@
     '';
   };
 
+  xdg.dataFile."chrome" = {
+    enable = true;
+    executable = true;
+    text = ''
+      #!/bin/sh
+      mkdir /tmp/chrometrick/ && firejail --private=/tmp/chrometrick --profile=google-chrome ${pkgs.google-chrome}/bin/google-chrome-stable && rm -rf /tmp/chrometrick/
+    '';
+  };
+
+  xdg.dataFile."1984" = {
+    enable = true;
+    executable = true;
+    text = ''
+      #!/bin/sh
+      interface=$(${pkgs.gnome.zenity}/bin/zenity --list --title="Network Interface Selection" --text="Select a Network Interface" --column="Interface" default ethernet wifi)
+      profile=$(${pkgs.gnome.zenity}/bin/zenity --list --title="Firefox Profile Selection" --text="Select a Firefox Profile" --column="Profile" russian spoofed clean)
+
+      # if [[ $profile == "russian" ]]; then
+      #   firejail --net=enp3s0f3u1u3 --dns=1.1.1.1 firefox -no-remote -P russian
+      # elif [[ $profile == "spoofed" ]]; then
+      #   interface=$(${pkgs.gnome.zenity}/bin/zenity --list --title="Network Interface Selection" --text="Select a Network Interface" --column="Interface" enp3s0f3u1u3 wlp1s0)
+      #   firejail --net=$interface --dns=1.1.1.1 firefox -no-remote -P spoofed
+      # elif [[ $profile == "clean" ]]; then
+      #   interface=$(${pkgs.gnome.zenity}/bin/zenity --list --title="Network Interface Selection" --text="Select a Network Interface" --column="Interface" enp3s0f3u1u3 wlp1s0)
+      #   fireja
+      # fi
+
+      if [[ $interface == "default" ]]; then
+        firejail firefox -no-remote -P $profile
+      elif [[ $interface == "ethernet" ]]; then
+        firejail --net=enp3s0f3u1u3 --dns=1.1.1.1 firefox -no-remote -P $profile
+      elif [[ $interface == "wifi" ]]; then
+        firejail --net=wlp1s0 --dns=1.1.1.1 firefox -no-remote -P $profile
+      fi
+    '';
+  };
+
   home.file."monitor" = {
     enable = true;
     target = "/.config/kitty/monitor";
