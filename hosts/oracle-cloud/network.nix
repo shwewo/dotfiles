@@ -1,6 +1,7 @@
 { stable, inputs, config, pkgs, lib, ... }:
 
 {
+  users.groups.no-net = {};
   networking = {
     hostName = "oracle-cloud";
     nat.enable = true;
@@ -36,6 +37,9 @@
         { from = 52000; to = 52100; } 
         { from = 55000; to = 55100; } 
       ];
+      extraCommands = ''
+        iptables -A OUTPUT -m owner --gid-owner no-net -j REJECT
+      '';
       checkReversePath = "loose";
     };
   };
