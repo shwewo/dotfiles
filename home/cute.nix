@@ -83,6 +83,7 @@ in {
     wget
     remmina
     # Games
+    protonup-qt
     lutris
     steam-run
     prismlauncher
