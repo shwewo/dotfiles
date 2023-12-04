@@ -6,7 +6,7 @@
   ];
 
   users.users.qbit = {
-    group = "users";
+    group = "qbit";
     isSystemUser = true;
     createHome = true;
     home = "/var/lib/qbit";
@@ -14,6 +14,16 @@
   users.groups.qbit = {
     gid = 10000;
   };
+
+  # system.activationScripts.iqbit = ''
+  #   if [ ! -d "/var/lib/qbit/iqbit" ]; then
+  #     ${pkgs.wget}/bin/wget https://github.com/CzBiX/qb-web/releases/download/nightly-20230513/qb-web-nightly-20230513.zip -O /tmp/qb-web.zip
+  #     ${pkgs.unzip}/bin/unzip /tmp/qb-web.zip -d /tmp/qb-web
+  #     mv /tmp/qb-web/dist/ /var/lib/qbit/qb-web
+  #     chown -R qbit:users /var/lib/qbit/qb-web
+  #     rm -rf /tmp/qb-web
+  #   fi
+  # '';
 
   systemd.services.qbitnox = {
     wantedBy = [ "multi-user.target" ];

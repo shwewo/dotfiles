@@ -116,6 +116,7 @@
     };
     scripts = with pkgs; [ 
       mpvScripts.autoload
+      mpvScripts.cutter
     ];
     scriptOpts = {
       autoload = {

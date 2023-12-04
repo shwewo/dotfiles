@@ -43,6 +43,33 @@
         }
       ];
     };
+    nixosConfigurations.vm = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = { 
+        inherit inputs; 
+        stable = inputs.nixpkgs-stable.legacyPackages."x86_64-linux";
+        nix.registry.sys.flake = inputs.nixpkgs;
+        nix.extraOptions = ''
+          keep-outputs = true
+          keep-derivations = true
+        '';
+      };
+      modules = [
+        ./hosts/vm/system.nix
+        ./hosts/vm/hardware.nix
+        ./hosts/generic.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.cute = import ./home/cute.nix;
+          home-manager.extraSpecialArgs = { 
+            inherit inputs;
+            stable = inputs.nixpkgs-stable.legacyPackages."x86_64-linux";
+          }; 
+        }
+      ];
+    };
     nixosConfigurations.oracle-cloud = nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";
       specialArgs = { 
