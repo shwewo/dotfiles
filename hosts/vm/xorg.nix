@@ -7,7 +7,13 @@
       xterm.enable = false;
       xfce.enable = true;
     };
-    displayManager.defaultSession = "xfce";
+    displayManager = {
+      defaultSession = "xfce";
+      autoLogin = { 
+        enable = true;
+        user = "cute";
+      };
+    };
   };
 
   environment.systemPackages = with pkgs; [

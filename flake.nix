@@ -56,6 +56,7 @@
       };
       modules = [
         ./hosts/vm/system.nix
+        ./hosts/vm/xorg.nix
         ./hosts/vm/hardware.nix
         ./hosts/generic.nix
         home-manager.nixosModules.home-manager

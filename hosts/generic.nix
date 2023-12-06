@@ -38,6 +38,7 @@
     wget
     htop
     any-nix-shell
+    ncdu
   ];
 
   security.wrappers = {
