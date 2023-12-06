@@ -8,6 +8,10 @@
     [ (modulesPath + "/profiles/qemu-guest.nix")
     ];
 
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot";
+
   fileSystems."/" = { 
     device = "/dev/sda2"; 
     fsType = "ext4"; 
@@ -18,5 +22,5 @@
     fsType = "vfat"; 
   };
 
-  boot.cleanTmpDir = true;
+  boot.tmp.cleanOnBoot = true;
 }
