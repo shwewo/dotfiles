@@ -22,6 +22,7 @@ in {
     ungoogled-chromium # i have bipolar disorder
     firefox
     # Files
+    yt-dlp
     gocryptfs
     dropbox
     localsend
