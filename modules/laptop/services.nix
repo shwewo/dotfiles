@@ -5,6 +5,14 @@
     "d /var/www/torrents 0775 qbit users"
   ];
 
+  # services.jira = {
+  #   enable = true; 
+  # };
+
+  # services.postgresql = {
+  #   enable = true;
+  # };
+
   users.users.qbit = {
     group = "qbit";
     isSystemUser = true;

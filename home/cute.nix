@@ -4,7 +4,6 @@ let
   schema = pkgs.gsettings-desktop-schemas;
   patchDesktop = pkg: appName: from: to: with pkgs; let zipped = lib.zipLists from to; sed-args = builtins.map ({ fst, snd }: "-e 's#${fst}#${snd}#g'") zipped; concat-args = builtins.concatStringsSep " " sed-args; in lib.hiPrio (pkgs.runCommand "$patched-desktop-entry-for-${appName}" { } '' ${coreutils}/bin/mkdir -p $out/share/applications ${gnused}/bin/sed ${concat-args} \ ${pkg}/share/applications/${appName}.desktop \ > $out/share/applications/${appName}.desktop'');
 in {
-  nixpkgs.config.allowUnfree = true;
   home.username = "cute";
   home.stateVersion = "22.11";
   home.sessionVariables = {

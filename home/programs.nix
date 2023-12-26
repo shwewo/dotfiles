@@ -14,6 +14,27 @@
     userName  = "shwewo";
     userEmail = "shwewo@gmail.com";
   };
+ 
+  home.sessionPath = [
+    "$HOME/.local/bin"
+  ];
+
+  # programs.neovim = {
+  #   enable = true;
+  #   coc = {
+  #     enable = true;
+  #     settings = {
+  #       languageserver = {
+  #         nix = {
+  #           command = "nil";
+  #           filetypes = [ "nix" ];
+  #           rootPatterns = [ "flake.nix" ];
+  #         };
+  #       };
+  #     };
+  #   }; 
+  #   extraPackages = with pkgs; [ nil lunarvim ];
+  # };
 
   programs.ssh = {
     enable = true;

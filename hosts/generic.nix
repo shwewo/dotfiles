@@ -14,6 +14,11 @@
   boot.kernel.sysctl."kernel.sysrq" = 1;
   i18n.defaultLocale = "en_GB.UTF-8";
   nix.settings.experimental-features = [ "flakes" "nix-command" ];
+  nix.registry.sys.flake = inputs.nixpkgs;
+  nix.extraOptions = ''
+    keep-outputs = true
+    keep-derivations = true
+  '';
   nix.settings.auto-optimise-store = true;
   nixpkgs.config.allowUnfree = true;
   programs.firejail.enable = true;

@@ -14,12 +14,8 @@
       system = "x86_64-linux";
       specialArgs = { 
         inherit inputs; 
-        stable = inputs.nixpkgs-stable.legacyPackages."x86_64-linux";
-        nix.registry.sys.flake = inputs.nixpkgs;
-        nix.extraOptions = ''
-          keep-outputs = true
-          keep-derivations = true
-        '';
+        # stable = inputs.nixpkgs-stable.legacyPackages."x86_64-linux";
+        stable = import nixpkgs-stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
       };
       modules = [
         ./hosts/laptop/system.nix
@@ -38,7 +34,7 @@
           home-manager.users.cute = import ./home/cute.nix;
           home-manager.extraSpecialArgs = { 
             inherit inputs;
-            stable = inputs.nixpkgs-stable.legacyPackages."x86_64-linux";
+            stable = import nixpkgs-stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
           }; 
         }
       ];
@@ -47,12 +43,7 @@
       system = "x86_64-linux";
       specialArgs = { 
         inherit inputs; 
-        stable = inputs.nixpkgs-stable.legacyPackages."x86_64-linux";
-        nix.registry.sys.flake = inputs.nixpkgs;
-        nix.extraOptions = ''
-          keep-outputs = true
-          keep-derivations = true
-        '';
+        stable = import nixpkgs-stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
       };
       modules = [
         ./hosts/vm/system.nix
@@ -66,18 +57,13 @@
           home-manager.users.cute = import ./home/cute.nix;
           home-manager.extraSpecialArgs = { 
             inherit inputs;
-            stable = inputs.nixpkgs-stable.legacyPackages."x86_64-linux";
+            stable = import nixpkgs-stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
           }; 
         }
       ];
     };
     nixosConfigurations.oracle-cloud = nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";
-      specialArgs = { 
-        inherit inputs; 
-        stable = inputs.nixpkgs-stable.legacyPackages."x86_64-linux";
-        nix.registry.sys.flake = inputs.nixpkgs;
-      };
       modules = [
         ./hosts/oracle-cloud/system.nix
         ./hosts/oracle-cloud/hardware.nix
@@ -91,11 +77,6 @@
     };
     nixosConfigurations.moldova = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      specialArgs = { 
-        inherit inputs; 
-        stable = inputs.nixpkgs-stable.legacyPackages."x86_64-linux";
-        nix.registry.sys.flake = inputs.nixpkgs;
-      };
       modules = [
         ./hosts/moldova/system.nix
         ./hosts/moldova/hardware.nix
