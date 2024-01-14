@@ -32,6 +32,7 @@
     xfce.xfce4-weather-plugin
     xfce.xfce4-pulseaudio-plugin
     xfce.xfce4-xkb-plugin
+    xfce.xfce4-timer-plugin
   ];
   
   i18n.inputMethod = {
