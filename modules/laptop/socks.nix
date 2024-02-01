@@ -5,7 +5,6 @@
       enable = true;
       description = "avoid censorship";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
       serviceConfig = { Restart = "on-failure"; RestartSec = "15"; User = "socks"; Group = "socks"; };
       script = attrs.script;
       path = with pkgs; [shadowsocks-libev shadowsocks-v2ray-plugin sing-box];

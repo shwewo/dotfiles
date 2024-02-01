@@ -104,7 +104,8 @@
       foreground = "#DCDCCC";
       background_opacity = "0.8";
       remember_window_size = "yes";
-     
+      hide_window_decorations = "yes";     
+
       color0 = "#3F3F3F";
       color1 = "#705050";
       color2 = "#60B48A";

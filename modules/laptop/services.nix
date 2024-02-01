@@ -35,7 +35,6 @@
 
   systemd.services.qbitnox = {
     wantedBy = [ "multi-user.target" ];
-    after = [ "network-online.target" ];
     serviceConfig = {
       Restart = "always";
       RestartSec = 10;

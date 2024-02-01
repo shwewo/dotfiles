@@ -218,14 +218,4 @@
       fi
     '';
   };
-
-  home.file."monitor" = {
-    enable = true;
-    target = "/.config/kitty/monitor";
-    text = ''
-      launch htop
-      launch dmesg -w
-      launch watch sensors
-    '';
-  };
 }

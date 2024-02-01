@@ -6,9 +6,6 @@ let
 in {
   home.username = "cute";
   home.stateVersion = "22.11";
-  home.sessionVariables = {
-    GTK_THEME = "Adwaita:dark";
-  };
 
   imports = [
     ./scripts.nix
@@ -23,7 +20,8 @@ in {
     # Files
     yt-dlp
     gocryptfs
-    dropbox
+    # dropbox
+    maestral-gui
     localsend
     gnome.nautilus
     gnome.file-roller
@@ -89,6 +87,7 @@ in {
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
+    blueberry
 
     (callPackage ../derivations/audiorelay.nix {})
     (callPackage ../derivations/spotify.nix {})
@@ -101,6 +100,27 @@ in {
       exec = ''sh -c "cat /run/agenix/precise | ${pkgs.keepassxc}/bin/keepassxc --pw-stdin ~/Dropbox/Sync/passwords.kdbx"'';
       type = "Application";
     };
+    autostart = {
+      name = "autostart";
+      exec = "/home/cute/.autostart.sh";
+      type = "Application";
+    };
+  };
+
+  home.file."autostart" = {
+    enable = true;
+    target = "/.autostart.sh";
+    executable = true;
+    text = ''
+      #!/bin/sh
+      sleep 5
+      gtk-launch keepassxc.desktop
+      gtk-launch discord.desktop
+      gtk-launch maestral.desktop
+      gtk-launch org.telegram.desktop.desktop
+      gtk-launch spotify.desktop
+      gtk-launch firefox.desktop
+    '';
   };
 
   # xdg.dataFile."afterkeepassxc" = {
@@ -122,5 +142,5 @@ in {
     };
   };
 
-  services.kdeconnect.enable = true;
+  # services.kdeconnect.enable = true;
 }

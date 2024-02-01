@@ -22,7 +22,7 @@
     pulse.enable = true;
   };
 
-  services.tlp.enable = true;
+  # services.tlp.enable = true; # gnome requires this to be false
   services.flatpak.enable = true;
   services.yubikey-agent.enable = true;
   services.printing.enable = true;
@@ -34,14 +34,16 @@
   programs.steam.enable = true;
   programs.noisetorch.enable = true;
 
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  # xdg.portal.enable = true;
+  # xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   hardware.pulseaudio.enable = false;
   sound.enable = true;
 
   environment.systemPackages = with pkgs; [
+    wireguard-tools
     appimage-run
+    wine
     tor-browser-bundle-bin
     idevicerestore
     libimobiledevice
@@ -62,5 +64,6 @@
     inputs.nix-search-cli.packages.x86_64-linux.default
   ];
 
-  nixpkgs.config.permittedInsecurePackages = [ "electron-25.9.0" ];
+  nixpkgs.config.permittedInsecurePackages = [ "electron-25.9.0" ]; 
 }
+
