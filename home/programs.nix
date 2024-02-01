@@ -82,7 +82,8 @@
     enable = true;
     
     shellAliases = {
-      r = "sudo nixos-rebuild switch --flake ~/dev/dotfiles/";
+      rebuild = "sudo nixos-rebuild switch --flake ~/dev/dotfiles/";
+      rollback = "sudo nixos-rebuild switch --rollback --flake ~/dev/dotfiles/";
       sign = "~/.local/share/sign";
       mc = "steam-run java -jar ~/Dropbox/Software/minecraft.jar";
       run = "~/.local/share/run";

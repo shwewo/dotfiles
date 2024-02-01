@@ -68,8 +68,7 @@ pkgs.stdenv.mkDerivation rec {
 
   desktopItem = pkgs.makeDesktopItem {
     name = "AudioRelay";
-    exec = "bash -c \"xvfb-run audio-relay\"";
-    #exec = "audio-relay";
+    exec = "audio-relay";
     genericName = "AudioRelay audio bridge";
     comment = "AudioRelay sound server/player";
     categories = [ "Network" "Audio" ];
