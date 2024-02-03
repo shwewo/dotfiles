@@ -31,7 +31,9 @@
 
   environment.systemPackages = with pkgs; [
     gnomeExtensions.appindicator
+    gnomeExtensions.activate-window-by-title
     gnomeExtensions.unite
+    gnomeExtensions.tailscale-qs
     gnomeExtensions.gsconnect
     gnomeExtensions.clipboard-indicator
     gnome.gnome-tweaks

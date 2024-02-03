@@ -99,7 +99,7 @@
     executable = true;
     text = ''
       APP="kitty"
-      APP_CMD="kitty"  # Replace with the actual command to start your app, if different
+      APP_CMD="kitty --start-as maximized"  # Replace with the actual command to start your app, if different
 
       # Check if the application is running
       APP_PID=$(pgrep "$APP")
@@ -108,12 +108,7 @@
           # If the application isn't running, start it
           $APP_CMD &
       else
-          # If the application is running, focus on it
-          # Get the window ID associated with the PID
-          WIN_ID=$(${pkgs.xdotool}/bin/xdotool search --pid "$APP_PID" | head -1)
-          if [[ -n $WIN_ID ]]; then
-              ${pkgs.xdotool}/bin/xdotool windowactivate "$WIN_ID"
-          fi
+        gdbus call --session --dest org.gnome.Shell --object-path /de/lucaswerkmeister/ActivateWindowByTitle --method de.lucaswerkmeister.ActivateWindowByTitle.activateByWmClass 'kitty'
       fi
     '';
   };
