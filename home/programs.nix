@@ -46,9 +46,6 @@
         hostname = inputs.meow.hosts.oracle-cloud.network.ip;
         port = inputs.meow.hosts.oracle-cloud.network.ssh.port;
       };
-      "moldova" = {
-        hostname = inputs.meow.hosts.moldova.network.ip;
-      };
       "canada" = {
         hostname = inputs.meow.hosts.canada.network.ip;
         port = inputs.meow.hosts.canada.network.ssh.port;

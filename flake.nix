@@ -75,17 +75,5 @@
         agenix.nixosModules.default
       ];
     };
-    nixosConfigurations.moldova = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        ./hosts/moldova/system.nix
-        ./hosts/moldova/hardware.nix
-        ./hosts/moldova/network.nix
-        ./hosts/generic.nix
-        ./modules/moldova/socks.nix
-        ./modules/moldova/age.nix
-        agenix.nixosModules.default
-      ];
-    };
   };
 }

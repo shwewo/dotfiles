@@ -51,7 +51,6 @@ in {
     pre-commit
     # Messengers
     element-desktop
-    tdesktop
     discord
     # Administration
     pavucontrol
@@ -106,6 +105,7 @@ in {
 
     (callPackage ../derivations/audiorelay.nix {})
     (callPackage ../derivations/spotify.nix {})
+    (callPackage ../derivations/tdesktop.nix {})
 
     (patchDesktop discord "discord"
       [
