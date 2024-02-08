@@ -9,10 +9,12 @@
     enable = true;
     wacom.enable = true;
     videoDrivers = [ "amdgpu" ];
-    displayManager.gdm.enable = true;
+    displayManager = {
+      gdm.enable = true;
+      defaultSession = "gnome";
+    };
     desktopManager = {
       gnome.enable = true;
-      default = "gnome";
     };
     # displayManager.defaultSession = "xfce";
     # config = ''
