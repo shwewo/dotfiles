@@ -76,28 +76,16 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./macos.patch
+    ./0001-Disable-sponsored-messages.patch
+    ./0002-Disable-saving-restrictions.patch
+    ./0003-Disable-invite-peeking-restrictions.patch
+    ./0004-Disable-accounts-limit.patch
     # the generated .desktop files contains references to unwrapped tdesktop, breaking scheme handling
     # and the scheme handler is already registered in the packaged .desktop file, rendering this unnecessary
     # see https://github.com/NixOS/nixpkgs/issues/218370
     (fetchpatch {
       url = "https://salsa.debian.org/debian/telegram-desktop/-/raw/09b363ed5a4fcd8ecc3282b9bfede5fbb83f97ef/debian/patches/Disable-register-custom-scheme.patch";
       hash = "sha256-B8X5lnSpwwdp1HlvyXJWQPybEN+plOwimdV5gW6aY2Y=";
-    })
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/Layerex/telegram-desktop-patches/master/0001-Disable-sponsored-messages.patch";
-      hash = "";
-    })
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/Layerex/telegram-desktop-patches/master/0002-Disable-saving-restrictions.patch";
-      hash = "";
-    })
-    (fetchpatch {
-      url = "https://github.com/Layerex/telegram-desktop-patches/blob/master/0003-Disable-invite-peeking-restrictions.patch";
-      hash = ""; 
-    })
-    (fetchpatch {
-      url = "https://github.com/Layerex/telegram-desktop-patches/blob/master/0004-Disable-accounts-limit.patch";
-      hash = "";
     })
   ];
 
@@ -203,9 +191,7 @@ stdenv.mkDerivation rec {
     "-Ddisable_autoupdate=ON"
     # We're allowed to used the API ID of the Snap package:
     "-DTDESKTOP_API_ID=611335"
-    # <!-- gitleaks-disable -->
     "-DTDESKTOP_API_HASH=REDACTED"
-    # <!-- gitleaks-enable -->
     # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
     "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
     "-DDESKTOP_APP_DISABLE_SCUDO=ON"

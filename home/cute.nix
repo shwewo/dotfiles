@@ -105,7 +105,7 @@ in {
 
     (callPackage ../derivations/audiorelay.nix {})
     (callPackage ../derivations/spotify.nix {})
-    (callPackage ../derivations/tdesktop.nix {})
+    (callPackage ../derivations/tdesktop/default.nix {})
 
     (patchDesktop discord "discord"
       [
