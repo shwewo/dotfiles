@@ -27,29 +27,6 @@ in {
     ./programs.nix
   ];
 
-  # nixpkgs.overlays = [(final: prev: {
-  #   telegram-desktop-patched = prev.telegram-desktop.overrideAttrs (old: {
-  #     patches = (old.patches or []) ++ [
-  #       (prev.fetchpatch {
-  #         url = "https://raw.githubusercontent.com/Layerex/telegram-desktop-patches/master/0001-Disable-sponsored-messages.patch";
-  #         hash = "";
-  #       })
-  #       (prev.fetchpatch {
-  #         url = "https://raw.githubusercontent.com/Layerex/telegram-desktop-patches/master/0002-Disable-saving-restrictions.patch";
-  #         hash = "";
-  #       })
-  #       (prev.fetchpatch {
-  #         url = "https://raw.githubusercontent.com/Layerex/telegram-desktop-patches/master/0003-Disable-invite-peeking-restrictions.patch";
-  #         hash = ""; 
-  #       })
-  #       (prev.fetchpatch {
-  #         url = "https://raw.githubusercontent.com/Layerex/telegram-desktop-patches/master/0004-Disable-accounts-limit.patch";
-  #         hash = "";
-  #       })
-  #     ];
-  #   });
-  # })];
-
   home.packages = with pkgs; [
     # Browsers
     # google-chrome # ikr
@@ -74,26 +51,7 @@ in {
     pre-commit
     # Messengers
     element-desktop
-    (telegram-desktop.overrideAttrs (oldAttrs: {
-      patches = (oldAttrs.patches or []) ++ [
-        (fetchpatch {
-          url = "https://raw.githubusercontent.com/Layerex/telegram-desktop-patches/master/0001-Disable-sponsored-messages.patch";
-          hash = "sha256-o2Wxyag6hpEDgGm8FU4vs6aCpL9aekazKiNeZPLI9po=";
-        })
-        (fetchpatch {
-          url = "https://raw.githubusercontent.com/Layerex/telegram-desktop-patches/master/0002-Disable-saving-restrictions.patch";
-          hash = "sha256-sQsyXlvhXSvouPgzYSiRB8ieICo3GDXWH5MaZtBjtqw=";
-        })
-        (fetchpatch {
-          url = "https://raw.githubusercontent.com/Layerex/telegram-desktop-patches/master/0003-Disable-invite-peeking-restrictions.patch";
-          hash = "sha256-8mJD6LOjz11yfAdY4QPK/AUz9o5W3XdupXxy7kRrbC8="; 
-        })
-        (fetchpatch {
-          url = "https://raw.githubusercontent.com/Layerex/telegram-desktop-patches/master/0004-Disable-accounts-limit.patch";
-          hash = "sha256-PZWCFdGE/TTJ1auG1JXNpnTUko2rCWla6dYKaQNzreg=";
-        })
-      ];
-    }))
+    inputs.telegram-desktop-patched.packages.${pkgs.system}.default
     discord
     # Administration
     pavucontrol
@@ -145,6 +103,7 @@ in {
     noto-fonts-cjk
     noto-fonts-emoji
     blueberry
+    cachix
 
     (callPackage ../derivations/audiorelay.nix {})
     (callPackage ../derivations/spotify.nix {})

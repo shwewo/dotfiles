@@ -1,4 +1,13 @@
 {
+  nixConfig = {
+    extra-substituters = [
+      "https://shwewo.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "shwewo.cachix.org-1:84cIX7ETlqQwAWHBnd51cD4BeUVXCyGbFdtp+vLxKOo="
+    ];
+  };
+ 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.05";
@@ -6,10 +15,11 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
     nix-search-cli.url = "github:peterldowns/nix-search-cli";
+    telegram-desktop-patched.url = "github:shwewo/telegram-desktop-patched";
     meow.url = "git+ssh://git@github.com/shwewo/meow";
   };
 
-  outputs = inputs @ { nixpkgs, nixpkgs-stable, agenix, nix-search-cli, meow, home-manager, ... }: {
+  outputs = inputs @ { nixpkgs, nixpkgs-stable, agenix, nix-search-cli, meow, home-manager, telegram-desktop-patched, ... }: {
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { 

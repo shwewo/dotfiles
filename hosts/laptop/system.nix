@@ -32,6 +32,7 @@
   programs.wireshark.package = pkgs.wireshark;
   programs.gamemode.enable = true;
   programs.steam.enable = true;
+  programs.gamescope.enable = true;
   programs.noisetorch.enable = true;
 
   # xdg.portal.enable = true;
