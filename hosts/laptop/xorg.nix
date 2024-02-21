@@ -50,20 +50,4 @@
     # xfce.xfce4-xkb-plugin
     # xfce.xfce4-timer-plugin
   ];
-  
-  # i18n.inputMethod = {
-  #   # enabled = "fcitx5";
-  #   # fcitx5.addons = with pkgs; [
-  #   #   fcitx5-rime
-  #   #   fcitx5-chinese-addons
-  #   # ];
-
-  #   # 我现在用 ibus
-  #   enabled = "ibus";
-  #   ibus.engines = with pkgs.ibus-engines; [
-  #     libpinyin
-  #     rime
-  #   ];
-  # };
-  # programs.thunar.enable = lib.mkForce false;
 }

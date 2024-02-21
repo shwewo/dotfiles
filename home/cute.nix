@@ -35,7 +35,6 @@ in {
     # Files
     yt-dlp
     gocryptfs
-    # dropbox
     maestral-gui
     localsend
     gnome.nautilus
@@ -53,6 +52,7 @@ in {
     element-desktop
     inputs.telegram-desktop-patched.packages.${pkgs.system}.default
     discord
+    discord-screenaudio
     # Administration
     pavucontrol
     gnome.gnome-disk-utility
@@ -102,7 +102,7 @@ in {
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
-    blueberry
+    wl-clipboard
     cachix
 
     (callPackage ../derivations/audiorelay.nix {})

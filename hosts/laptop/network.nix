@@ -20,6 +20,8 @@
     settings.PasswordAuthentication = false;
   };
 
+  services.tailscale.enable = true;
+
   users.groups.no-net = {};
   networking = {
     nameservers = [ "127.0.0.1" "::1" ];
@@ -27,7 +29,6 @@
     hostName = "laptop";
     useDHCP = lib.mkDefault true;
     networkmanager.enable = true;
-    # interfaces."wlp1s0".proxyARP = true;
     firewall = {
       enable = true;
       allowedTCPPorts = [
@@ -53,32 +54,6 @@
       '';
     };
   };
-
-  # systemd.services.dnscrypt-watch = {
-  #   enable = true;
-  #   description = "Monitor DNS state";
-  #   after = [ "network-online.target" ];
-  #   wantedBy = [ "multi-user.target" ];
-  #   serviceConfig = {
-  #     Restart = "on-failure";
-  #     RestartSec = "5";
-  #   };
-  #   path = with pkgs; [ dnsutils ];
-  #   script = ''
-  #     #!/bin/sh
-      
-  #     while true; do
-  #       output=$(nslookup cloudflare.com)
-
-  #       if ! [ $? -eq 0 ]; then
-  #         echo "DNS is not working..."
-  #         sudo -u cute DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1003/bus notify-send -t 2000 -i computer "Network" "DNS is down, restarting..."
-  #       fi
-
-  #       sleep 10
-  #     done
-  #   '';
-  # };
   
   systemd.services.NetworkManager-wait-online.enable = false;
 }
