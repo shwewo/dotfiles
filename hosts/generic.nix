@@ -1,11 +1,19 @@
 { stable, inputs, config, pkgs, lib, ... }:
 
-{
+let
+  run = pkgs.writeScriptBin "run" ''
+    #!/usr/bin/env bash
+    if [[ $# -eq 0 ]]; then
+      echo "Error: Missing argument"
+    else
+      NIXPKGS_ALLOW_UNFREE=1 nix run --impure nixpkgs#"$1" -- "''\${@:2}"
+    fi
+  ''; 
+in {
   users.users.cute = {
     isNormalUser = true;
     description = "cute";
     extraGroups = [ "networkmanager" "wheel" "audio" "libvirtd" "wireshark" "dialout" ];
-    initialHashedPassword = "$y$j9T$FfQD9RCuNd.uJOWTuJJQb0$dmh0rfcc5aagT60ebWXgrgmMGfGfBtJ/uDAk3fJLv9/";
     openssh.authorizedKeys.keys = [ 
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ9blPuLoJkCfTl88JKpqnSUmybCm7ci5EgWAUvfEmwb cute@laptop" 
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAZX2ByyBbuOfs6ndbzn/hbLaCAFiMXFsqbjplmx9GfVTx2T1aaDKFRNFtQU1rv6y3jyQCrEbjgvIjdCM4ptDf8=" # ipod
@@ -38,6 +46,7 @@
   services.vnstat.enable = true;
   users.defaultUserShell = pkgs.fish;
   environment.systemPackages = with pkgs; [
+    run
     vnstat
     git
     wget
@@ -45,16 +54,11 @@
     any-nix-shell
     ncdu
     btop
+    nix-output-monitor
     inputs.nh.packages.${pkgs.system}.default
   ];
   environment.sessionVariables.FLAKE = "/home/cute/dev/dotfiles";
 
-  system.activationScripts.diff = ''
-    if [[ -e /run/current-system ]]; then
-      ${pkgs.nix}/bin/nix store diff-closures /run/current-system "$systemConfig"
-    fi
-  '';
- 
   security.wrappers = {
     firejail = {
       source = "${pkgs.firejail.out}/bin/firejail";

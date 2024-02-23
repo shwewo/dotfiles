@@ -62,17 +62,14 @@
     enable = true;
     
     shellAliases = {
-      sign = "~/.local/share/sign";
-      mc = "steam-run java -jar ~/Dropbox/Software/minecraft.jar";
-      run = "~/.local/share/run";
       fru = "trans ru:en";
       fen = "trans en:ru";
       code = "/etc/profiles/per-user/cute/bin/code --ozone-platform-hint=auto";
     };
     shellInit = ''
-        set fish_cursor_normal block
-        set fish_greeting
-        any-nix-shell fish --info-right | source
+      set fish_cursor_normal block
+      set fish_greeting
+      any-nix-shell fish --info-right | source
     '';
   };
 

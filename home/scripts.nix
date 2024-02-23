@@ -1,51 +1,6 @@
 { inputs, home, config, lib, pkgs, specialArgs, ... }: 
 
 {
-  xdg.dataFile."xfceunhide" = {
-    enable = true;
-    executable = true;
-    text = ''
-      #!/bin/sh
-      PANEL="panel-$1"
-      FILE="/tmp/xfce-unhide-$PANEL"
-
-      if [[ -e $FILE ]]; then
-        value=$(cat $FILE)
-
-        if [[ $value -eq 1 ]]; then
-          echo "0" > $FILE
-          xfconf-query -c xfce4-panel -p /panels/$PANEL/autohide-behavior -s 0
-        else
-          echo "1" > $FILE
-          xfconf-query -c xfce4-panel -p /panels/$PANEL/autohide-behavior -s 2
-        fi
-      else
-        echo "1" > $FILE
-        xfconf-query -c xfce4-panel -p /panels/$PANEL/autohide-behavior -s 0
-      fi
-    '';
-  };
-
-  # xdg.dataFile."backup_libvirt" = {
-  #   enable = true;
-  #   executable = true;
-  #   text = ''
-  #     #!/bin/sh
-  #     if [ -z "$1" ]; then
-  #       echo "Please provide a directory to a backup archive";
-  #       ${pkgs.libnotify}/bin/notify-send "Backup" "Libvirt backup failure" --icon=drive-harddisk;
-  #       exit 1
-  #     fi;
-
-  #     DIRECTORY="$1";
-  #     LIBVIRT_DIRECTORY="/var/lib/libvirt";                                                                                                                                                   
-  #     sudo 7z a -mhe=on "$DIRECTORY/libvirt.7z" /var/lib/libvirt/ -p$(cat /run/agenix/backup);
-  #     sync;
-  #     echo "Backup complete";
-  #     ${pkgs.libnotify}/bin/notify-send "Backup" "Libvirt backup complete" --icon=drive-harddisk;
-  #   '';
-  # }; 
-
   xdg.dataFile."cloudsync" = {
     enable = true;
     executable = true;
@@ -140,19 +95,6 @@
     '';
   };
 
-  xdg.dataFile."run" = {
-    enable = true;
-    executable = true;
-    text = ''
-      #!/bin/sh
-      if [[ $# -eq 0 ]]; then
-        echo "Error: Missing argument."
-      else
-        nix run nixpkgs#"$1" -- "''\${@:2}"
-      fi
-    '';
-  };
-
   xdg.dataFile."yubinotify" = {
     enable = true;
     executable = true;
@@ -168,49 +110,12 @@
     '';
   };
 
-  xdg.dataFile."screenshot" = {
-    enable = true;
-    executable = true;
-    text = ''
-      #!/bin/sh
-      ${pkgs.scrot}/bin/scrot -fs - | ${pkgs.xclip}/bin/xclip -selection clipboard -t image/png
-    '';
-  };
-
   xdg.dataFile."chrome" = {
     enable = true;
     executable = true;
     text = ''
       #!/bin/sh
       mkdir /tmp/chrometrick/ && firejail --private=/tmp/chrometrick --profile=google-chrome ${pkgs.google-chrome}/bin/google-chrome-stable && rm -rf /tmp/chrometrick/
-    '';
-  };
-
-  xdg.dataFile."1984" = {
-    enable = true;
-    executable = true;
-    text = ''
-      #!/bin/sh
-      interface=$(${pkgs.gnome.zenity}/bin/zenity --list --title="Network Interface Selection" --text="Select a Network Interface" --column="Interface" default ethernet wifi)
-      profile=$(${pkgs.gnome.zenity}/bin/zenity --list --title="Firefox Profile Selection" --text="Select a Firefox Profile" --column="Profile" russian spoofed clean)
-
-      # if [[ $profile == "russian" ]]; then
-      #   firejail --net=enp3s0f3u1u3 --dns=1.1.1.1 firefox -no-remote -P russian
-      # elif [[ $profile == "spoofed" ]]; then
-      #   interface=$(${pkgs.gnome.zenity}/bin/zenity --list --title="Network Interface Selection" --text="Select a Network Interface" --column="Interface" enp3s0f3u1u3 wlp1s0)
-      #   firejail --net=$interface --dns=1.1.1.1 firefox -no-remote -P spoofed
-      # elif [[ $profile == "clean" ]]; then
-      #   interface=$(${pkgs.gnome.zenity}/bin/zenity --list --title="Network Interface Selection" --text="Select a Network Interface" --column="Interface" enp3s0f3u1u3 wlp1s0)
-      #   fireja
-      # fi
-
-      if [[ $interface == "default" ]]; then
-        firejail firefox -no-remote -P $profile
-      elif [[ $interface == "ethernet" ]]; then
-        firejail --net=enp3s0f3u1u3 --dns=1.1.1.1 firefox -no-remote -P $profile
-      elif [[ $interface == "wifi" ]]; then
-        firejail --net=wlp1s0 --dns=1.1.1.1 firefox -no-remote -P $profile
-      fi
     '';
   };
 }
