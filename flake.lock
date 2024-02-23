@@ -173,6 +173,26 @@
         "url": "ssh://git@github.com/shwewo/meow"
       }
     },
+    "nh": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1708335499,
+        "narHash": "sha256-ZOAhp3hiJsWdNDSs/SF2EPylluAx5PiZv9aAUwZrKOI=",
+        "owner": "viperML",
+        "repo": "nh",
+        "rev": "aa4df097654cdeb15aa74aabd72863a6fb30c7e6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "viperML",
+        "repo": "nh",
+        "type": "github"
+      }
+    },
     "nix-search-cli": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -277,6 +297,7 @@
         "agenix": "agenix",
         "home-manager": "home-manager_2",
         "meow": "meow",
+        "nh": "nh",
         "nix-search-cli": "nix-search-cli",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-stable": "nixpkgs-stable",

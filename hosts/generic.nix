@@ -32,7 +32,7 @@
     any-nix-shell fish --info-right | source
   '';
   programs.fish.shellAliases = {
-    rebuild = "nom build --no-link --accept-flake-config ~/dev/dotfiles#nixosConfigurations.$(hostname).config.system.build.toplevel && sudo nixos-rebuild switch --flake ~/dev/dotfiles";
+    rebuild = "nh os switch -- --accept-flake-config";
     rollback = "sudo nixos-rebuild switch --rollback --flake ~/dev/dotfiles/";
   };
   services.vnstat.enable = true;
@@ -44,10 +44,10 @@
     htop
     any-nix-shell
     ncdu
-    nix-output-monitor
     btop
-    ripcord
+    inputs.nh.packages.${pkgs.system}.default
   ];
+  environment.sessionVariables.FLAKE = "/home/cute/dev/dotfiles";
 
   system.activationScripts.diff = ''
     if [[ -e /run/current-system ]]; then

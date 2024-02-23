@@ -16,6 +16,8 @@
     agenix.url = "github:ryantm/agenix";
     nix-search-cli.url = "github:peterldowns/nix-search-cli";
     telegram-desktop-patched.url = "github:shwewo/telegram-desktop-patched";
+    nh.url = "github:viperML/nh";
+    nh.inputs.nixpkgs.follows = "nixpkgs";
     meow.url = "git+ssh://git@github.com/shwewo/meow";
   };
 
@@ -38,6 +40,7 @@
         ./modules/laptop/age.nix
         agenix.nixosModules.default
         home-manager.nixosModules.home-manager
+        inputs.nh.nixosModules.default
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
@@ -45,7 +48,12 @@
           home-manager.extraSpecialArgs = { 
             inherit inputs;
             stable = import nixpkgs-stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
-          }; 
+          };
+          nh = {
+            enable = true;
+            clean.enable = true;
+            clean.extraArgs = "--keep-since 4d --keep 3";
+          };
         }
       ];
     };
