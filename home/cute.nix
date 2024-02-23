@@ -151,16 +151,6 @@ in {
     '';
   };
 
-  # xdg.dataFile."afterkeepassxc" = {
-  #   enable = true;
-  #   executable = true;
-  #   text = ''
-  #     #!/bin/sh
-  #     while ! pgrep -x .keepassxc-wrap >/dev/null; do sleep 1; done && sleep 5 && \
-  #     geary --gapplication-service 
-  #   '';
-  # };
-
   gtk = {
     enable = true;
 
@@ -169,6 +159,4 @@ in {
       package = pkgs.papirus-icon-theme;
     };
   };
-
-  # services.kdeconnect.enable = true;
 }
