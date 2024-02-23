@@ -115,6 +115,14 @@ in {
       [
         "Exec=Discord --ozone-platform-hint=auto"
       ])
+    
+    (patchDesktop vscode "code"
+      [
+        "Exec=code %F"
+      ]
+      [
+        "Exec=code --ozone-platform-hint=auto"
+      ])
   ];
 
   xdg.desktopEntries = {

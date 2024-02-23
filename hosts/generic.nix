@@ -15,10 +15,6 @@
   i18n.defaultLocale = "en_GB.UTF-8";
   nix.settings.experimental-features = [ "flakes" "nix-command" ];
   nix.registry.sys.flake = inputs.nixpkgs;
-  nix.extraOptions = ''
-    keep-outputs = true
-    keep-derivations = true
-  '';
   nix.settings.auto-optimise-store = true;
   nixpkgs.config.allowUnfree = true;
   programs.firejail.enable = true;
@@ -35,6 +31,10 @@
     set fish_greeting
     any-nix-shell fish --info-right | source
   '';
+  programs.fish.shellAliases = {
+    rebuild = "nom build --no-link --accept-flake-config ~/dev/dotfiles#nixosConfigurations.$(hostname).config.system.build.toplevel && sudo nixos-rebuild switch --flake ~/dev/dotfiles";
+    rollback = "sudo nixos-rebuild switch --rollback --flake ~/dev/dotfiles/";
+  };
   services.vnstat.enable = true;
   users.defaultUserShell = pkgs.fish;
   environment.systemPackages = with pkgs; [
@@ -44,8 +44,17 @@
     htop
     any-nix-shell
     ncdu
+    nix-output-monitor
+    btop
+    ripcord
   ];
 
+  system.activationScripts.diff = ''
+    if [[ -e /run/current-system ]]; then
+      ${pkgs.nix}/bin/nix store diff-closures /run/current-system "$systemConfig"
+    fi
+  '';
+ 
   security.wrappers = {
     firejail = {
       source = "${pkgs.firejail.out}/bin/firejail";

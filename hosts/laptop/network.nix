@@ -29,6 +29,7 @@
     hostName = "laptop";
     useDHCP = lib.mkDefault true;
     networkmanager.enable = true;
+    interfaces.wlp1s0.proxyARP = true;
     firewall = {
       enable = true;
       allowedTCPPorts = [

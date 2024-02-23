@@ -68,7 +68,8 @@
     '';
   };
 
-  # services.ttyd.enable = false;
+  services.ttyd.enable = true;
+  services.ttyd.writeable = false;
   # systemd.services.ttyd.script = lib.mkForce ''
   #   ${pkgs.ttyd}/bin/ttyd \
   #     --port 7681 \
@@ -79,8 +80,8 @@
   #     ${pkgs.shadow}/bin/login
   # '';
 
-  # services.cloudflared.enable = false;
-  # services.cloudflared.tunnels = {
+  #services.cloudflared.enable = false;
+  #services.cloudflared.tunnels = {
   #   "unified" = {
   #     default = "http_status:404";
   #     credentialsFile = "/run/agenix/cloudflared";

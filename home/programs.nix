@@ -7,6 +7,10 @@
       matklad.rust-analyzer
       bbenoist.nix
     ];
+    enableUpdateCheck = false;
+    userSettings = {
+      "window.titleBarStyle" = "custom";
+    };
   };
   
   programs.git = {
@@ -15,27 +19,6 @@
     userEmail = "shwewo@gmail.com";
   };
  
-  home.sessionPath = [
-    "$HOME/.local/bin"
-  ];
-
-  # programs.neovim = {
-  #   enable = true;
-  #   coc = {
-  #     enable = true;
-  #     settings = {
-  #       languageserver = {
-  #         nix = {
-  #           command = "nil";
-  #           filetypes = [ "nix" ];
-  #           rootPatterns = [ "flake.nix" ];
-  #         };
-  #       };
-  #     };
-  #   }; 
-  #   extraPackages = with pkgs; [ nil lunarvim ];
-  # };
-
   programs.ssh = {
     enable = true;
     matchBlocks = {
@@ -79,13 +62,12 @@
     enable = true;
     
     shellAliases = {
-      rebuild = "sudo nixos-rebuild switch --flake ~/dev/dotfiles/";
-      rollback = "sudo nixos-rebuild switch --rollback --flake ~/dev/dotfiles/";
       sign = "~/.local/share/sign";
       mc = "steam-run java -jar ~/Dropbox/Software/minecraft.jar";
       run = "~/.local/share/run";
       fru = "trans ru:en";
       fen = "trans en:ru";
+      code = "/etc/profiles/per-user/cute/bin/code --ozone-platform-hint=auto";
     };
     shellInit = ''
         set fish_cursor_normal block
@@ -136,7 +118,6 @@
     };
     scripts = with pkgs; [ 
       mpvScripts.autoload
-      mpvScripts.cutter
     ];
     scriptOpts = {
       autoload = {

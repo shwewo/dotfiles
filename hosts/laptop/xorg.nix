@@ -2,7 +2,7 @@
 
 {
   environment.sessionVariables = { 
-    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1"; 
+    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
   };
   
   services.xserver = {
