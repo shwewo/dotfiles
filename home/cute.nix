@@ -49,16 +49,14 @@ in {
     gitleaks
     pre-commit
     # Messengers
+    vesktop
     element-desktop
     inputs.telegram-desktop-patched.packages.${pkgs.system}.default
-    discord
-    discord-screenaudio
     # Administration
     pavucontrol
-    gnome.gnome-disk-utility
+    mission-center
     usbutils
     pciutils
-    networkmanagerapplet
     util-linux
     libnotify
     lm_sensors
@@ -72,7 +70,6 @@ in {
     # Utilities
     obsidian
     scrcpy
-    stable.trayscale
     gnome.zenity
     distrobox
     libreoffice
@@ -103,19 +100,18 @@ in {
     noto-fonts-cjk
     noto-fonts-emoji
     wl-clipboard
-    cachix
 
     (callPackage ../derivations/audiorelay.nix {})
     (callPackage ../derivations/spotify.nix {})
 
-    (patchDesktop discord "discord"
+    (patchDesktop vesktop "vesktop"
       [
-        "Exec=Discord"
+        "Exec=vesktop %U"
       ]
       [
-        "Exec=Discord --ozone-platform-hint=auto"
+        "Exec=vesktop --ozone-platform-hint=auto"
       ])
-    
+
     (patchDesktop vscode "code"
       [
         "Exec=code %F"
@@ -148,7 +144,7 @@ in {
       sleep 5
       gtk-launch maestral.desktop
       gtk-launch keepassxc.desktop
-      gtk-launch discord.desktop
+      gtk-launch vesktop.desktop
       gtk-launch org.telegram.desktop.desktop
       gtk-launch spotify.desktop
       gtk-launch firefox.desktop

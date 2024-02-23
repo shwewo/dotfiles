@@ -32,7 +32,7 @@
     any-nix-shell fish --info-right | source
   '';
   programs.fish.shellAliases = {
-    rebuild = "nh os switch -- --accept-flake-config";
+    rebuild = "nh os switch -- --accept-flake-config --option warn-dirty false";
     rollback = "sudo nixos-rebuild switch --rollback --flake ~/dev/dotfiles/";
   };
   services.vnstat.enable = true;
