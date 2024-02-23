@@ -68,8 +68,8 @@
     '';
   };
 
-  services.ttyd.enable = true;
-  services.ttyd.writeable = false;
+  #services.ttyd.enable = false;
+  #services.ttyd.writeable = false;
   # systemd.services.ttyd.script = lib.mkForce ''
   #   ${pkgs.ttyd}/bin/ttyd \
   #     --port 7681 \
