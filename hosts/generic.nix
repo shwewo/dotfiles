@@ -19,11 +19,23 @@ in {
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAZX2ByyBbuOfs6ndbzn/hbLaCAFiMXFsqbjplmx9GfVTx2T1aaDKFRNFtQU1rv6y3jyQCrEbjgvIjdCM4ptDf8=" # ipod
     ];
   };
+
+  nix = {
+    settings = {
+      experimental-features = [ "flakes" "nix-command" ];
+      auto-optimise-store = true;
+      substituters = [
+        "https://shwewo.cachix.org"
+      ];
+      trusted-public-keys = [
+        "shwewo.cachix.org-1:84cIX7ETlqQwAWHBnd51cD4BeUVXCyGbFdtp+vLxKOo="
+      ];
+    };
+    registry.sys.flake = inputs.nixpkgs;
+  };
+
   boot.kernel.sysctl."kernel.sysrq" = 1;
   i18n.defaultLocale = "en_GB.UTF-8";
-  nix.settings.experimental-features = [ "flakes" "nix-command" ];
-  nix.registry.sys.flake = inputs.nixpkgs;
-  nix.settings.auto-optimise-store = true;
   nixpkgs.config.allowUnfree = true;
   programs.firejail.enable = true;
   programs.command-not-found.enable = false;

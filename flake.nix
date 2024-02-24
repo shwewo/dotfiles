@@ -1,13 +1,4 @@
-{
-  nixConfig = {
-    extra-substituters = [
-      "https://shwewo.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "shwewo.cachix.org-1:84cIX7ETlqQwAWHBnd51cD4BeUVXCyGbFdtp+vLxKOo="
-    ];
-  };
- 
+{ 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.05";

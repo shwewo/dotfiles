@@ -3,7 +3,7 @@
 {
   environment.sessionVariables = { 
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-    NIXOS_OZONE_WL = "1";
+    #NIXOS_OZONE_WL = "1";
   };
 
   services.xserver = {

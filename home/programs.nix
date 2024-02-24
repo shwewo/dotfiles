@@ -64,7 +64,6 @@
     shellAliases = {
       fru = "trans ru:en";
       fen = "trans en:ru";
-      code = "/etc/profiles/per-user/cute/bin/code --ozone-platform-hint=auto";
     };
     shellInit = ''
       set fish_cursor_normal block

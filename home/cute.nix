@@ -103,22 +103,6 @@ in {
 
     (callPackage ../derivations/audiorelay.nix {})
     (callPackage ../derivations/spotify/default.nix {})
-
-    #(patchDesktop vesktop "vesktop"
-    #  [
-    #    "Exec=vesktop %U"
-    #  ]
-    #  [
-    #    "Exec=vesktop --ozone-platform-hint=auto"
-    #  ])
-
-    (patchDesktop vscode "code"
-      [
-        "Exec=code %F"
-      ]
-      [
-        "Exec=code --ozone-platform-hint=auto"
-      ])
   ];
 
   xdg.desktopEntries = {
@@ -151,11 +135,11 @@ in {
     '';
   };
 
-  dconf.settings = {
-    "org/gnome/mutter" = {
-      experimental-features = [ "scale-monitor-framebuffer" ];
-    };
-  };
+  # dconf.settings = {
+  #   "org/gnome/mutter" = {
+  #     experimental-features = [ "scale-monitor-framebuffer" ];
+  #   };
+  # };
 
   gtk = {
     enable = true;
