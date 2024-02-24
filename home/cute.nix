@@ -54,7 +54,7 @@ in {
     inputs.telegram-desktop-patched.packages.${pkgs.system}.default
     # Administration
     pavucontrol
-    mission-center
+    mission-center  
     usbutils
     pciutils
     util-linux
@@ -102,7 +102,7 @@ in {
     wl-clipboard
 
     (callPackage ../derivations/audiorelay.nix {})
-    (callPackage ../derivations/spotify/default.nix {})
+    (callPackage ../derivations/spotify.nix {})
   ];
 
   xdg.desktopEntries = {
