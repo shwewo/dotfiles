@@ -102,15 +102,15 @@ in {
     wl-clipboard
 
     (callPackage ../derivations/audiorelay.nix {})
-    (callPackage ../derivations/spotify.nix {})
+    (callPackage ../derivations/spotify/default.nix {})
 
-    (patchDesktop vesktop "vesktop"
-      [
-        "Exec=vesktop %U"
-      ]
-      [
-        "Exec=vesktop --ozone-platform-hint=auto"
-      ])
+    #(patchDesktop vesktop "vesktop"
+    #  [
+    #    "Exec=vesktop %U"
+    #  ]
+    #  [
+    #    "Exec=vesktop --ozone-platform-hint=auto"
+    #  ])
 
     (patchDesktop vscode "code"
       [
@@ -149,6 +149,12 @@ in {
       gtk-launch spotify.desktop
       gtk-launch firefox.desktop
     '';
+  };
+
+  dconf.settings = {
+    "org/gnome/mutter" = {
+      experimental-features = [ "scale-monitor-framebuffer" ];
+    };
   };
 
   gtk = {
