@@ -73,6 +73,10 @@
     };
     nixosConfigurations.oracle-cloud = nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";
+      specialArgs = { 
+        inherit inputs; 
+        stable = import nixpkgs-stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
+      };
       modules = [
         ./hosts/oracle-cloud/system.nix
         ./hosts/oracle-cloud/hardware.nix

@@ -37,6 +37,8 @@
   hardware.pulseaudio.enable = false;
   sound.enable = true;
 
+  hardware.rtl-sdr.enable = true;
+
   environment.systemPackages = with pkgs; [
     wireguard-tools
     appimage-run
@@ -57,6 +59,8 @@
     yubikey-manager-qt
     yubikey-manager
     yubico-pam
+    rtl-sdr
+    gnuradio
     inputs.agenix.packages.x86_64-linux.default
     inputs.nix-search-cli.packages.x86_64-linux.default
   ];
