@@ -1,5 +1,6 @@
 <img align="right" src="./logo.png" width="300"/>
-# My NixOS and home-manager configuration
+
+### My NixOS and home-manager configuration
 ### Note: this configuration is shared "as is", and i highly discourage blindly copy-pasting from it
 
 ---
