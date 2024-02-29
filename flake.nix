@@ -22,7 +22,19 @@
     };
   };
 
-  outputs = inputs @ { nixpkgs, home-manager, ... }: {
+  outputs = inputs @ { nixpkgs, home-manager, ... }: 
+  let
+    pkgs86 = nixpkgs.legacyPackages."x86_64-linux";
+  in {
+    devShells."x86_64-linux".default = pkgs86.mkShell {
+      name = "shwewo";
+      packages = with pkgs86; [ gitleaks pre-commit ];
+      DIRENV_LOG_FORMAT = "";
+      shellHook = ''
+        gitleaks detect -v
+        pre-commit install 
+      '';      
+    };
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { 
