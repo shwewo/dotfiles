@@ -11,13 +11,24 @@ let
 in {
   programs.firefox = {
     enable = true;
-    package = stable.firefox;
     policies = {
-      # To add additional extensions, find it on addons.mozilla.org, find
-      # the short ID in the url (like https://addons.mozilla.org/en-US/firefox/addon/!SHORT_ID!/)
-      # Then, download the XPI by filling it in to the install_url template, unzip it,
-      # run `jq .browser_specific_settings.gecko.id manifest.json` or
-      # `jq .applications.gecko.id manifest.json` to get the UUID
+      DisableTelemetry = true;
+      DisableFirefoxStudies = true;
+      DisablePocket = true;
+      DisableFirefoxAccounts = true;
+      DisableAccounts = true;
+      DisableFirefoxScreenshots = true;
+      DisplayBookmarksToolbar = "never";
+      
+      Preferences = {
+        "ui.key.menuAccessKeyFocuses" = lock-false;
+        "signon.generation.enabled" = lock-false;
+        "browser.compactmode.show" = lock-true;
+        "browser.uidensity" = { Value = 1; Status = "Locked"; };
+        "mousewheel.with_alt.action" = { Value = "-1"; Status = "Locked"; };
+        "browser.tabs.firefox-view" = lock-false;
+      };
+
       # https://discourse.nixos.org/t/declare-firefox-extensions-and-settings/36265/17
       # about:debugging#/runtime/this-firefox
       ExtensionSettings = with builtins;
@@ -46,16 +57,11 @@ in {
           (extension "tampermonkey" "firefox@tampermonkey.net")
           (extension "torrent-control" "{e6e36c9a-8323-446c-b720-a176017e38ff}")
           (extension "unpaywall" "{f209234a-76f0-4735-9920-eb62507a54cd}")
+          (extension "ctrl-number-to-switch-tabs" "{84601290-bec9-494a-b11c-1baa897a9683}")
         ];
-      Preferences = {
-        "ui.key.menuAccessKeyFocuses" = lock-false;
-        "services.sync.engine.addons" = lock-false;
-        "signon.generation.enabled" = lock-false;
-        "browser.compactmode.show" = lock-true;
-        "mousewheel.with_alt.action" = { Value = "-1"; Status = "Locked"; };
-      };
     };
   };
+  
   programs.vscode = {
     enable = true;
     extensions = with pkgs.vscode-extensions; [
@@ -123,11 +129,14 @@ in {
     shellInit = ''
       set -U __done_kitty_remote_control 1
       set -U __done_kitty_remote_control_password "kitty-notification-password-fish"
+      set -U __done_notification_command "${pkgs.libnotify}/bin/notify-send --icon=kitty --app-name=kitty \$title \$argv[1]"
+      set -U __done_notification_urgency_level_failure critical
     '';
   };
 
   programs.kitty = {
     enable = true;
+    shellIntegration.enableFishIntegration = false;
     settings = {
       background = "#171717";
       foreground = "#DCDCCC";

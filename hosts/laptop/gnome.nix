@@ -3,7 +3,7 @@
 {
   environment.sessionVariables = { 
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-    #NIXOS_OZONE_WL = "1";
+    MOZ_ENABLE_WAYLAND = "0";
   };
 
   nixpkgs.overlays = [
@@ -21,12 +21,44 @@
     })
   ];
 
+  systemd.tmpfiles.rules = [
+    "L+ /run/gdm/.config/monitors.xml - - - - ${pkgs.writeText "gdm-monitors.xml" ''
+      <!-- this should all be copied from your ~/.config/monitors.xml -->
+      <monitors version="2">
+        <configuration>
+          <logicalmonitor>
+            <x>0</x>
+            <y>0</y>
+            <scale>2</scale>
+            <primary>yes</primary>
+            <monitor>
+              <monitorspec>
+                <connector>eDP</connector>
+                <vendor>CMN</vendor>
+                <product>P130ZFA-BA1</product>
+                <serial>0x00000000</serial>
+              </monitorspec>
+              <mode>
+                <width>2160</width>
+                <height>1440</height>
+                <rate>60.001</rate>
+              </mode>
+            </monitor>
+          </logicalmonitor>
+        </configuration>
+      </monitors>
+    ''}"
+  ];
+
   services.xserver = {
     enable = true;
     wacom.enable = true;
     videoDrivers = [ "amdgpu" ];
     displayManager = {
-      gdm.enable = true;
+      gdm = {
+        enable = true;
+        settings = {};
+      };
       defaultSession = "gnome";
     };
     desktopManager = {

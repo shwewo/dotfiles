@@ -5,6 +5,7 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
+    firefox.url = "github:nix-community/flake-firefox-nightly";
     nix-search-cli.url = "github:peterldowns/nix-search-cli";
     telegram-desktop-patched.url = "github:shwewo/telegram-desktop-patched";
     nh.url = "github:viperML/nh";
@@ -24,7 +25,7 @@
         ./hosts/laptop/system.nix
         ./hosts/laptop/hardware.nix
         ./hosts/laptop/network.nix
-        ./hosts/laptop/xorg.nix
+        ./hosts/laptop/gnome.nix
         ./hosts/generic.nix
         ./modules/laptop/socks.nix
         ./modules/laptop/services.nix

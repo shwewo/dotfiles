@@ -47,6 +47,7 @@ in {
   nixpkgs.config.allowUnfree = true;
   programs.firejail.enable = true;
   programs.command-not-found.enable = false;
+  programs.direnv.enable = true;
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
