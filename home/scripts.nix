@@ -143,9 +143,9 @@ in {
       type = "Application";
     };
     autostart = {
-      name = "autostart";
+      name = "Autostart";
       icon = "app-launcher";
-      exec = "${autostart}/bin/autostart";
+      exec = "/etc/profiles/per-user/cute/bin/autostart"; # this is needed due to nix stuff, the path is going to be changed every time i update autostart script
       type = "Application";
     };
   };
