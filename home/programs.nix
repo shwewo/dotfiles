@@ -1,6 +1,61 @@
-{ inputs, home, config, lib, pkgs, specialArgs, ... }: 
-
-{
+{ inputs, stable, home, config, lib, pkgs, specialArgs, ... }: 
+let
+  lock-false = {
+    Value = false;
+    Status = "locked";
+  };
+  lock-true = {
+    Value = true;
+    Status = "locked";
+  };
+in {
+  programs.firefox = {
+    enable = true;
+    package = stable.firefox;
+    policies = {
+      # To add additional extensions, find it on addons.mozilla.org, find
+      # the short ID in the url (like https://addons.mozilla.org/en-US/firefox/addon/!SHORT_ID!/)
+      # Then, download the XPI by filling it in to the install_url template, unzip it,
+      # run `jq .browser_specific_settings.gecko.id manifest.json` or
+      # `jq .applications.gecko.id manifest.json` to get the UUID
+      # https://discourse.nixos.org/t/declare-firefox-extensions-and-settings/36265/17
+      # about:debugging#/runtime/this-firefox
+      ExtensionSettings = with builtins;
+        let extension = shortId: uuid: {
+          name = uuid;
+          value = {
+            install_url = "https://addons.mozilla.org/en-US/firefox/downloads/latest/${shortId}/latest.xpi";
+            installation_mode = "normal_installed";
+          };
+        };
+        in listToAttrs [
+          (extension "ublock-origin" "uBlock0@raymondhill.net")
+          (extension "container-proxy" "contaner-proxy@bekh-ivanov.me")
+          (extension "clearurls" "{74145f27-f039-47ce-a470-a662b129930a}")
+          (extension "darkreader" "addon@darkreader.org")
+          (extension "firefox-color" "FirefoxColor@mozilla.com")
+          (extension "multi-account-containers" "@testpilot-containers")
+          (extension "jkcs" "{6d9f4f04-2499-4fed-ae4a-02c5658c5d00}")
+          (extension "keepassxc-browser" "keepassxc-browser@keepassxc.org")
+          (extension "new-window-without-toolbar" "new-window-without-toolbar@tkrkt.com")
+          (extension "open-in-spotify-desktop" "{04a727ec-f366-4f19-84bc-14b41af73e4d}")
+          (extension "search_by_image" "{2e5ff8c8-32fe-46d0-9fc8-6b8986621f3c}")
+          (extension "single-file" "{531906d3-e22f-4a6c-a102-8057b88a1a63}")
+          (extension "soundfixer" "soundfixer@unrelenting.technology")
+          (extension "sponsorblock" "sponsorBlocker@ajay.app")
+          (extension "tampermonkey" "firefox@tampermonkey.net")
+          (extension "torrent-control" "{e6e36c9a-8323-446c-b720-a176017e38ff}")
+          (extension "unpaywall" "{f209234a-76f0-4735-9920-eb62507a54cd}")
+        ];
+      Preferences = {
+        "ui.key.menuAccessKeyFocuses" = lock-false;
+        "services.sync.engine.addons" = lock-false;
+        "signon.generation.enabled" = lock-false;
+        "browser.compactmode.show" = lock-true;
+        "mousewheel.with_alt.action" = { Value = "-1"; Status = "Locked"; };
+      };
+    };
+  };
   programs.vscode = {
     enable = true;
     extensions = with pkgs.vscode-extensions; [
@@ -66,21 +121,21 @@
       fen = "trans en:ru";
     };
     shellInit = ''
-      set fish_cursor_normal block
-      set fish_greeting
-      any-nix-shell fish --info-right | source
+      set -U __done_kitty_remote_control 1
+      set -U __done_kitty_remote_control_password "kitty-notification-password-fish"
     '';
   };
 
   programs.kitty = {
     enable = true;
-    shellIntegration.enableFishIntegration = false;
     settings = {
       background = "#171717";
       foreground = "#DCDCCC";
       background_opacity = "0.8";
       remember_window_size = "yes";
-      hide_window_decorations = "yes";     
+      hide_window_decorations = "yes";
+      remote_control_password = "kitty-notification-password-fish ls";
+      allow_remote_control = "password";
 
       color0 = "#3F3F3F";
       color1 = "#705050";

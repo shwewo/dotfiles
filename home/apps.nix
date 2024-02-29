@@ -3,7 +3,6 @@
 {
   home.packages = with pkgs; [
     # Browsers
-    firefox
     ungoogled-chromium
     # Files
     yt-dlp
@@ -74,6 +73,7 @@
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
+    jq # needed for kitty
 
     (callPackage ../derivations/audiorelay.nix {})
     (callPackage ../derivations/spotify.nix {})

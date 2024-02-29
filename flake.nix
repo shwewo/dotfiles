@@ -12,7 +12,7 @@
     meow.url = "git+ssh://git@github.com/shwewo/meow";
   };
 
-  outputs = inputs @ { nixpkgs, nixpkgs-stable, agenix, nix-search-cli, meow, home-manager, telegram-desktop-patched, ... }: {
+  outputs = inputs @ { nixpkgs, nixpkgs-stable, agenix, meow, home-manager, ... }: {
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { 
