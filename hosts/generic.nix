@@ -48,6 +48,7 @@ in {
   programs.firejail.enable = true;
   programs.command-not-found.enable = false;
   programs.direnv.enable = true;
+  programs.direnv.silent = true;
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;

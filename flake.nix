@@ -1,25 +1,34 @@
 { 
+  description = "Shwewo's NixOS system configuration";
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.05";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    stable.url = "github:nixos/nixpkgs/nixos-23.05";
+    unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+
     agenix.url = "github:ryantm/agenix";
-    firefox.url = "github:nix-community/flake-firefox-nightly";
-    nix-search-cli.url = "github:peterldowns/nix-search-cli";
+
     telegram-desktop-patched.url = "github:shwewo/telegram-desktop-patched";
-    nh.url = "github:viperML/nh";
-    nh.inputs.nixpkgs.follows = "nixpkgs";
     meow.url = "git+ssh://git@github.com/shwewo/meow";
+
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nh = {
+      url = "github:viperML/nh";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs @ { nixpkgs, nixpkgs-stable, agenix, meow, home-manager, ... }: {
+  outputs = inputs @ { nixpkgs, home-manager, ... }: {
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { 
-        inherit inputs; 
-        # stable = inputs.nixpkgs-stable.legacyPackages."x86_64-linux";
-        stable = import nixpkgs-stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
+        inherit inputs;   
+        stable = import stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
+        unstable = import unstable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
       };
       modules = [
         ./hosts/laptop/system.nix
@@ -30,7 +39,7 @@
         ./modules/laptop/socks.nix
         ./modules/laptop/services.nix
         ./modules/laptop/age.nix
-        agenix.nixosModules.default
+        inputs.agenix.nixosModules.default
         home-manager.nixosModules.home-manager
         inputs.nh.nixosModules.default
         {
@@ -39,7 +48,8 @@
           home-manager.users.cute = import ./home/cute.nix;
           home-manager.extraSpecialArgs = { 
             inherit inputs;
-            stable = import nixpkgs-stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
+            stable = import stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
+            unstable = import unstable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
           };
           nh = {
             enable = true;
@@ -49,34 +59,12 @@
         }
       ];
     };
-    nixosConfigurations.vm = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { 
-        inherit inputs; 
-        stable = import nixpkgs-stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
-      };
-      modules = [
-        ./hosts/vm/system.nix
-        ./hosts/vm/xorg.nix
-        ./hosts/vm/hardware.nix
-        ./hosts/generic.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.cute = import ./home/cute.nix;
-          home-manager.extraSpecialArgs = { 
-            inherit inputs;
-            stable = import nixpkgs-stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
-          }; 
-        }
-      ];
-    };
     nixosConfigurations.oracle-cloud = nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";
       specialArgs = { 
         inherit inputs; 
-        stable = import nixpkgs-stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
+        stable = import stable { system = "aarch64-linux"; config = { allowUnfree = true; }; };
+        unstable = import unstable { system = "aarch64-linux"; config = { allowUnfree = true; }; };
       };
       modules = [
         ./hosts/oracle-cloud/system.nix

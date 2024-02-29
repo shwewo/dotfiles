@@ -17,9 +17,6 @@
     zip
     inotify-tools
     stable.spotdl
-    # Git
-    gitleaks
-    pre-commit
     # Messengers
     vesktop
     element-desktop
