@@ -27,8 +27,8 @@
       system = "x86_64-linux";
       specialArgs = { 
         inherit inputs;   
-        stable = import stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
-        unstable = import unstable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
+        stable = import inputs.stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
+        unstable = import inputs.unstable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
       };
       modules = [
         ./hosts/laptop/system.nix
@@ -48,8 +48,8 @@
           home-manager.users.cute = import ./home/cute.nix;
           home-manager.extraSpecialArgs = { 
             inherit inputs;
-            stable = import stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
-            unstable = import unstable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
+            stable = import inputs.stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
+            unstable = import inputs.unstable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
           };
           nh = {
             enable = true;
@@ -63,8 +63,8 @@
       system = "aarch64-linux";
       specialArgs = { 
         inherit inputs; 
-        stable = import stable { system = "aarch64-linux"; config = { allowUnfree = true; }; };
-        unstable = import unstable { system = "aarch64-linux"; config = { allowUnfree = true; }; };
+        stable = import inputs.stable { system = "aarch64-linux"; config = { allowUnfree = true; }; };
+        unstable = import inputs.unstable { system = "aarch64-linux"; config = { allowUnfree = true; }; };
       };
       modules = [
         ./hosts/oracle-cloud/system.nix
@@ -74,7 +74,7 @@
         ./modules/oracle-cloud/socks.nix
         ./modules/oracle-cloud/nginx.nix
         ./modules/oracle-cloud/age.nix
-        agenix.nixosModules.default
+        inputs.agenix.nixosModules.default
       ];
     };
   };
