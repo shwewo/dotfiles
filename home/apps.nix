@@ -29,6 +29,7 @@
     pavucontrol
     mission-center  
     usbutils
+    dnsutils
     pciutils
     util-linux
     libnotify
@@ -74,7 +75,6 @@
     noto-fonts-cjk
     noto-fonts-emoji
 
-    ephemeralbrowser
     (callPackage ../derivations/audiorelay.nix {})
     (callPackage ../derivations/spotify.nix {})
   ];

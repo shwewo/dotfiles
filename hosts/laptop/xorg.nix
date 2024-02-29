@@ -72,7 +72,6 @@
   ]) ++ (with pkgs.gnome; [
     cheese # webcam tool
     gnome-music
-    gnome-terminal
     epiphany # web browser
     geary # email reader
     gnome-characters

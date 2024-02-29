@@ -2,38 +2,59 @@
 
 let 
   ephemeralbrowser = pkgs.writeScriptBin "ephemeralbrowser" ''
-    #!${pkgs.bash}/bin/bash
-    google_chrome="--profile=google-chrome --private=/tmp/ephemeralbrowser ${pkgs.google-chrome}/bin/google-chrome-stable"
-    ungoogled_chromium="--profile=chromium --private=/tmp/ephemeralbrowser ${pkgs.ungoogled-chromium}/bin/chromium"
+  #!/usr/bin/env bash
 
-    browser=$(${pkgs.gnome.zenity}/bin/zenity --list --title="Select Browser" --text="Choose browser:" --column="Browser" "google_chrome" "ungoogled_chromium")
-    interface=$(${pkgs.gnome.zenity}/bin/zenity --list --title="Network Interfaces" --text="Select network interface:" --column="Interface" "default" $(${pkgs.iproute2}/bin/ip -o -4 addr show | ${pkgs.gawk}/bin/awk '$4 ~ /\/24/ {print $2}' | ${pkgs.coreutils}/bin/cut -d: -f1))
-    dns=$(${pkgs.gnome.zenity}/bin/zenity --list --title="Select DNS" --text="Choose DNS server:" --column="DNS Server" "1.1.1.1" "8.8.8.8" "77.88.8.1")
+  default_interface=$(ip route show default | awk '/default/ {print $5}')
+  interfaces=$(ip -o -4 addr show | awk '$4 ~ /\/24/ {print $2}' | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/|/g')
 
-    echo "Selected browser: $browser"
-    echo "Selected interface: $interface"
-    echo "Selected dns: $dns"
+  # The difference between default_interface and and default chose option is that default_interface is used to get dhcp from it, and default is for leave network as is without tweaking it (e.g. VPN/proxy/whatever)
 
-    if [[ $interface != "default" ]]; then
-      google_chrome="--net=$interface $google_chrome"
-      ungoogled_chromium="--net=$interface $ungoogled_chromium"
-    fi
+  result=$(zenity --forms --title="Configuration" \
+    --text="Please configure your settings" \
+    --add-combo="Browser:" --combo-values="google_chrome|ungoogled_chromium" \
+    --add-combo="Network Interface:" --combo-values="default|"$interfaces \
+    --add-combo="DNS Server:" --combo-values="dhcp|1.1.1.1|8.8.8.8|77.88.8.1")
 
-    google_chrome="firejail --ignore='include whitelist-run-common.inc' --dns=$dns $google_chrome"
-    ungoogled_chromium="firejail --ignore='include whitelist-run-common.inc' --dns=$dns $ungoogled_chromium"
-    
-    mkdir /tmp/ephemeralbrowser
-    ${pkgs.libnotify}/bin/notify-send "Ephemeral Browser" --icon=google-chrome-unstable "Browser: $browser | Interface: $interface | DNS: $dns"
-   
-    if [[ $browser == "google_chrome" ]]; then
-      eval "$google_chrome"
-    elif [[ $browser == "ungoogled_chromium" ]]; then
-      eval "$ungoogled_chromium"
-    fi
+  browser=$(echo "$result" | cut -d'|' -f1)
+  interface=$(echo "$result" | cut -d'|' -f2)
+  dns=$(echo "$result" | cut -d'|' -f3)
+
+  if [[ $dns == "dhcp" ]]; then
+    echo "Getting DNS from DHCP..."
+    dns=$(nmcli device show $default_interface | grep 'IP4.DNS\[1\]' | head -n 1 | awk '{print $2}')
+    echo "DHCP's dns is $dns"
+  fi
+
+  mkdir -p /tmp/ephemeralbrowser
+
+  if [[ $browser == "google_chrome" ]]; then
+    browser_path="${pkgs.google-chrome}/bin/google-chrome-stable"
+    profile="google-chrome"
+  elif [[ $browser == "ungoogled_chromium" ]]; then
+    browser_path="${pkgs.ungoogled-chromium}/bin/chromium"
+    profile="chromium"
+  fi
+
+  notify-send --icon=google-chrome-unstable "Ephemeral Browser" "$browser | $interface | $dns" 
+
+  if [[ $interface != "default" ]]; then
+    firejail --ignore='include whitelist-run-common.inc' \
+      --private=/tmp/ephemeralbrowser \
+      --profile="$profile" \
+      --net="$interface" \
+      --dns="$dns" \
+      "$browser_path" https://ifconfig.me
+  else
+    firejail --ignore='include whitelist-run-common.inc' \
+      --private=/tmp/ephemeralbrowser \
+      --profile="$profile" \
+      --dns="$dns" \
+      "$browser_path" https://ifconfig.me
+  fi
   '';
   
   cloudsync = pkgs.writeScriptBin "cloudsync" ''
-    #!${pkgs.bash}/bin/bash
+    #!/usr/bin/env bash
     ${pkgs.libnotify}/bin/notify-send "Syncing" "Compressing sync folder" --icon=globe
     ${pkgs.p7zip}/bin/7z a -mhe=on /tmp/Sync.7z ~/Dropbox/Sync -p$(cat /run/agenix/backup)
 
@@ -56,7 +77,7 @@ let
   '';
 
   fitsync = pkgs.writeScriptBin "fitsync" ''
-    #!${pkgs.bash}/bin/bash
+    #!/usr/bin/env bash
     if [ ! -f "/home/cute/Dropbox/Sync/recovery.kdbx" ]; then
       echo "Warning, 'recovery keys' database not found!"
       exit
@@ -73,19 +94,30 @@ let
   '';
 
   kitty_wrapped = pkgs.writeScriptBin "kitty_wrapped" ''
-    #!${pkgs.bash}/bin/bash
-    APP="kitty"
-    APP_CMD="kitty --start-as maximized"  # Replace with the actual command to start your app, if different
+    #!/usr/bin/env bash
+    pid=$(${pkgs.procps}/bin/pgrep "kitty")
 
-    # Check if the application is running
-    APP_PID=$(pgrep "$APP")
-
-    if [[ -z $APP_PID ]]; then
-        # If the application isn't running, start it
-        $APP_CMD &
+    if [[ -z $pid ]]; then
+      kitty --start-as maximized &
     else
-      gdbus call --session --dest org.gnome.Shell --object-path /de/lucaswerkmeister/ActivateWindowByTitle --method de.lucaswerkmeister.ActivateWindowByTitle.activateByWmClass 'kitty'
+      ${pkgs.glib}/bin/gdbus call --session --dest org.gnome.Shell --object-path /de/lucaswerkmeister/ActivateWindowByTitle --method de.lucaswerkmeister.ActivateWindowByTitle.activateByWmClass 'kitty'
     fi
+  '';
+
+  autostart = pkgs.writeScriptBin "autostart" ''
+    #!/usr/bin/env bash
+    ${pkgs.coreutils}/bin/sleep 5
+    ${pkgs.gtk3}/bin/gtk-launch maestral.desktop
+    ${pkgs.gtk3}/bin/gtk-launch keepassxc.desktop
+    ${pkgs.gtk3}/bin/gtk-launch vesktop.desktop
+    ${pkgs.gtk3}/bin/gtk-launch org.telegram.desktop.desktop
+    ${pkgs.gtk3}/bin/gtk-launch spotify.desktop
+    ${pkgs.gtk3}/bin/gtk-launch firefox.desktop
+  '';
+
+  keepassxc = pkgs.writeScriptBin "keepassxc" ''
+    #!/usr/bin/env bash
+    cat /run/agenix/precise | ${pkgs.keepassxc}/bin/keepassxc --pw-stdin ~/Dropbox/Sync/passwords.kdbx
   '';
 in {
   home.packages = [
@@ -93,5 +125,28 @@ in {
     cloudsync
     fitsync
     kitty_wrapped
+    keepassxc
+    autostart
   ];
+  
+  xdg.desktopEntries = {
+    keepassxc = {
+      name = "KeePassXC";
+      icon = "keepassxc";
+      exec = "${keepassxc}/bin/keepassxc";
+      type = "Application";
+    };
+    ephemeralbrowser = {
+      name = "Ephemeral Browser";
+      icon = "google-chrome-unstable";
+      exec = "${ephemeralbrowser}/bin/ephemeralbrowser";
+      type = "Application";
+    };
+    autostart = {
+      name = "autostart";
+      icon = "app-launcher";
+      exec = "${autostart}/bin/autostart";
+      type = "Application";
+    };
+  };
 }
