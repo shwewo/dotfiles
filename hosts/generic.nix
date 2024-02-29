@@ -8,6 +8,14 @@ let
     else
       NIXPKGS_ALLOW_UNFREE=1 nix run --impure nixpkgs#"$1" -- "''\${@:2}"
     fi
+  '';
+  shell = pkgs.writeScriptBin "shell" ''
+    #!/usr/bin/env bash
+    if [[ $# -eq 0 ]]; then
+      echo "Error: Missing argument"
+    else
+      NIXPKGS_ALLOW_UNFREE=1 nix shell --impure nixpkgs#"$1" -- "''\${@:2}"
+    fi
   ''; 
 in {
   users.users.cute = {
@@ -57,8 +65,11 @@ in {
   };
   services.vnstat.enable = true;
   users.defaultUserShell = pkgs.fish;
+
+  environment.sessionVariables.FLAKE = "/home/cute/dev/dotfiles";
   environment.systemPackages = with pkgs; [
     run
+    shell
     vnstat
     git
     wget
@@ -68,8 +79,8 @@ in {
     btop
     nix-output-monitor
     inputs.nh.packages.${pkgs.system}.default
+    inputs.agenix.packages.${pkgs.system}.default
   ];
-  environment.sessionVariables.FLAKE = "/home/cute/dev/dotfiles";
 
   security.wrappers = {
     firejail = {

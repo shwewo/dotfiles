@@ -66,4 +66,24 @@
     # xfce.xfce4-xkb-plugin
     # xfce.xfce4-timer-plugin
   ];
+
+  environment.gnome.excludePackages = (with pkgs; [
+    gnome-tour
+  ]) ++ (with pkgs.gnome; [
+    cheese # webcam tool
+    gnome-music
+    gnome-terminal
+    epiphany # web browser
+    geary # email reader
+    gnome-characters
+    totem # video player
+    tali # poker game
+    iagno # go game
+    hitori # sudoku game
+    atomix # puzzle game
+    gnome-maps
+    gnome-software
+    gnome-contacts
+    simple-scan
+  ]);
 }

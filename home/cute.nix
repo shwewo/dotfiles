@@ -1,108 +1,13 @@
 { stable, inputs, home, config, lib, pkgs, specialArgs, ... }:
 
-let
-  schema = pkgs.gsettings-desktop-schemas;
-  patchDesktop = pkg: appName: from: to:
-    with pkgs; let
-      zipped = lib.zipLists from to;
-      # Multiple operations to be performed by sed are specified with -e
-      sed-args = builtins.map
-        ({ fst, snd }: "-e 's#${fst}#${snd}#g'")
-        zipped;
-      concat-args = builtins.concatStringsSep " " sed-args;
-    in
-    lib.hiPrio
-      (pkgs.runCommand "$patched-desktop-entry-for-${appName}" { } ''
-        ${coreutils}/bin/mkdir -p $out/share/applications
-        ${gnused}/bin/sed ${concat-args} \
-         ${pkg}/share/applications/${appName}.desktop \
-         > $out/share/applications/${appName}.desktop
-      '');
-in {
+{
   home.username = "cute";
   home.stateVersion = "22.11";
 
   imports = [
     ./scripts.nix
     ./programs.nix
-  ];
-
-  home.packages = with pkgs; [
-    # Browsers
-    # google-chrome # ikr
-    ungoogled-chromium # i have bipolar disorder
-    firefox
-    # Files
-    yt-dlp
-    gocryptfs
-    maestral-gui
-    localsend
-    gnome.nautilus
-    gnome.file-roller
-    p7zip
-    rclone
-    unzip
-    zip
-    inotify-tools
-    stable.spotdl
-    # Git
-    gitleaks
-    pre-commit
-    # Messengers
-    vesktop
-    element-desktop
-    inputs.telegram-desktop-patched.packages.${pkgs.system}.default
-    # Administration
-    pavucontrol
-    mission-center  
-    usbutils
-    pciutils
-    util-linux
-    libnotify
-    lm_sensors
-    htop
-    killall
-    lsof
-    dnsutils
-    inetutils
-    virt-manager
-    neofetch
-    # Utilities
-    obsidian
-    scrcpy
-    gnome.zenity
-    distrobox
-    libreoffice
-    android-tools
-    lua5_4
-    translate-shell
-    # Network
-    nmap
-    wget
-    remmina
-    # Games
-    protonup-qt
-    lutris
-    steam-run
-    prismlauncher
-    # Graphics
-    krita
-    inkscape
-    ffmpeg
-    imagemagick
-    v4l-utils
-    flameshot
-    # Other stuff
-    monero-gui
-    openjfx11
-    openjdk11 
-    noto-fonts
-    noto-fonts-cjk
-    noto-fonts-emoji
-    wl-clipboard
-
-    (callPackage ../derivations/audiorelay.nix {})
-    (callPackage ../derivations/spotify.nix {})
+    ./apps.nix
   ];
 
   xdg.desktopEntries = {
@@ -112,8 +17,15 @@ in {
       exec = ''sh -c "cat /run/agenix/precise | ${pkgs.keepassxc}/bin/keepassxc --pw-stdin ~/Dropbox/Sync/passwords.kdbx"'';
       type = "Application";
     };
+    ephemeralbrowser = {
+      name = "Ephemeral Browser";
+      icon = "google-chrome-unstable";
+      exec = "ephemeralbrowser";
+      type = "Application";
+    };
     autostart = {
       name = "autostart";
+      icon = "settings";
       exec = "/home/cute/.autostart.sh";
       type = "Application";
     };
@@ -134,12 +46,6 @@ in {
       gtk-launch firefox.desktop
     '';
   };
-
-  # dconf.settings = {
-  #   "org/gnome/mutter" = {
-  #     experimental-features = [ "scale-monitor-framebuffer" ];
-  #   };
-  # };
 
   gtk = {
     enable = true;

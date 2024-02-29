@@ -23,7 +23,6 @@
   };
 
   services.flatpak.enable = true;
-  services.yubikey-agent.enable = true;
   services.printing.enable = true;
   services.printing.drivers = with pkgs; [ foo2zjs fxlinuxprint ];  
   
@@ -34,18 +33,7 @@
   programs.gamescope.enable = true;
   programs.noisetorch.enable = true;
   programs.captive-browser = {
-    browser = builtins.concatStringsSep " " [
-    ''env XDG_CONFIG_HOME="$PREV_CONFIG_HOME"''
-    ''${pkgs.ungoogled-chromium}/bin/chromium''
-    ''--user-data-dir=''${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive''
-    ''--proxy-server="socks5://$PROXY"''
-    ''--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE localhost"''
-    ''--no-first-run''
-    ''--new-window''
-    ''--incognito''
-    ''-no-default-browser-check''
-    ''http://cache.nixos.org/''
-  ];
+    browser = ''firejail --ignore="include whitelist-run-common.inc" --private --profile=chromium ${pkgs.bash}/bin/bash -c '${pkgs.coreutils}/bin/env XDG_CONFIG_HOME="$PREV_CONFIG_HOME" ${pkgs.ungoogled-chromium}/bin/chromium --user-data-dir=''${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive --proxy-server="socks5://$PROXY" --host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE localhost" --no-first-run --new-window --incognito -no-default-browser-check http://cache.nixos.org/' '';
     interface = "wlp1s0";
     enable = true;
   };
@@ -53,32 +41,14 @@
   hardware.pulseaudio.enable = false;
   sound.enable = true;
 
-  hardware.rtl-sdr.enable = true;
-
   environment.systemPackages = with pkgs; [
-    wireguard-tools
-    appimage-run
-    wine
-    tor-browser-bundle-bin
-    idevicerestore
-    libimobiledevice
-    ifuse
-    pinentry
+    tor-browser
     virtiofsd
-    pcsctools
     linuxPackages.usbip
-    yubioath-flutter
-    yubikey-personalization
-    yubikey-personalization-gui
-    yubico-piv-tool
-    yubikey-touch-detector
-    yubikey-manager-qt
-    yubikey-manager
-    yubico-pam
-    rtl-sdr
-    gnuradio
-    inputs.agenix.packages.x86_64-linux.default
-    inputs.nix-search-cli.packages.x86_64-linux.default
+  ];
+
+  users.users.cute.packages = with pkgs; [
+    yubioath-flutter # for some reason flutter apps are borked in home-manager
   ];
 
   nixpkgs.config.permittedInsecurePackages = [ "electron-25.9.0" ]; 
