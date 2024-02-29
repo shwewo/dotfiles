@@ -24,15 +24,14 @@
 
   outputs = inputs @ { nixpkgs, home-manager, ... }: 
   let
-    pkgs86 = nixpkgs.legacyPackages."x86_64-linux";
+    pkgs = nixpkgs.legacyPackages."x86_64-linux";
   in {
-    devShells."x86_64-linux".default = pkgs86.mkShell {
+    devShells."x86_64-linux".default = pkgs.mkShell {
       name = "shwewo";
-      packages = with pkgs86; [ gitleaks pre-commit ];
-      DIRENV_LOG_FORMAT = "";
+      packages = with pkgs; [ gitleaks pre-commit ];
       shellHook = ''
         gitleaks detect -v
-        pre-commit install 
+        pre-commit install
       '';      
     };
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
