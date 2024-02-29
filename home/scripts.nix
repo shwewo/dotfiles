@@ -4,28 +4,28 @@ let
   ephemeralbrowser = pkgs.writeScriptBin "ephemeralbrowser" ''
   #!/usr/bin/env bash
 
-  default_interface=$(ip route show default | awk '/default/ {print $5}')
-  interfaces=$(ip -o -4 addr show | awk '$4 ~ /\/24/ {print $2}' | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/|/g')
+  default_interface=$(${pkgs.iproute2}/bin/ip route show default | ${pkgs.gawk}/bin/awk '/default/ {print $5}')
+  interfaces=$(${pkgs.iproute2}/bin/ip -o -4 addr show | ${pkgs.gawk}/bin/awk '$4 ~ /\/24/ {print $2}' | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/|/g')
 
   # The difference between default_interface and and default chose option is that default_interface is used to get dhcp from it, and default is for leave network as is without tweaking it (e.g. VPN/proxy/whatever)
 
-  result=$(zenity --forms --title="Configuration" \
+  result=$(${pkgs.gnome.zenity}/bin/zenity --forms --title="Configuration" \
     --text="Please configure your settings" \
     --add-combo="Browser:" --combo-values="google_chrome|ungoogled_chromium" \
     --add-combo="Network Interface:" --combo-values="default|"$interfaces \
     --add-combo="DNS Server:" --combo-values="dhcp|1.1.1.1|8.8.8.8|77.88.8.1")
 
-  browser=$(echo "$result" | cut -d'|' -f1)
-  interface=$(echo "$result" | cut -d'|' -f2)
-  dns=$(echo "$result" | cut -d'|' -f3)
+  browser=$(${pkgs.coreutils}/bin/echo "$result" | cut -d'|' -f1)
+  interface=$(${pkgs.coreutils}/bin/echo "$result" | cut -d'|' -f2)
+  dns=$(${pkgs.coreutils}/bin/echo "$result" | cut -d'|' -f3)
 
   if [[ $dns == "dhcp" ]]; then
-    echo "Getting DNS from DHCP..."
-    dns=$(nmcli device show $default_interface | grep 'IP4.DNS\[1\]' | head -n 1 | awk '{print $2}')
-    echo "DHCP's dns is $dns"
+    ${pkgs.coreutils}/bin/echo "Getting DNS from DHCP..."
+    dns=$(${pkgs.networkmanager}/bin/nmcli device show $default_interface | ${pkgs.gnugrep}/bin/grep 'IP4.DNS\[1\]' | ${pkgs.coreutils}/bin/head -n 1 | ${pkgs.gawk}/bin/awk '{print $2}')
+    ${pkgs.coreutils}/bin/echo "DHCP's dns is $dns"
   fi
 
-  mkdir -p /tmp/ephemeralbrowser
+  ${pkgs.coreutils}/bin/mkdir -p /tmp/ephemeralbrowser
 
   if [[ $browser == "google_chrome" ]]; then
     browser_path="${pkgs.google-chrome}/bin/google-chrome-stable"
@@ -35,7 +35,7 @@ let
     profile="chromium"
   fi
 
-  notify-send --icon=google-chrome-unstable "Ephemeral Browser" "$browser | $interface | $dns" 
+  ${pkgs.libnotify}/bin/notify-send --icon=google-chrome-unstable "Ephemeral Browser" "$browser | $interface | $dns" 
 
   if [[ $interface != "default" ]]; then
     firejail --ignore='include whitelist-run-common.inc' \
@@ -60,18 +60,18 @@ let
 
     rclone_pass=$(cat /run/agenix/rclone);
     ${pkgs.libnotify}/bin/notify-send "Syncing" "Syncing koofr" --icon=globe;
-    echo "Syncing koofr...";
+    ${pkgs.coreutils}/bin/echo "Syncing koofr...";
     RCLONE_CONFIG_PASS="$rclone_pass" rclone -vvvv copy /tmp/Sync.7z koofr:
 
     ${pkgs.libnotify}/bin/notify-send "Syncing" "Syncing pcloud" --icon=globe
-    echo "Syncing pcloud..."
+    ${pkgs.coreutils}/bin/echo "Syncing pcloud..."
     RCLONE_CONFIG_PASS="$rclone_pass" rclone -vvvv copy /tmp/Sync.7z pcloud:
 
     ${pkgs.libnotify}/bin/notify-send "Syncing" "Syncing mega" --icon=globe
-    echo "Syncing mega..."
+    ${pkgs.coreutils}/bin/echo "Syncing mega..."
     RCLONE_CONFIG_PASS="$rclone_pass" rclone -vvvv copy /tmp/Sync.7z mega:
 
-    echo "Sync complete"
+    ${pkgs.coreutils}/bin/echo "Sync complete"
     ${pkgs.libnotify}/bin/notify-send "Syncing" "Cloud sync complete" --icon=globe
     sleep infinity
   '';
@@ -79,17 +79,17 @@ let
   fitsync = pkgs.writeScriptBin "fitsync" ''
     #!/usr/bin/env bash
     if [ ! -f "/home/cute/Dropbox/Sync/recovery.kdbx" ]; then
-      echo "Warning, 'recovery keys' database not found!"
+      ${pkgs.coreutils}/bin/echo "Warning, 'recovery keys' database not found!"
       exit
     fi
 
-    fusermount -uz ~/.encryptedfit
+    ${pkgs.fuse}/bin/fusermount -uz ~/.encryptedfit
     ${pkgs.gocryptfs}/bin/gocryptfs -passfile=/run/agenix/backup /run/media/cute/samsungfit/Encrypted ~/.encryptedfit && \
     ${pkgs.rsync}/bin/rsync -r -t -v --progress -s ~/Dropbox --delete ~/.encryptedfit/ --exclude "Sync/" --exclude ".dropbox.cache" && \
     ${pkgs.rsync}/bin/rsync -r -t -v --progress -s ~/Dropbox/Sync --delete /run/media/cute/samsungfit && \
-    sync && \
-    fusermount -uz ~/.encryptedfit && \
-    echo "Sync complete"
+    ${pkgs.coreutils}/bin/sync && \
+    ${pkgs.fuse}/bin/fusermount -uz ~/.encryptedfit && \
+    ${pkgs.coreutils}/bin/echo "Sync complete"
     ${pkgs.libnotify}/bin/notify-send "Syncing" "USB sync complete" --icon=usb
   '';
 
@@ -117,7 +117,7 @@ let
 
   keepassxc = pkgs.writeScriptBin "keepassxc" ''
     #!/usr/bin/env bash
-    cat /run/agenix/precise | ${pkgs.keepassxc}/bin/keepassxc --pw-stdin ~/Dropbox/Sync/passwords.kdbx
+    ${pkgs.coreutils}/bin/cat /run/agenix/precise | ${pkgs.keepassxc}/bin/keepassxc --pw-stdin ~/Dropbox/Sync/passwords.kdbx
   '';
 in {
   home.packages = [
@@ -133,13 +133,13 @@ in {
     keepassxc = {
       name = "KeePassXC";
       icon = "keepassxc";
-      exec = "${keepassxc}/bin/keepassxc";
+      exec = "/etc/profiles/per-user/cute/bin/keepassxc";
       type = "Application";
     };
     ephemeralbrowser = {
       name = "Ephemeral Browser";
       icon = "google-chrome-unstable";
-      exec = "${ephemeralbrowser}/bin/ephemeralbrowser";
+      exec = "/etc/profiles/per-user/cute/bin/ephemeralbrowser";
       type = "Application";
     };
     autostart = {
