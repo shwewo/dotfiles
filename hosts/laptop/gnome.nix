@@ -96,6 +96,7 @@ in {
         };
         "org/gnome/desktop/input-sources" = {
           sources = [ (lib.gvariant.mkTuple [ "xkb" "us" ]) (lib.gvariant.mkTuple [ "xkb" "ru" ]) ];
+          xkb-options = [ "terminate:ctrl_alt_bksp" "lv3:switch" "compose:ralt" ];
         };
         "org/gnome/shell/extensions/unite" = {
           enable-titlebar-actions = true;
