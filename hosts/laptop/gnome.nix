@@ -3,9 +3,10 @@
 let
   wallpaper = pkgs.stdenv.mkDerivation {
     name = "wallpaper";
+    phases = [ "installPhase" ];
     installPhase = ''
-      mkdir $out
-      cp ${../../wallpaper.png} $out/wallpaper.png
+      mkdir -p $out/share/backgrounds
+      cp ${../../wallpaper.png} $out/share/backgrounds/wallpaper.png
     '';
   };
 in {
@@ -25,7 +26,6 @@ in {
             sha256 = "sha256-mzNy5GPlB2qkI2KEAErJQzO//uo8yO0kPQUwvGDwR4w=";
           };
         });
-
       });
     })
   ];
@@ -37,9 +37,6 @@ in {
       settings = {
         "org/gnome/desktop/interface" = {
           scaling-factor = lib.gvariant.mkUint32 2;
-          };
-        "org/gnome/desktop/peripherals/touchpad" = {
-          tap-to-click = true;
         };
       };
     }
@@ -76,6 +73,50 @@ in {
         };
         "org/gnome/desktop/interface" = {
           icon-theme = "Papirus-Dark";
+          color-scheme = "prefer-dark";
+          gtk-theme = "adw-gtk3-dark";
+        };
+        "org/gnome/shell" = {
+          favorite-apps = [
+            "firefox.desktop" 
+            "vesktop.desktop"
+            "org.telegram.desktop.desktop" 
+            "spotify.desktop" 
+            "kitty.desktop" 
+            "org.gnome.Nautilus.desktop"
+          ];
+          disable-user-extensions = false;
+          enabled-extensions = [
+            "activate-window-by-title@lucaswerkmeister.de" "appindicatorsupport@rgcjonas.gmail.com" "clipboard-indicator@tudmotu.com" 
+            "gsconnect@andyholmes.github.io"
+            "tailscale@joaophi.github.com" 
+            "unite@hardpixel.eu" 
+            "user-theme@gnome-shell-extensions.gcampax.github.com"
+          ];
+        };
+        "org/gnome/desktop/input-sources" = {
+          sources = [ (lib.gvariant.mkTuple [ "xkb" "us" ]) (lib.gvariant.mkTuple [ "xkb" "ru" ]) ];
+        };
+        "org/gnome/shell/extensions/unite" = {
+          enable-titlebar-actions = true;
+          extend-left-box = false;
+          hide-activities-button = "never";
+          hide-app-menu-icon = false;
+          notifications-position = "center";
+          reduce-panel-spacing = true;
+          restrict-to-primary-screen = false;
+          show-appmenu-button = true;
+          show-desktop-name = false;
+          show-legacy-tray = false;
+          show-window-buttons = "tiled";
+          show-window-title = "never";
+        };
+        "org/gnome/shell/extensions/user-theme" = {
+          name = "Mojave-Dark-solid-alt";
+        };
+        "org/gnome/desktop/background" = {
+          picture-uri = "file:///run/current-system/sw/share/backgrounds/wallpaper.png";
+          picture-uri-dark = "file:///run/current-system/sw/share/backgrounds/wallpaper.png";
         };
         "org/gnome/desktop/peripherals/touchpad" = {
           tap-to-click = true;
@@ -98,11 +139,11 @@ in {
     desktopManager = {
       gnome = {
         enable = true;
-        extraGSettingsOverrides = ''
-          [org.gnome.login-screen]
-          icon-theme="Papirus-Dark"
-          background-picture-uri=${wallpaper}/wallpaper.png
-        '';
+        # extraGSettingsOverrides = ''
+        #   [org.gnome.login-screen]
+        #   icon-theme="Papirus-Dark"
+        #   background-picture-uri=${wallpaper}/wallpaper.png
+        # '';
       };
     };
   };
@@ -118,6 +159,7 @@ in {
     mojave-gtk-theme
     adw-gtk3
     papirus-icon-theme
+    wallpaper
     # xfce.xfce4-clipman-plugin
     # xfce.xfce4-weather-plugin
     # xfce.xfce4-pulseaudio-plugin

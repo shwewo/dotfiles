@@ -9,14 +9,6 @@ let
       NIXPKGS_ALLOW_UNFREE=1 nix run --impure nixpkgs#"$1" -- "''\${@:2}"
     fi
   '';
-  shell = pkgs.writeScriptBin "shell" ''
-    #!/usr/bin/env bash
-    if [[ $# -eq 0 ]]; then
-      echo "Error: Missing argument"
-    else
-      NIXPKGS_ALLOW_UNFREE=1 nix shell --impure nixpkgs#"$1" -- "''\${@:2}"
-    fi
-  ''; 
 in {
   users.users.cute = {
     isNormalUser = true;
@@ -71,7 +63,6 @@ in {
   environment.sessionVariables.FLAKE = "/home/cute/dev/dotfiles";
   environment.systemPackages = with pkgs; [
     run
-    shell
     vnstat
     git
     wget
