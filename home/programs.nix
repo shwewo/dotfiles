@@ -19,6 +19,11 @@ in {
       DisableAccounts = true;
       DisableFirefoxScreenshots = true;
       DisplayBookmarksToolbar = "never";
+      DNSOverHTTPS = {
+        Enabled = true;
+        ProviderURL = "https://mozilla.cloudflare-dns.com/dns-query";
+        Locked = true;
+      };
       
       Preferences = {
         "ui.key.menuAccessKeyFocuses" = lock-false;

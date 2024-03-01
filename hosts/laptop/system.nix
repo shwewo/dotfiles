@@ -1,7 +1,7 @@
 { stable, inputs, config, pkgs, lib, ... }:
 
 {
-  system.stateVersion = "22.11";
+  system.stateVersion = "23.11";
   time.timeZone = "Europe/Moscow";
 
   security.sudo.wheelNeedsPassword = false;

@@ -15,6 +15,10 @@ let
     --add-combo="Network Interface:" --combo-values="default|"$interfaces \
     --add-combo="DNS Server:" --combo-values="dhcp|1.1.1.1|8.8.8.8|77.88.8.1")
 
+  if [[ -z $result ]]; then
+    exit 1
+  fi
+
   browser=$(${pkgs.coreutils}/bin/echo "$result" | cut -d'|' -f1)
   interface=$(${pkgs.coreutils}/bin/echo "$result" | cut -d'|' -f2)
   dns=$(${pkgs.coreutils}/bin/echo "$result" | cut -d'|' -f3)

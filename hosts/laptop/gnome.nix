@@ -1,6 +1,14 @@
 { stable, inputs, config, pkgs, lib, ... }:
 
-{
+let
+  wallpaper = pkgs.stdenv.mkDerivation {
+    name = "wallpaper";
+    installPhase = ''
+      mkdir $out
+      cp ${./wallpaper.png} $out/wallpaper.png
+    '';
+  };
+in {
   environment.sessionVariables = { 
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
     MOZ_ENABLE_WAYLAND = "0";
@@ -17,37 +25,63 @@
             sha256 = "sha256-mzNy5GPlB2qkI2KEAErJQzO//uo8yO0kPQUwvGDwR4w=";
           };
         });
+
       });
     })
   ];
 
-  systemd.tmpfiles.rules = [
-    "L+ /run/gdm/.config/monitors.xml - - - - ${pkgs.writeText "gdm-monitors.xml" ''
-      <!-- this should all be copied from your ~/.config/monitors.xml -->
-      <monitors version="2">
-        <configuration>
-          <logicalmonitor>
-            <x>0</x>
-            <y>0</y>
-            <scale>2</scale>
-            <primary>yes</primary>
-            <monitor>
-              <monitorspec>
-                <connector>eDP</connector>
-                <vendor>CMN</vendor>
-                <product>P130ZFA-BA1</product>
-                <serial>0x00000000</serial>
-              </monitorspec>
-              <mode>
-                <width>2160</width>
-                <height>1440</height>
-                <rate>60.001</rate>
-              </mode>
-            </monitor>
-          </logicalmonitor>
-        </configuration>
-      </monitors>
-    ''}"
+  # https://discourse.nixos.org/t/need-help-for-nixos-gnome-scaling-settings/24590/12 
+  programs.dconf.enable = true;
+  programs.dconf.profiles.gdm.databases = [
+    {
+      settings = {
+        "org/gnome/desktop/interface" = {
+          scaling-factor = lib.gvariant.mkUint32 2;
+          };
+        "org/gnome/desktop/peripherals/touchpad" = {
+          tap-to-click = true;
+        };
+      };
+    }
+  ];
+
+  programs.dconf.profiles.user.databases = [
+    { 
+      settings = {
+        "org/gnome/settings-daemon/plugins/media-keys" = {
+          custom-keybindings = [
+            "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+            "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
+          ];
+        };
+        "org/gnome/shell/keybindings" = {
+          show-screenshot-ui = [ "<Shift><Super>s" ];
+        };
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+          binding = "<Alt>Return";
+          command = "/etc/profiles/per-user/cute/bin/kitty_wrapped";
+          name = "kitty";
+        };
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+          binding = "<Control><Alt>x";
+          command = "/etc/profiles/per-user/cute/bin/keepassxc";
+          name = "keepassxc";
+        };
+        "org/gnome/desktop/sound" = {
+          allow-volume-above-100-percent = true;
+        };
+        "org/gnome/desktop/wm/keybindings" = {
+          switch-input-source = [ "<Shift>Alt_L" ];
+          switch-input-source-backward = [ "<Alt>Shift_L" ];
+        };
+        "org/gnome/desktop/interface" = {
+          icon-theme = "Papirus-Dark";
+        };
+        "org/gnome/desktop/peripherals/touchpad" = {
+          tap-to-click = true;
+        };
+      };
+    }
   ];
 
   services.xserver = {
@@ -62,24 +96,15 @@
       defaultSession = "gnome";
     };
     desktopManager = {
-      gnome.enable = true;
+      gnome = {
+        enable = true;
+        extraGSettingsOverrides = ''
+          [org.gnome.login-screen]
+          icon-theme="Papirus-Dark"
+          background-picture-uri=${wallpaper}/wallpaper.png
+        '';
+      };
     };
-    # displayManager.defaultSession = "xfce";
-    # config = ''
-    #   section "OutputClass"
-    #   Identifier "AMD"
-    #   MatchDriver "amdgpu"
-    #   Driver "amdgpu"
-    #   Option "TearFree" "true"
-    #   EndSection
-
-    #   Section "InputClass"
-    #   Identifier "Tablet"
-    #   Driver "wacom"
-    #   MatchDevicePath "/dev/input/event*"
-    #   MatchUSBID "056a:037a"
-    #   EndSection
-    # '';
   };
 
   environment.systemPackages = with pkgs; [
@@ -92,6 +117,7 @@
     gnome.gnome-tweaks
     mojave-gtk-theme
     adw-gtk3
+    papirus-icon-theme
     # xfce.xfce4-clipman-plugin
     # xfce.xfce4-weather-plugin
     # xfce.xfce4-pulseaudio-plugin
