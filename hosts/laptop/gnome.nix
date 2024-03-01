@@ -5,7 +5,7 @@ let
     name = "wallpaper";
     installPhase = ''
       mkdir $out
-      cp ${./wallpaper.png} $out/wallpaper.png
+      cp ${../../wallpaper.png} $out/wallpaper.png
     '';
   };
 in {
