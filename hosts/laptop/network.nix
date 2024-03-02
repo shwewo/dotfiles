@@ -21,6 +21,13 @@
   };
 
   services.tailscale.enable = true;
+  services.tailscale.extraUpFlags = [
+    "--accept-dns=false"
+    "--operator=cute"
+    "--exit-node=100.122.26.102"
+    "--exit-node-allow-lan-access"
+    "--accept-dns=false"
+  ];
 
   users.groups.no-net = {};
   networking = {

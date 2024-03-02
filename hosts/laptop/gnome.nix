@@ -89,7 +89,7 @@ in {
           enabled-extensions = [
             "activate-window-by-title@lucaswerkmeister.de" "appindicatorsupport@rgcjonas.gmail.com" "clipboard-indicator@tudmotu.com" 
             "gsconnect@andyholmes.github.io"
-            "tailscale@joaophi.github.com" 
+            "tailscale@joaophi.github.com"
             "unite@hardpixel.eu" 
             "user-theme@gnome-shell-extensions.gcampax.github.com"
           ];
@@ -109,7 +109,7 @@ in {
           show-appmenu-button = true;
           show-desktop-name = false;
           show-legacy-tray = false;
-          show-window-buttons = "tiled";
+          show-window-buttons = "never";
           show-window-title = "never";
         };
         "org/gnome/shell/extensions/user-theme" = {
@@ -138,14 +138,7 @@ in {
       defaultSession = "gnome";
     };
     desktopManager = {
-      gnome = {
-        enable = true;
-        # extraGSettingsOverrides = ''
-        #   [org.gnome.login-screen]
-        #   icon-theme="Papirus-Dark"
-        #   background-picture-uri=${wallpaper}/wallpaper.png
-        # '';
-      };
+      gnome.enable = true;
     };
   };
 
@@ -161,11 +154,6 @@ in {
     adw-gtk3
     papirus-icon-theme
     wallpaper
-    # xfce.xfce4-clipman-plugin
-    # xfce.xfce4-weather-plugin
-    # xfce.xfce4-pulseaudio-plugin
-    # xfce.xfce4-xkb-plugin
-    # xfce.xfce4-timer-plugin
   ];
 
   environment.gnome.excludePackages = (with pkgs; [
