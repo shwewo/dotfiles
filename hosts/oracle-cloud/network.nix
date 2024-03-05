@@ -7,7 +7,7 @@
       ipv6_servers = true;
       require_dnssec = true;
       server_names = [ "cloudflare" ];
-      listen_addresses = [ "100.122.26.102:53" ]
+      listen_addresses = [ "100.122.26.102:53" ];
     };
   };
 
@@ -31,7 +31,7 @@
         8001 
         1935 
         8888 
-        8889 
+        8889 cd 
         8890 
       ];
       allowedUDPPorts = [ 
