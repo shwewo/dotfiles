@@ -50,6 +50,7 @@
     # Network
     nmap
     wget
+    trayscale
     remmina
     # Games
     protonup-qt

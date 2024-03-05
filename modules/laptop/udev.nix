@@ -1,7 +1,7 @@
 { stable, inputs, config, pkgs, lib, ... }:
  
 {
-  services.udev.packages = [ pkgs.yubikey-personalization ];
+  services.udev.packages = with pkgs; [ yubikey-personalization android-udev-rules ];
   services.udev.extraRules = ''
     # USB-Blaster
     SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6001", MODE="0666", GROUP="plugdev"

@@ -26,6 +26,7 @@
   services.printing.enable = true;
   services.printing.drivers = with pkgs; [ foo2zjs fxlinuxprint ];  
   
+  programs.adb.enable = true;
   programs.wireshark.enable = true;
   programs.wireshark.package = pkgs.wireshark;
   programs.gamemode.enable = true;
