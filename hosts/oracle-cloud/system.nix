@@ -57,23 +57,6 @@
           "/run/agenix/neko_xfce"
         ];
       };
-      neko-xfce = {
-        image = "ghcr.io/m1k1o/neko/arm-xfce:latest";
-        ports = [
-          "127.0.0.1:9090:8080"
-          "55000-55100:55000-55100/udp"
-        ];
-        environment = {
-          NEKO_SCREEN = "1920x1080@30";
-          NEKO_EPR = "55000-55100";
-          NEKO_ICELITE = "true";
-          NEKO_NAT1TO1 = inputs.meow.hosts.oracle-cloud.network.ip;
-          NEKO_CONTROL_PROTECTION = "true";
-        };
-        environmentFiles = [
-          "/run/agenix/neko_xfce"
-        ];
-      };
     };
   };
 
