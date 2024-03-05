@@ -46,6 +46,7 @@
     tor-browser
     virtiofsd
     linuxPackages.usbip
+    android-tools
   ];
 
   users.users.cute.packages = with pkgs; [

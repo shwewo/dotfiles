@@ -1,6 +1,20 @@
 { stable, inputs, config, pkgs, lib, ... }:
 
 {
+  services.dnscrypt-proxy2 = {
+    enable = true;
+    settings = {
+      ipv6_servers = true;
+      require_dnssec = true;
+      server_names = [ "cloudflare" ];
+      listen_addresses = [ "100.122.26.102:53" ]
+    };
+  };
+
+  systemd.services.dnscrypt-proxy2.serviceConfig = {
+    StateDirectory = "dnscrypt-proxy";
+  };
+
   users.groups.no-net = {};
   networking = {
     hostName = "oracle-cloud";

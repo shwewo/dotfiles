@@ -44,7 +44,6 @@
     gnome.zenity
     distrobox
     libreoffice
-    android-tools
     lua5_4
     translate-shell
     # Network

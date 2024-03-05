@@ -57,18 +57,40 @@
           "/run/agenix/neko_xfce"
         ];
       };
-      # not supported on arm, fuck this then
-      # dcef = {
-      #   image = "docker.io/slada/dcef:main";
-      #   workdir = "/discord_data";
-      #   volumes = [
-      #     "dcef_cache:/dcef/cache"
-      #     "/var/www/html/discord_data:/discord_data"
-      #   ];
-      #   ports = [
-      #     "127.0.0.1:21011:21011"
-      #   ];
-      # };
+      neko-xfce = {
+        image = "ghcr.io/m1k1o/neko/arm-xfce:latest";
+        ports = [
+          "127.0.0.1:9090:8080"
+          "55000-55100:55000-55100/udp"
+        ];
+        environment = {
+          NEKO_SCREEN = "1920x1080@30";
+          NEKO_EPR = "55000-55100";
+          NEKO_ICELITE = "true";
+          NEKO_NAT1TO1 = inputs.meow.hosts.oracle-cloud.network.ip;
+          NEKO_CONTROL_PROTECTION = "true";
+        };
+        environmentFiles = [
+          "/run/agenix/neko_xfce"
+        ];
+      };
+      findmydevice = {
+        image = "ghcr.io/m1k1o/neko/arm-xfce:latest";
+        ports = [
+          "127.0.0.1:9090:8080"
+          "55000-55100:55000-55100/udp"
+        ];
+        environment = {
+          NEKO_SCREEN = "1920x1080@30";
+          NEKO_EPR = "55000-55100";
+          NEKO_ICELITE = "true";
+          NEKO_NAT1TO1 = inputs.meow.hosts.oracle-cloud.network.ip;
+          NEKO_CONTROL_PROTECTION = "true";
+        };
+        environmentFiles = [
+          "/run/agenix/neko_xfce"
+        ];
+      };
     };
   };
 

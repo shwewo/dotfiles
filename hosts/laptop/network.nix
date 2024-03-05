@@ -1,19 +1,6 @@
 { stable, inputs, config, pkgs, lib, ... }:
 
-{  
-  services.dnscrypt-proxy2 = {
-    enable = true;
-    settings = {
-      ipv6_servers = true;
-      require_dnssec = true;
-      server_names = [ "cloudflare" ];
-    };
-  };
-
-  systemd.services.dnscrypt-proxy2.serviceConfig = {
-    StateDirectory = "dnscrypt-proxy";
-  };
-
+{
   services.openssh = {
     enable = true;
     listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
@@ -23,7 +10,7 @@
   services.tailscale.enable = true;
   users.groups.no-net = {};
   networking = {
-    nameservers = [ "127.0.0.1" "::1" ];
+    nameservers = [ "100.122.26.102" ];
     networkmanager.dns = "none";
     hostName = "laptop";
     useDHCP = lib.mkDefault true;
