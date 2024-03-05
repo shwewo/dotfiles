@@ -22,7 +22,7 @@ in {
       DNSOverHTTPS = {
         Enabled = true;
         ProviderURL = "https://mozilla.cloudflare-dns.com/dns-query";
-        Locked = true;
+        Locked = false;
       };
       
       Preferences = {

@@ -11,7 +11,7 @@ let
 
   result=$(${pkgs.gnome.zenity}/bin/zenity --forms --title="Configuration" \
     --text="Please configure your settings" \
-    --add-combo="Browser:" --combo-values="google_chrome|ungoogled_chromium" \
+    --add-combo="Browser:" --combo-values="google_chrome|ungoogled_chromium|firefox" \
     --add-combo="Network Interface:" --combo-values="default|"$interfaces \
     --add-combo="DNS Server:" --combo-values="dhcp|1.1.1.1|8.8.8.8|77.88.8.1")
 
@@ -30,6 +30,7 @@ let
   fi
 
   ${pkgs.coreutils}/bin/mkdir -p /tmp/ephemeralbrowser
+  browser_parameters=""
 
   if [[ $browser == "google_chrome" ]]; then
     browser_path="${pkgs.google-chrome}/bin/google-chrome-stable"
@@ -37,23 +38,36 @@ let
   elif [[ $browser == "ungoogled_chromium" ]]; then
     browser_path="${pkgs.ungoogled-chromium}/bin/chromium"
     profile="chromium"
+  elif [[ $browser == "firefox" ]]; then
+    browser_parameters="-no-remote"
+    browser_path="${pkgs.firefox}/bin/firefox"
+    profile="firefox"
   fi
 
   ${pkgs.libnotify}/bin/notify-send --icon=google-chrome-unstable "Ephemeral Browser" "$browser | $interface | $dns" 
 
+  # FOR SOME FUCKING REASON https://github.com/netblue30/firejail/issues/2869#issuecomment-546579293
   if [[ $interface != "default" ]]; then
-    firejail --ignore='include whitelist-run-common.inc' \
+    firejail \
+      --ignore='include whitelist-run-common.inc' \
+      --blacklist='/var/run/nscd' \
       --private=/tmp/ephemeralbrowser \
       --profile="$profile" \
       --net="$interface" \
       --dns="$dns" \
-      "$browser_path" https://ifconfig.me
+      "$browser_path" \
+      $browser_parameters \
+      https://ifconfig.me
   else
-    firejail --ignore='include whitelist-run-common.inc' \
+    firejail \
+      --ignore='include whitelist-run-common.inc' \
+      --blacklist='/var/run/nscd' \
       --private=/tmp/ephemeralbrowser \
       --profile="$profile" \
       --dns="$dns" \
-      "$browser_path" https://ifconfig.me
+      "$browser_path" \
+      $browser_parameters \
+      https://ifconfig.me
   fi
   '';
   
