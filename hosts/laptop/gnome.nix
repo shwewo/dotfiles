@@ -1,4 +1,4 @@
-{ stable, inputs, config, pkgs, lib, ... }:
+{ stable, inputs, config, pkgs, lib, ... }: with lib.gvariant;
 
 let
   wallpaper = pkgs.stdenv.mkDerivation {
@@ -36,7 +36,7 @@ in {
     {
       settings = {
         "org/gnome/desktop/interface" = {
-          scaling-factor = lib.gvariant.mkUint32 2;
+          scaling-factor = mkUint32 2;
         };
       };
     }
@@ -95,11 +95,11 @@ in {
           ];
         };
         "org/gnome/desktop/input-sources" = {
-          sources = [ (lib.gvariant.mkTuple [ "xkb" "us" ]) (lib.gvariant.mkTuple [ "xkb" "ru" ]) ];
+          sources = [ (mkTuple [ "xkb" "us" ]) (mkTuple [ "xkb" "ru" ]) ];
           xkb-options = [ "terminate:ctrl_alt_bksp" "lv3:switch" "compose:ralt" ];
         };
         "org/gnome/shell/extensions/unite" = {
-          enable-titlebar-actions = true;
+          enable-titlebar-actions = true; 
           extend-left-box = false;
           hide-activities-button = "never";
           hide-app-menu-icon = false;
@@ -115,12 +115,20 @@ in {
         "org/gnome/shell/extensions/user-theme" = {
           name = "Mojave-Dark-solid-alt";
         };
+        "org/gnome/shell/world-clocks" = {
+        };
+        "org/gnome/shell/weather" = {
+          automatic-location = true;
+        };
         "org/gnome/desktop/background" = {
           picture-uri = "file:///run/current-system/sw/share/backgrounds/wallpaper.png";
           picture-uri-dark = "file:///run/current-system/sw/share/backgrounds/wallpaper.png";
         };
         "org/gnome/desktop/peripherals/touchpad" = {
           tap-to-click = true;
+        };
+        "org/gnome/settings-daemon/plugins/power" = {
+          sleep-inactive-ac-type = "nothing";
         };
       };
     }

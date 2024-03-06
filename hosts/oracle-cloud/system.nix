@@ -94,6 +94,6 @@
     };
     appName = "Yet another gitea instance";
   };
+
+  services.adguardhome.enable = true;
 }
-
-

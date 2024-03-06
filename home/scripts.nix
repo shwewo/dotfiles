@@ -20,7 +20,7 @@ let
   fi
 
   browser=$(${pkgs.coreutils}/bin/echo "$result" | cut -d'|' -f1)
-  interface=$(${pkgs.coreutils}/bin/echo "$result" | cut -d'|' -f2)
+  interface=$(${pkgs.coreutils}/bin/echo "$result" | cut -d'|' -f2) 
   dns=$(${pkgs.coreutils}/bin/echo "$result" | cut -d'|' -f3)
 
   if [[ $dns == "dhcp" ]]; then
@@ -55,7 +55,7 @@ let
       --profile="$profile" \
       --net="$interface" \
       --dns="$dns" \
-      "$browser_path" \
+      "$browser_path" \ 
       $browser_parameters \
       https://ifconfig.me
   else
@@ -71,7 +71,7 @@ let
   fi
   '';
   
-  cloudsync = pkgs.writeScriptBin "cloudsync" ''
+  cloudsync = pkgs.writeScriptBin "cloudsync"  ''
     #!/usr/bin/env bash
     ${pkgs.libnotify}/bin/notify-send "Syncing" "Compressing sync folder" --icon=globe
     ${pkgs.p7zip}/bin/7z a -mhe=on /tmp/Sync.7z ~/Dropbox/Sync -p$(cat /run/agenix/backup)
@@ -91,7 +91,7 @@ let
 
     ${pkgs.coreutils}/bin/echo "Sync complete"
     ${pkgs.libnotify}/bin/notify-send "Syncing" "Cloud sync complete" --icon=globe
-    sleep infinity
+    ${pkgs.coreutils}/bin/sleep infinity
   '';
 
   fitsync = pkgs.writeScriptBin "fitsync" ''

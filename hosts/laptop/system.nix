@@ -47,6 +47,7 @@
     virtiofsd
     linuxPackages.usbip
     android-tools
+    wl-clipboard
   ];
 
   users.users.cute.packages = with pkgs; [
