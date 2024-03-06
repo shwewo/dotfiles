@@ -97,5 +97,5 @@
 
   services.adguardhome.enable = true;
   services.adguardhome.settings.bind_port = 4000;
-  services.adguardhome.settings.bind_port = "100.122.26.102";
+  services.adguardhome.settings.bind_host = "100.122.26.102";
 }
