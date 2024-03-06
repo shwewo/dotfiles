@@ -96,5 +96,5 @@
   };
 
   services.adguardhome.enable = true;
-  services.adguardhome.settings.address = "100.122.26.102:4000";
+  services.adguardhome.settings.http.address = "100.122.26.102:4000";
 }
