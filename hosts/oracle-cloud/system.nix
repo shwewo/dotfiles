@@ -96,5 +96,5 @@
   };
 
   services.adguardhome.enable = true;
-  services.adguardhome.bind_port = 4000;
+  services.adguardhome.settings.bind_port = 4000;
 }
