@@ -3,20 +3,25 @@
 {
   services.openssh = {
     enable = true;
-    listenAddresses = [ { addr = "127.0.0.1"; port = 22; } { addr = "100.121.227.118"; port = 22; } ];
+    listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
     settings.PasswordAuthentication = false;
   };
 
   services.tailscale.enable = true;
   users.groups.no-net = {};
   networking = {
+    networkmanager = { 
+      enable = true;
+      wifi.backend = "iwd";
+      dns = "none";
+    };
     nameservers = [ "100.122.26.102" ];
-    networkmanager.dns = "none";
     hostName = "laptop";
     useDHCP = lib.mkDefault true;
-    networkmanager.enable = true;
-    interfaces.wlp1s0.proxyARP = true;
+    interfaces.wlan0.proxyARP = true;
     iproute2.enable = true;
+    wireless.iwd.enable = true;
+    usePredictableInterfaceNames = true;
     firewall = {
       enable = true;
       allowedTCPPorts = [

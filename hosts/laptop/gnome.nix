@@ -12,7 +12,9 @@ let
 in {
   environment.sessionVariables = { 
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+    # QT_QPA_PLATFORM = "wayland";
     MOZ_ENABLE_WAYLAND = "0";
+    # NIXOS_OZONE_WL = "1";
   };
 
   nixpkgs.overlays = [
@@ -45,6 +47,9 @@ in {
   programs.dconf.profiles.user.databases = [
     { 
       settings = {
+        # "org/gnome/mutter" = {
+        #   experimental-features = [ "scale-monitor-framebuffer" ];
+        # };
         "org/gnome/settings-daemon/plugins/media-keys" = {
           custom-keybindings = [
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"

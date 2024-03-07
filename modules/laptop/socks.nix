@@ -4,6 +4,7 @@
     value = {
       enable = true;
       description = "avoid censorship";
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = { Restart = "on-failure"; RestartSec = "15"; User = "socks"; Group = "socks"; };
       script = attrs.script;

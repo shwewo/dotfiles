@@ -5,10 +5,9 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     stable.url = "github:nixos/nixpkgs/nixos-23.05";
     unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-
     agenix.url = "github:ryantm/agenix";
-
     telegram-desktop-patched.url = "github:shwewo/telegram-desktop-patched";
+    spicetify-nix.url = "github:the-argus/spicetify-nix";
     meow.url = "git+ssh://git@github.com/shwewo/meow";
 
     home-manager = {
@@ -20,6 +19,7 @@
       url = "github:viperML/nh";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
   };
 
   outputs = inputs @ { nixpkgs, home-manager, ... }: 

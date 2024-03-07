@@ -28,7 +28,20 @@ let
       install -D --mode=644 --strip target/release/libspotifyadblock.so $out/lib
       
     '';
-
+  };
+  spotifywm = stdenv.mkDerivation {
+    name = "spotifywm";
+    src = fetchFromGitHub {
+      owner = "dasj";
+      repo = "spotifywm";
+      rev = "8624f539549973c124ed18753881045968881745";
+      hash = "sha256-AsXqcoqUXUFxTG+G+31lm45gjP6qGohEnUSUtKypew0=";
+    };
+    buildInputs = [xorg.libX11];
+    installPhase = ''
+      mkdir -p $out/lib/
+      mv spotifywm.so $out/lib
+    '';
   };
 in
   spotify.overrideAttrs (
@@ -55,7 +68,7 @@ in
 
           ln -s ${spotify-adblock}/lib/libspotifyadblock.so $libdir
           wrapProgram $out/bin/spotify \
-            --set LD_PRELOAD "${spotify-adblock}/lib/libspotifyadblock.so"
+            --set LD_PRELOAD "${spotify-adblock}/lib/libspotifyadblock.so ${spotifywm}/lib/spotifywm.so"
           sed -i 's/Exec=spotify %U/Exec=spotify --uri=%U/g' "$out/share/applications/spotify.desktop"
         '';
     }

@@ -33,14 +33,13 @@ let
   browser_parameters=""
 
   if [[ $browser == "google_chrome" ]]; then
-    browser_path="${pkgs.google-chrome}/bin/google-chrome-stable"
+    browser_path="${pkgs.google-chrome}/bin/google-chrome-stable https://ifconfig.me"
     profile="google-chrome"
   elif [[ $browser == "ungoogled_chromium" ]]; then
-    browser_path="${pkgs.ungoogled-chromium}/bin/chromium"
+    browser_path="${pkgs.ungoogled-chromium}/bin/chromium https://ifconfig.me"
     profile="chromium"
   elif [[ $browser == "firefox" ]]; then
-    browser_parameters="-no-remote"
-    browser_path="${pkgs.firefox}/bin/firefox"
+    browser_path="${pkgs.firefox}/bin/firefox -no-remote https://ifconfig.me"
     profile="firefox"
   fi
 
@@ -55,9 +54,7 @@ let
       --profile="$profile" \
       --net="$interface" \
       --dns="$dns" \
-      "$browser_path" \ 
-      $browser_parameters \
-      https://ifconfig.me
+      bash -c "$browser_path"
   else
     firejail \
       --ignore='include whitelist-run-common.inc' \
@@ -65,9 +62,7 @@ let
       --private=/tmp/ephemeralbrowser \
       --profile="$profile" \
       --dns="$dns" \
-      "$browser_path" \
-      $browser_parameters \
-      https://ifconfig.me
+      bash -c "$browser_path"
   fi
   '';
   

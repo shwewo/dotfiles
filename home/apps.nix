@@ -10,6 +10,7 @@
     maestral-gui
     gnome.nautilus
     gnome.file-roller
+    celluloid
     localsend
     p7zip
     rclone
