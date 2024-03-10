@@ -5,7 +5,6 @@
   home.stateVersion = "23.11";
 
   imports = [
-    ./apps.nix
     ./scripts.nix
     ./programs.nix
   ];

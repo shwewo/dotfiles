@@ -1,13 +1,16 @@
+# This file exists because home-manager always complains about collisions between some shit and i already don't have a life
+
 { stable, inputs, config, pkgs, lib, ... }:
 
 {
-  home.packages = with pkgs; [
+  nixpkgs.config.permittedInsecurePackages = [ "electron-25.9.0" ]; 
+
+  users.users.cute.packages = with pkgs; [
     # Browsers
     ungoogled-chromium
     # Files
     yt-dlp
     gocryptfs
-    maestral-gui
     gnome.nautilus
     gnome.file-roller
     celluloid
@@ -19,7 +22,6 @@
     inotify-tools
     stable.spotdl
     # Messengers
-    vesktop
     element-desktop
     inputs.telegram-desktop-patched.packages.${pkgs.system}.default
     # Administration
@@ -66,6 +68,7 @@
     flameshot
     # Other stuff
     monero-gui
+    yubioath-flutter
     openjfx11
     openjdk11 
     noto-fonts
@@ -76,4 +79,12 @@
     (callPackage ../derivations/audiorelay.nix {})
     (callPackage ../derivations/spotify.nix {})
   ];
+
+  programs.wireshark.enable = true;
+  programs.wireshark.package = pkgs.wireshark;
+  programs.gamemode.enable = true;
+  programs.steam.enable = true;
+  programs.gamescope.enable = true;
+  programs.noisetorch.enable = true;
+  programs.adb.enable = true;
 }

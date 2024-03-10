@@ -67,7 +67,7 @@
       done 
     '';
   };
-
+  
   #services.ttyd.enable = false;
   #services.ttyd.writeable = false;
   # systemd.services.ttyd.script = lib.mkForce ''

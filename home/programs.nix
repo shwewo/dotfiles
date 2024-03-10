@@ -92,20 +92,20 @@ in {
         hostname = "192.168.122.222"; 
       };
       "oracle-cloud" = {
-        hostname = inputs.meow.hosts.oracle-cloud.network.ip;
-        port = inputs.meow.hosts.oracle-cloud.network.ssh.port;
+        hostname = inputs.secrets.hosts.oracle-cloud.network.ip;
+        port = inputs.secrets.hosts.oracle-cloud.network.ssh.port;
       };
       "canada" = {
-        hostname = inputs.meow.hosts.canada.network.ip;
-        port = inputs.meow.hosts.canada.network.ssh.port;
+        hostname = inputs.secrets.hosts.canada.network.ip;
+        port = inputs.secrets.hosts.canada.network.ssh.port;
       };
       "finland" = {
-        hostname = inputs.meow.hosts.finland.network.ip;
-        port = inputs.meow.hosts.finland.network.ssh.port;
+        hostname = inputs.secrets.hosts.finland.network.ip;
+        port = inputs.secrets.hosts.finland.network.ssh.port;
       };
       "france" = {
-        hostname = inputs.meow.hosts.france.network.ip;
-        port = inputs.meow.hosts.france.network.ssh.port;
+        hostname = inputs.secrets.hosts.france.network.ip;
+        port = inputs.secrets.hosts.france.network.ssh.port;
       };
       "nyadesk" = {
         hostname = "192.168.50.150";
@@ -122,21 +122,6 @@ in {
     plugins = with pkgs.obs-studio-plugins; [
       obs-pipewire-audio-capture
     ];
-  };
-
-  programs.fish = {
-    enable = true;
-    
-    shellAliases = {
-      fru = "trans ru:en";
-      fen = "trans en:ru";
-    };
-    shellInit = ''
-      set -U __done_kitty_remote_control 1
-      set -U __done_kitty_remote_control_password "kitty-notification-password-fish"
-      set -U __done_notification_command "${pkgs.libnotify}/bin/notify-send --icon=kitty --app-name=kitty \$title \$argv[1]"
-      set -U __done_notification_urgency_level_failure critical
-    '';
   };
 
   programs.kitty = {
@@ -169,6 +154,21 @@ in {
       color14 = "#93E0E3";
       color15 = "#FFFFFF";
     };
+  };
+
+  programs.fish = {
+    enable = true;
+    
+    shellAliases = {
+      fru = "trans ru:en";
+      fen = "trans en:ru";
+    };
+    shellInit = ''
+      set -U __done_kitty_remote_control 1
+      set -U __done_kitty_remote_control_password "kitty-notification-password-fish"
+      set -U __done_notification_command "${pkgs.libnotify}/bin/notify-send --icon=kitty --app-name=kitty \$title \$argv[1]"
+      set -U __done_notification_urgency_level_failure critical
+    '';
   };
 
   programs.mpv = { 

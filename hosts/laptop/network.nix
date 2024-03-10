@@ -31,6 +31,8 @@
         59100
         # localsend
         53317
+        # dropbox
+        17500
       ];
       allowedUDPPorts = [
         # audiorelay
@@ -38,6 +40,8 @@
         59200
         # localsend
         53317
+        # dropbox
+        17500
       ];
       allowedTCPPortRanges = [ { from = 1714; to = 1764; } ]; # kde connect
       allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];

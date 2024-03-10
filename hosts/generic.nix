@@ -74,7 +74,6 @@ in {
     nix-output-monitor
     fishPlugins.done
     inputs.nh.packages.${pkgs.system}.default
-    inputs.agenix.packages.${pkgs.system}.default
   ];
 
   security.wrappers = {

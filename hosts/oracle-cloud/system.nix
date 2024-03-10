@@ -33,7 +33,7 @@
           NEKO_SCREEN = "1920x1080@30";
           NEKO_EPR = "52000-52100";
           NEKO_ICELITE = "true";
-          NEKO_NAT1TO1 = inputs.meow.hosts.oracle-cloud.network.ip;
+          NEKO_NAT1TO1 = inputs.secrets.hosts.oracle-cloud.network.ip;
           NEKO_CONTROL_PROTECTION = "true";
         };
         environmentFiles = [
@@ -50,7 +50,7 @@
           NEKO_SCREEN = "1920x1080@30";
           NEKO_EPR = "55000-55100";
           NEKO_ICELITE = "true";
-          NEKO_NAT1TO1 = inputs.meow.hosts.oracle-cloud.network.ip;
+          NEKO_NAT1TO1 = inputs.secrets.hosts.oracle-cloud.network.ip;
           NEKO_CONTROL_PROTECTION = "true";
         };
         environmentFiles = [
@@ -85,7 +85,7 @@
     settings = {
       service.DISABLE_REGISTRATION = true;
       server = {
-        DOMAIN = inputs.meow.hosts.oracle-cloud.gitea.domain;
+        DOMAIN = inputs.secrets.hosts.oracle-cloud.gitea.domain;
         DISABLE_SSH = true;
       };
     };

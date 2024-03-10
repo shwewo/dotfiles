@@ -3,12 +3,12 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    stable.url = "github:nixos/nixpkgs/nixos-23.05";
+    stable.url = "github:nixos/nixpkgs/nixos-23.11";
     unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    agenix.url = "github:ryantm/agenix";
+    
     telegram-desktop-patched.url = "github:shwewo/telegram-desktop-patched";
-    spicetify-nix.url = "github:the-argus/spicetify-nix";
-    meow.url = "git+ssh://git@github.com/shwewo/meow";
+    secrets.url = "git+ssh://git@github.com/shwewo/secrets";
+    agenix.url = "github:ryantm/agenix";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -19,20 +19,19 @@
       url = "github:viperML/nh";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
   };
 
-  outputs = inputs @ { nixpkgs, home-manager, ... }: 
+  outputs = inputs @ { nixpkgs, ... }: 
   let
     pkgs = nixpkgs.legacyPackages."x86_64-linux";
   in {
     devShells."x86_64-linux".default = pkgs.mkShell {
       name = "shwewo";
-      packages = with pkgs; [ gitleaks pre-commit ];
+      packages = with pkgs; [ gitleaks pre-commit inputs.agenix.packages.${pkgs.system}.default ];
       shellHook = ''
         gitleaks detect -v
-        pre-commit install
-      '';      
+        pre-commit install &> /dev/null
+      '';
     };
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
@@ -46,12 +45,12 @@
         ./hosts/laptop/hardware.nix
         ./hosts/laptop/network.nix
         ./hosts/laptop/gnome.nix
+        ./hosts/laptop/socks.nix
+        ./hosts/laptop/services.nix
         ./hosts/generic.nix
-        ./modules/laptop/socks.nix
-        ./modules/laptop/services.nix
-        ./modules/laptop/age.nix
-        inputs.agenix.nixosModules.default
-        home-manager.nixosModules.home-manager
+        ./hosts/apps.nix
+        inputs.home-manager.nixosModules.home-manager
+        inputs.secrets.nixosModules.laptop
         inputs.nh.nixosModules.default
         {
           home-manager.useGlobalPkgs = true;
@@ -81,11 +80,10 @@
         ./hosts/oracle-cloud/system.nix
         ./hosts/oracle-cloud/hardware.nix
         ./hosts/oracle-cloud/network.nix
+        ./hosts/oracle-cloud/socks.nix
+        ./hosts/oracle-cloud/nginx.nix
         ./hosts/generic.nix
-        ./modules/oracle-cloud/socks.nix
-        ./modules/oracle-cloud/nginx.nix
-        ./modules/oracle-cloud/age.nix
-        inputs.agenix.nixosModules.default
+        inputs.secrets.nixosModules.oracle-cloud
       ];
     };
   };

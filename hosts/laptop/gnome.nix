@@ -174,7 +174,6 @@ in {
   ]) ++ (with pkgs.gnome; [
     cheese # webcam tool
     gnome-music
-    epiphany # web browser
     geary # email reader
     gnome-characters
     totem # video player
