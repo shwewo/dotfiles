@@ -1,4 +1,4 @@
-{ stable, inputs, config, pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
 {
   systemd.tmpfiles.rules = [

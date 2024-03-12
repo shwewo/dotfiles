@@ -1,4 +1,4 @@
-{ stable, inputs, config, pkgs, lib, ... }:
+{ pkgs, lib, ... }:
  
 {
   services.udev.packages = with pkgs; [ yubikey-personalization android-udev-rules ];

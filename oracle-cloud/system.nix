@@ -1,5 +1,14 @@
-{ inputs, config, pkgs, lib, args, ... }:
-{
+{ pkgs, lib, inputs, ... }:
+let
+  secrets = inputs.secrets.nixosModules.oracle-cloud;
+  imports = [
+    import ../generics/generic.nix
+    import ./hardware.nix
+    import ./network.nix
+    import ./socks.nix
+    import ./nginx.nix
+  ];
+in {
   system.stateVersion = "22.11";
   time.timeZone = "Europe/Amsterdam";
   boot.loader.systemd-boot.enable = true;
@@ -33,7 +42,7 @@
           NEKO_SCREEN = "1920x1080@30";
           NEKO_EPR = "52000-52100";
           NEKO_ICELITE = "true";
-          NEKO_NAT1TO1 = inputs.secrets.hosts.oracle-cloud.network.ip;
+          NEKO_NAT1TO1 = secrets.hosts.oracle-cloud.network.ip;
           NEKO_CONTROL_PROTECTION = "true";
         };
         environmentFiles = [
@@ -50,7 +59,7 @@
           NEKO_SCREEN = "1920x1080@30";
           NEKO_EPR = "55000-55100";
           NEKO_ICELITE = "true";
-          NEKO_NAT1TO1 = inputs.secrets.hosts.oracle-cloud.network.ip;
+          NEKO_NAT1TO1 = secrets.hosts.oracle-cloud.network.ip;
           NEKO_CONTROL_PROTECTION = "true";
         };
         environmentFiles = [
@@ -85,7 +94,7 @@
     settings = {
       service.DISABLE_REGISTRATION = true;
       server = {
-        DOMAIN = inputs.secrets.hosts.oracle-cloud.gitea.domain;
+        DOMAIN = secrets.hosts.oracle-cloud.gitea.domain;
         DISABLE_SSH = true;
       };
     };

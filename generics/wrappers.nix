@@ -1,6 +1,6 @@
-{ inputs, home, config, lib, pkgs, specialArgs, ... }: 
+{ pkgs, lib, inputs, ... }:
 
-let 
+{
   ephemeralbrowser = pkgs.writeScriptBin "ephemeralbrowser" ''
     #!/usr/bin/env bash
 
@@ -30,7 +30,6 @@ let
     fi
 
     ${pkgs.coreutils}/bin/mkdir -p /tmp/ephemeralbrowser
-    browser_parameters=""
 
     if [[ $browser == "google_chrome" ]]; then
       browser_path="${pkgs.google-chrome}/bin/google-chrome-stable https://ifconfig.me"
@@ -65,7 +64,81 @@ let
         bash -c "$browser_path"
     fi
   '';
-  
+
+  ephemeralbrowserDesktopItem = pkgs.makeDesktopItem {
+    name = "ephemeralbrowser";
+    desktopName = "Ephemeral Browser";
+    icon = "google-chrome-unstable";
+    exec = "/etc/profiles/per-user/cute/bin/ephemeralbrowser";
+    type = "Application";
+  };
+
+  dropbox = pkgs.writeScriptBin "dropbox" ''
+    #!/usr/bin/env bash
+    ${pkgs.dropbox-cli}/bin/dropbox "$@"
+    exit 0
+  '';
+
+  dropboxDesktopItem = pkgs.makeDesktopItem {
+    name = "dropbox";
+    desktopName = "Dropbox";
+    icon = "dropbox";
+    exec = "${pkgs.dropbox}/bin/dropbox";
+    type = "Application";
+  };
+
+  autostart = pkgs.writeScriptBin "autostart" ''
+    #!/usr/bin/env bash
+    ${pkgs.coreutils}/bin/sleep 5
+    PID=$$
+    ${pkgs.gtk3}/bin/gtk-launch dropbox.desktop
+    ${pkgs.gtk3}/bin/gtk-launch org.telegram.desktop.desktop
+    ${pkgs.gtk3}/bin/gtk-launch vesktop.desktop
+    ${pkgs.gtk3}/bin/gtk-launch ayugram.desktop
+    ${pkgs.gtk3}/bin/gtk-launch spotify.desktop
+    ${pkgs.gtk3}/bin/gtk-launch firefox.desktop
+    ${pkgs.gtk3}/bin/gtk-launch keepassxc.desktop                       
+    exit 0
+  '';
+
+  autostartDesktopItem = pkgs.makeDesktopItem {
+    name = "autostart";
+    desktopName = "Autostart";
+    icon = "app-launcher";
+    exec = "/etc/profiles/per-user/cute/bin/autostart";
+    type = "Application";
+  };
+
+  keepassxc = pkgs.writeScriptBin "keepassxc" ''
+    #!/usr/bin/env bash
+    ${pkgs.coreutils}/bin/cat /run/agenix/precise | ${pkgs.keepassxc}/bin/keepassxc --pw-stdin ~/Dropbox/Sync/passwords.kdbx &
+    exit 0
+  '';
+
+  keepassxcDesktopItem = pkgs.makeDesktopItem {
+    name = "keepassxc";
+    desktopName = "KeePassXC";
+    icon = "keepassxc";
+    exec = "/etc/profiles/per-user/cute/bin/keepassxc";
+    type = "Application";
+  };
+
+  # ayugram-desktop = pkgs.writeScriptBin "ayugram-desktop" ''
+  #   #!/usr/bin/env bash
+  #   exec env QT_QPA_PLATFORM=wayland ${inputs.ayugram-desktop.packages.${pkgs.system}.default}/bin/ayugram-desktop "$@"
+  #   exit 0
+  # '';
+
+  # ayugram-desktopDesktopItem = pkgs.makeDesktopItem {
+  #   name = "com.ayugram.desktop";
+  #   desktopName = "Telegram Desktop";
+  #   icon = "telegram-desktop";
+  #   exec = "/etc/profiles/per-user/cute/bin/ayugram-desktop";
+  #   type = "Application";
+  #   startupWMClass = "com.ayugram";
+  #   mimeTypes = [ "x-scheme-handler/tg" ];
+  # };
+
   cloudsync = pkgs.writeScriptBin "cloudsync"  ''
     #!/usr/bin/env bash
     ${pkgs.libnotify}/bin/notify-send "Syncing" "Compressing sync folder" --icon=globe
@@ -118,77 +191,4 @@ let
     
     exit 0
   '';
-
-  dropbox = pkgs.writeScriptBin "dropbox" ''
-    #!/usr/bin/env bash
-    ${pkgs.dropbox-cli}/bin/dropbox "$@"
-    exit 0
-  '';
-
-  autostart = pkgs.writeScriptBin "autostart" ''
-    #!/usr/bin/env bash
-    ${pkgs.coreutils}/bin/sleep 5
-    ${pkgs.gtk3}/bin/gtk-launch dropbox.desktop
-    ${pkgs.gtk3}/bin/gtk-launch keepassxc.desktop
-    ${pkgs.gtk3}/bin/gtk-launch vesktop.desktop
-    ${pkgs.gtk3}/bin/gtk-launch org.telegram.desktop.desktop
-    ${pkgs.gtk3}/bin/gtk-launch spotify.desktop
-    ${pkgs.gtk3}/bin/gtk-launch firefox.desktop
-    exit 0
-  '';
-
-  keepassxc = pkgs.writeScriptBin "keepassxc" ''
-    #!/usr/bin/env bash
-    ${pkgs.coreutils}/bin/cat /run/agenix/precise | ${pkgs.keepassxc}/bin/keepassxc --pw-stdin ~/Dropbox/Sync/passwords.kdbx
-  '';
-
-  discord = pkgs.writeScriptBin "discord" ''
-    #!/usr/bin/env bash
-    ${pkgs.vesktop}/bin/vesktop
-    exit 0
-  '';
-in {
-  home.packages = [
-    ephemeralbrowser
-    cloudsync
-    fitsync
-    kitty_wrapped
-    dropbox
-    keepassxc
-    discord
-    autostart
-  ];
-  
-  xdg.desktopEntries = {
-    keepassxc = {
-      name = "KeePassXC";
-      icon = "keepassxc";
-      exec = "/etc/profiles/per-user/cute/bin/keepassxc";
-      type = "Application";
-    };
-    ephemeralbrowser = {
-      name = "Ephemeral Browser";
-      icon = "google-chrome-unstable";
-      exec = "/etc/profiles/per-user/cute/bin/ephemeralbrowser";
-      type = "Application";
-    };
-    dropbox = {
-      name = "Dropbox";
-      icon = "dropbox";
-      exec = "${pkgs.dropbox}/bin/dropbox";
-      type = "Application";
-    };
-    discord = {
-      name = "Discord";
-      icon = "discord-canary";
-      exec = "/etc/profiles/per-user/cute/bin/discord";
-      type = "Application";
-    };
-    autostart = {
-      name = "Autostart";
-      icon = "app-launcher";
-      exec = "/etc/profiles/per-user/cute/bin/autostart"; # this is needed due to nix stuff, the path is going to be changed every time i update autostart script
-      type = "Application";
-    };
-  };
 }

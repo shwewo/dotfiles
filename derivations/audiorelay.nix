@@ -1,4 +1,4 @@
-{ lib, pkgs ? import <nixpkgs> {} }:
+{ lib, pkgs, ... }:
 
 pkgs.stdenv.mkDerivation rec {
   name = "audio-relay";

@@ -1,4 +1,4 @@
-{ stable, inputs, config, pkgs, lib, ... }:
+{ pkgs, lib, ... }:
   let socksBuilder = attrs: {
     inherit (attrs) name;
     value = {

@@ -1,4 +1,4 @@
-{ stable, inputs, config, pkgs, lib, ... }:
+{ pkgs, lib, inputs, ... }:
 
 let
   run = pkgs.writeScriptBin "run" ''
@@ -31,7 +31,6 @@ in {
         "shwewo.cachix.org-1:84cIX7ETlqQwAWHBnd51cD4BeUVXCyGbFdtp+vLxKOo="
       ];
     };
-    registry.sys.flake = inputs.nixpkgs;
   };
 
   boot.kernel.sysctl."kernel.sysrq" = 1;
@@ -55,6 +54,7 @@ in {
   '';
   programs.fish.shellAliases = {
     rebuild = "nh os switch -- --option warn-dirty false";
+    haste = "HASTE_SERVER=https://haste.eww.workers.dev ${pkgs.haste-client}/bin/haste";
     rollback = "sudo nixos-rebuild switch --rollback --flake ~/dev/dotfiles/";
   };
   services.vnstat.enable = true;

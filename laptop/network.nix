@@ -1,4 +1,4 @@
-{ stable, inputs, config, pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
 {
   services.openssh = {
@@ -12,16 +12,13 @@
   networking = {
     networkmanager = { 
       enable = true;
-      wifi.backend = "iwd";
       dns = "none";
     };
     nameservers = [ "100.122.26.102" ];
     hostName = "laptop";
     useDHCP = lib.mkDefault true;
-    interfaces.wlan0.proxyARP = true;
+    interfaces.wlp1s0.proxyARP = true;
     iproute2.enable = true;
-    wireless.iwd.enable = true;
-    usePredictableInterfaceNames = true;
     firewall = {
       enable = true;
       allowedTCPPorts = [

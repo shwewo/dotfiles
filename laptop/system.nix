@@ -1,6 +1,19 @@
-{ stable, inputs, config, pkgs, lib, ... }:
-
-{
+{ pkgs, lib, inputs, ... }:
+let
+  secrets = inputs.secrets.nixosModules.laptop;
+  nh = inputs.nh.nixosModules.default;
+  imports = [
+    import ../generics/generic.nix
+    import ../generics/apps.nix { inherit secrets; }
+    import ../generics/gnome.nix
+    import ./hardware.nix
+    import ./network.nix
+    import ./xserver.nix
+    import ./socks.nix
+    import ./udev.nix
+    import ./services.nix
+  ];
+in {
   system.stateVersion = "23.11";
   time.timeZone = "Europe/Moscow";
 
@@ -31,9 +44,11 @@
   
   programs.captive-browser = {
     browser = ''firejail --ignore="include whitelist-run-common.inc" --private --profile=chromium ${pkgs.bash}/bin/bash -c '${pkgs.coreutils}/bin/env XDG_CONFIG_HOME="$PREV_CONFIG_HOME" ${pkgs.ungoogled-chromium}/bin/chromium --user-data-dir=''${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive --proxy-server="socks5://$PROXY" --host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE localhost" --no-first-run --new-window --incognito -no-default-browser-check http://cache.nixos.org/' '';
-    interface = "wlan0";
+    interface = "wlp1s0";
     enable = true;
   };
+
+  services.pcscd.enable = true; # yubikey
 
   environment.systemPackages = with pkgs; [
     tor-browser # globally because i need to firejail it
@@ -42,4 +57,10 @@
     android-tools
     wl-clipboard
   ];
+
+  nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep-since 4d --keep 3";
+  };
 }

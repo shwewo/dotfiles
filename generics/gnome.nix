@@ -1,4 +1,4 @@
-{ stable, inputs, config, pkgs, lib, ... }: with lib.gvariant;
+{ pkgs, lib, ... }: with lib.gvariant;
 
 let
   wallpaper = pkgs.stdenv.mkDerivation {
@@ -12,9 +12,7 @@ let
 in {
   environment.sessionVariables = { 
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-    # QT_QPA_PLATFORM = "wayland";
     MOZ_ENABLE_WAYLAND = "0";
-    # NIXOS_OZONE_WL = "1";
   };
 
   nixpkgs.overlays = [
@@ -44,7 +42,7 @@ in {
     }
   ];
 
-  programs.dconf.profiles.user.databases = [
+  programs.dconf.profiles.cute.databases = [
     { 
       settings = {
         # "org/gnome/mutter" = {
@@ -73,6 +71,7 @@ in {
           allow-volume-above-100-percent = true;
         };
         "org/gnome/desktop/wm/keybindings" = {
+          # close = mkEmptyAy (type.string);
           switch-input-source = [ "<Shift>Alt_L" ];
           switch-input-source-backward = [ "<Alt>Shift_L" ];
         };
@@ -139,22 +138,6 @@ in {
     }
   ];
 
-  services.xserver = {
-    enable = true;
-    wacom.enable = true;
-    videoDrivers = [ "amdgpu" ];
-    displayManager = {
-      gdm = {
-        enable = true;
-        settings = {};
-      };
-      defaultSession = "gnome";
-    };
-    desktopManager = {
-      gnome.enable = true;
-    };
-  };
-
   environment.systemPackages = with pkgs; [
     gnomeExtensions.appindicator
     gnomeExtensions.activate-window-by-title
@@ -174,6 +157,7 @@ in {
   ]) ++ (with pkgs.gnome; [
     cheese # webcam tool
     gnome-music
+    epiphany # web browser
     geary # email reader
     gnome-characters
     totem # video player
