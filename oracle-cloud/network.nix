@@ -1,10 +1,6 @@
 { pkgs, lib, ... }:
 
 {
-  systemd.services.dnscrypt-proxy2.serviceConfig = {
-    StateDirectory = "dnscrypt-proxy";
-  };
-
   users.groups.no-net = {};
   networking = {
     hostName = "oracle-cloud";

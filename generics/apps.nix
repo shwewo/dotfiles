@@ -2,7 +2,6 @@
 
 let
   wrappers = import ./wrappers.nix { inherit inputs pkgs lib; };
-  home-manager = inputs.home-manager.nixosModules.home-manager;
   lock-false = {
     Value = false;
     Status = "locked";
@@ -12,6 +11,10 @@ let
     Status = "locked";
   };
 in {
+  imports = [
+    inputs.home-manager.nixosModules.home-manager
+  ];
+
   users.users.cute.packages = (with pkgs; [
     # Browsers
     ungoogled-chromium
@@ -30,7 +33,7 @@ in {
     stable.spotdl
     # Messengers
     element-desktop
-    inputs.telegram-desktop-patched.packages.${pkgs.system}.default
+    inputs.tdesktop.packages.${pkgs.system}.default
     # Administration
     pavucontrol
     mission-center
@@ -233,20 +236,20 @@ in {
           hostname = "192.168.122.222"; 
         };
         "oracle-cloud" = {
-          hostname = secrets.hosts.oracle-cloud.network.ip;
-          port = secrets.hosts.oracle-cloud.network.ssh.port;
+          hostname = inputs.secrets.hosts.oracle-cloud.network.ip;
+          port = inputs.secrets.hosts.oracle-cloud.network.ssh.port;
         };
         "canada" = {
-          hostname = secrets.hosts.canada.network.ip;
-          port = secrets.hosts.canada.network.ssh.port;
+          hostname = inputs.secrets.hosts.canada.network.ip;
+          port = inputs.secrets.hosts.canada.network.ssh.port;
         };
         "finland" = {
-          hostname = secrets.hosts.finland.network.ip;
-          port = secrets.hosts.finland.network.ssh.port;
+          hostname = inputs.secrets.hosts.finland.network.ip;
+          port = inputs.secrets.hosts.finland.network.ssh.port;
         };
         "france" = {
-          hostname = secrets.hosts.france.network.ip;
-          port = secrets.hosts.france.network.ssh.port;
+          hostname = inputs.secrets.hosts.france.network.ip;
+          port = inputs.secrets.hosts.france.network.ssh.port;
         };
         "nyadesk" = {
           hostname = "192.168.50.150";

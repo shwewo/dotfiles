@@ -1,19 +1,20 @@
 { pkgs, lib, inputs, ... }:
-let
-  secrets = inputs.secrets.nixosModules.laptop;
-  nh = inputs.nh.nixosModules.default;
+
+{
   imports = [
-    import ../generics/generic.nix
-    import ../generics/apps.nix { inherit secrets; }
-    import ../generics/gnome.nix
-    import ./hardware.nix
-    import ./network.nix
-    import ./xserver.nix
-    import ./socks.nix
-    import ./udev.nix
-    import ./services.nix
+    ../generics/generic.nix
+    ../generics/apps.nix
+    ../generics/gnome.nix
+    ./hardware.nix
+    ./network.nix
+    ./xserver.nix
+    ./socks.nix
+    ./udev.nix
+    ./services.nix
+    inputs.nh.nixosModules.default
+    inputs.secrets.nixosModules.laptop
   ];
-in {
+
   system.stateVersion = "23.11";
   time.timeZone = "Europe/Moscow";
 

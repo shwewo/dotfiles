@@ -276,7 +276,7 @@
         "nixpkgs": "nixpkgs_2",
         "secrets": "secrets",
         "stable": "stable",
-        "telegram-desktop-patched": "telegram-desktop-patched",
+        "tdesktop": "tdesktop",
         "unstable": "unstable"
       }
     },
@@ -360,7 +360,7 @@
         "type": "github"
       }
     },
-    "telegram-desktop-patched": {
+    "tdesktop": {
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs_5"

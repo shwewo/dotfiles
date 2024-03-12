@@ -6,7 +6,7 @@ let
     phases = [ "installPhase" ];
     installPhase = ''
       mkdir -p $out/share/backgrounds
-      cp ${../../wallpaper.png} $out/share/backgrounds/wallpaper.png
+      cp ${../wallpaper.png} $out/share/backgrounds/wallpaper.png
     '';
   };
 in {
