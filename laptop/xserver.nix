@@ -1,7 +1,10 @@
 { pkgs, lib, ... }: 
-let 
-  gnome = import ./gnome.nix;
-in {
+
+{
+  imports = [
+    ./gnome.nix
+  ];
+
   services.xserver = {
     enable = true;
     wacom.enable = true;
