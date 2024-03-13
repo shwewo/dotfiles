@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./gnome.nix
+    ../generics/gnome.nix
   ];
 
   services.xserver = {
