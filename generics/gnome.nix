@@ -99,6 +99,7 @@ in {
           ];
         };
         "org/gnome/desktop/input-sources" = {
+          mru-sources = [ (mkTuple [ "xkb" "us" ]) ];
           sources = [ (mkTuple [ "xkb" "us" ]) (mkTuple [ "xkb" "ru" ]) ];
           xkb-options = [ "terminate:ctrl_alt_bksp" "lv3:switch" "compose:ralt" ];
         };

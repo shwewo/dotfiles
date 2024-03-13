@@ -169,12 +169,12 @@
       exit
     fi
 
-    ${pkgs.fuse}/bin/fusermount -uz ~/.encryptedfit
+    sudo ${pkgs.fuse}/bin/fusermount -uz ~/.encryptedfit
     ${pkgs.gocryptfs}/bin/gocryptfs -passfile=/run/agenix/backup /run/media/cute/samsungfit/Encrypted ~/.encryptedfit && \
     ${pkgs.rsync}/bin/rsync -r -t -v --progress -s ~/Dropbox --delete ~/.encryptedfit/ --exclude "Sync/" --exclude ".dropbox.cache" && \
     ${pkgs.rsync}/bin/rsync -r -t -v --progress -s ~/Dropbox/Sync --delete /run/media/cute/samsungfit && \
     ${pkgs.coreutils}/bin/sync && \
-    ${pkgs.fuse}/bin/fusermount -uz ~/.encryptedfit && \
+    sudo ${pkgs.fuse}/bin/fusermount -uz ~/.encryptedfit && \
     ${pkgs.coreutils}/bin/echo "Sync complete"
     ${pkgs.libnotify}/bin/notify-send "Syncing" "USB sync complete" --icon=usb
   '';
