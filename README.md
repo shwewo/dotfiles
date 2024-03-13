@@ -6,6 +6,13 @@
 ---
 
 ### General structure
-- `derivations` contains some programs that is not included in nixpkgs
-- `home` is my home-manager configuration
-- `hosts` hosts-specific configurations
+- `derivations` - contains some programs that is not included in nixpkgs
+- `generics` - generics that usually are hardware-independent
+- `laptop` - my daily driver laptop
+- `oracle-cloud` - VPS
+
+Note: i'm paranoid, so agenix and some other secrets are outside from this repo in a private one. sorry :3
+
+---
+
+Also, i don't really like home-manager being outside of the scope of NixOS modules, so i ended up with `./generics/apps.nix` that includes home manager with things that NixOS can't do.
