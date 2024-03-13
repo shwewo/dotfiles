@@ -42,7 +42,7 @@ in {
     }
   ];
 
-  programs.dconf.profiles.users.databases = [
+  programs.dconf.profiles.user.databases = [
     { 
       settings = {
         # "org/gnome/mutter" = {

@@ -4,7 +4,6 @@
   imports = [
     ../generics/generic.nix
     ../generics/apps.nix
-    ../generics/gnome.nix
     ./hardware.nix
     ./network.nix
     ./xserver.nix
