@@ -13,11 +13,7 @@
 
 Note: i'm paranoid, so agenix and some other secrets are outside from this repo in a private one. sorry :3
 
----
-
 Also, i don't really like home-manager being outside of the scope of NixOS modules, so i ended up with `./generics/apps.nix` that includes home manager with things that NixOS can't do.
-
----
 
 ### Desktop
 
@@ -26,6 +22,5 @@ Also, i don't really like home-manager being outside of the scope of NixOS modul
 - Icons: `Papirus-Dark`
 - Legacy applications (gtk3): `Adw-gtk3-dark`
 
----
 
 <img src="./desktop.png"/>
