@@ -17,7 +17,7 @@ Also, i don't really like home-manager being outside of the scope of NixOS modul
 
 ### Desktop
 
-- Gnome shell theme: `Mojave-gtk-theme`
+- Gnome shell theme: `Mojave-Dark-solid-alt`
 - Cursor theme: `Adwaita`
 - Icons: `Papirus-Dark`
 - Legacy applications (gtk3): `Adw-gtk3-dark`
