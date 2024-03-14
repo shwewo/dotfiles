@@ -1,10 +1,11 @@
 <img align="right" src="./logo.png" width="300"/>
 
+### My NixOS and home-manager configuration
+
+### Note: this configuration is shared "as is", and i highly discourage blindly copy-pasting from it
+
 ![laptop](https://github.com/shwewo/dotfiles/actions/workflows/laptop.yml/badge.svg)
 ![oracle-cloud](https://github.com/shwewo/dotfiles/actions/workflows/oracle-cloud.yml/badge.svg)
-
-### My NixOS and home-manager configuration
-### Note: this configuration is shared "as is", and i highly discourage blindly copy-pasting from it
 
 ---
 
