@@ -73,20 +73,6 @@
     type = "Application";
   };
 
-  dropbox = pkgs.writeScriptBin "dropbox" ''
-    #!/usr/bin/env bash
-    ${pkgs.dropbox-cli}/bin/dropbox "$@"
-    exit 0
-  '';
-
-  dropboxDesktopItem = pkgs.makeDesktopItem {
-    name = "dropbox";
-    desktopName = "Dropbox";
-    icon = "dropbox";
-    exec = "${pkgs.dropbox}/bin/dropbox";
-    type = "Application";
-  };
-
   autostart = pkgs.writeScriptBin "autostart" ''
     #!/usr/bin/env bash
     ${pkgs.coreutils}/bin/sleep 5
@@ -111,6 +97,7 @@
 
   keepassxc = pkgs.writeScriptBin "keepassxc" ''
     #!/usr/bin/env bash
+    QT_QPA_PLATFORM=wayland
     ${pkgs.coreutils}/bin/cat /run/agenix/precise | ${pkgs.keepassxc}/bin/keepassxc --pw-stdin ~/Dropbox/Sync/passwords.kdbx &
     exit 0
   '';

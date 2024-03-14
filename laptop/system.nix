@@ -28,6 +28,17 @@
     libvirtd.enable = true;
   };
 
+  programs.dconf.profiles.user.databases = [
+    {
+      settings = {
+        "org/virt-manager/virt-manager/connections" = {
+          autoconnect = [ "qemu:///system" ];
+          uris = [ "qemu:///system" ];
+        };
+      };
+    }
+  ];
+
   services.pipewire = {
     enable = true;
     alsa.enable = true;

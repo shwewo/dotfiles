@@ -21,6 +21,5 @@ Also, i don't really like home-manager being outside of the scope of NixOS modul
 - Cursor theme: `Adwaita`
 - Icons: `Papirus-Dark`
 - Legacy applications (gtk3): `Adw-gtk3-dark`
-
-
+- Firefox: [firefox colors theme](https://color.firefox.com/?theme=XQAAAAIcAQAAAAAAAABBKYhm849SCia3ftKEGccwS-xMDPr3mIJS1IAYgPpJmMqoaMV1vHo2YUqSSJyfqfEElOKeefz2PRijvIRDRLIzVMoSNIP805DV03v8JvcdcyT0427oa9ZjoN5H-wSBJomBI-gZyHGhmkB-wbsEkIjDeCMOoz9lf-QAUI6YkJ1vDRwGSSpJC4LwS-wWhw6i88zRfx5YLnkSgJ7JQ0XdiaN7p9mECRTcBSpPrC8AIx_TxFRxSLV-mf75sFj)
 <img src="./desktop.png"/>

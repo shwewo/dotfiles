@@ -20,6 +20,7 @@ in {
     ungoogled-chromium
     # Files
     yt-dlp
+    dropbox
     gocryptfs
     gnome.nautilus
     gnome.file-roller
@@ -114,8 +115,6 @@ in {
     cloudsync
     fitsync
     kitty_wrapped
-    dropbox
-    dropboxDesktopItem
     keepassxc
     keepassxcDesktopItem
     autostart

@@ -103,6 +103,15 @@ in {
           sources = [ (mkTuple [ "xkb" "us" ]) (mkTuple [ "xkb" "ru" ]) ];
           xkb-options = [ "terminate:ctrl_alt_bksp" "lv3:switch" "compose:ralt" ];
         };
+        "org/gnome/desktop/screensaver" = {
+          lock-enabled = false;
+        };
+        "org/gnome/desktop/notifications" = {
+          show-in-lock-screen = false;
+        };
+        "org/gnome/desktop/session" = {
+          idle-delay = mkUint32 0;
+        };
         "org/gnome/shell/extensions/unite" = {
           enable-titlebar-actions = true; 
           extend-left-box = false;
@@ -119,8 +128,6 @@ in {
         };
         "org/gnome/shell/extensions/user-theme" = {
           name = "Mojave-Dark-solid-alt";
-        };
-        "org/gnome/shell/world-clocks" = {
         };
         "org/gnome/shell/weather" = {
           automatic-location = true;
