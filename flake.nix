@@ -27,7 +27,7 @@
   in {
     devShells."x86_64-linux".default = pkgs.mkShell {
       name = "shwewo";
-      packages = with pkgs; [ gitleaks pre-commit inputs.agenix.packages.${pkgs.system}.default ];
+      packages = with pkgs; [ gitleaks pre-commit ];
       shellHook = ''
         gitleaks detect -v
         pre-commit install &> /dev/null

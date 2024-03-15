@@ -52,6 +52,7 @@ in {
     virt-manager
     neofetch
     # Utilities
+    inputs.agenix.packages.${pkgs.system}.default
     obsidian
     appimage-run
     scrcpy

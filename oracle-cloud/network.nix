@@ -53,6 +53,10 @@
     settings.X11Forwarding = true;
     ports = [ 34812 ];
   };
+
+  # {"AccountTag":"","TunnelID":"","TunnelSecret":""}
+  # echo "token" | base64 --decode
+  # replace everything to the correct one
   
   services.cloudflared.enable = true;
   services.cloudflared.tunnels = {
@@ -61,5 +65,6 @@
       credentialsFile = "/run/agenix/cloudflared";
     };
   };
+
   services.tailscale.enable = true;
 }
