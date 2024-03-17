@@ -96,6 +96,7 @@ in {
             "tailscale@joaophi.github.com"
             "unite@hardpixel.eu" 
             "user-theme@gnome-shell-extensions.gcampax.github.com"
+            "pip-on-top@rafostar.github.com"
           ];
         };
         "org/gnome/desktop/input-sources" = {
@@ -153,6 +154,7 @@ in {
     gnomeExtensions.tailscale-qs
     gnomeExtensions.gsconnect
     gnomeExtensions.clipboard-indicator
+    gnomeExtensions.pip-on-top
     gnome.gnome-tweaks
     mojave-gtk-theme
     adw-gtk3

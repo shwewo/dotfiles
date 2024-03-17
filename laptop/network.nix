@@ -48,6 +48,34 @@
       '';
     };
   };
+
+  # run this command if you are from russia
+  # warp-cli set-custom-endpoint 162.159.193.1:2408
+  # also don't forget to connect a vpn before running warp-cli register
+
+  systemd.services.warp-svc = {
+    enable = true;
+    description = "Cloudflare Zero Trust Client Daemon";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "pre-network.target" ];
+
+    serviceConfig = {
+      Type = "simple";
+      Restart = "on-failure";
+      RestartSec = "15";
+      DynamicUser = "no";
+      CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_PTRACE";
+      AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_PTRACE";
+      StateDirectory = "cloudflare-warp";
+      RuntimeDirectory = "cloudflare-warp";
+      LogsDirectory = "cloudflare-warp";
+      ExecStart = "${pkgs.cloudflare-warp}/bin/warp-svc";
+    };
+  };
+
+  environment.systemPackages = with pkgs; [
+    cloudflare-warp
+  ];
   
   systemd.services.NetworkManager-wait-online.enable = false;
 }

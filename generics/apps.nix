@@ -20,6 +20,7 @@ in {
     ungoogled-chromium
     # Files
     yt-dlp
+    freetube
     dropbox
     gocryptfs
     gnome.nautilus
