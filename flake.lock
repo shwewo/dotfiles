@@ -286,11 +286,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1710725159,
-        "narHash": "sha256-f0C3Zqsc2WgnxKS+6OHytF+/gUzTto4BwK3HX9Qi310=",
+        "lastModified": 1710782014,
+        "narHash": "sha256-5kz6pvodoaezQ4aNUM2Ak0klobEyALeE5yjgT0UsK7k=",
         "ref": "refs/heads/main",
-        "rev": "da89da10bfe217254f42ddcca79a3d1866ded634",
-        "revCount": 11,
+        "rev": "357590df2f5507716f1d96d79c8fde95ad80aa4a",
+        "revCount": 13,
         "type": "git",
         "url": "ssh://git@github.com/shwewo/secrets"
       },

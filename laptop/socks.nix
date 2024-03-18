@@ -1,29 +1,41 @@
 { pkgs, lib, ... }:
 let
   socksBuilder = attrs:
-    let
-      prefixedScript = "ip netns exec novpn sudo -u socks -g socks " + attrs.script;
-    in
+    # let
+    #   prefixedScript = "ip netns exec novpn sudo -u socks -g socks " + attrs.script;
+    # in
     {
       inherit (attrs) name;
       value = {
         enable = true;
-        after = [ "novpn.service" ];
-        bindsTo = [ "novpn.service" ];
-        wantedBy = [ "novpn.service" ];
-        serviceConfig = { Restart = "on-failure"; RestartSec = "15"; Type = "simple"; };
-        script = prefixedScript;
-        path = with pkgs; [shadowsocks-libev shadowsocks-v2ray-plugin sing-box wireproxy gawk sudo iproute2 ];
+        after = [ "run-netns-novpn.mount" "sys-devices-virtual-net-novpn0.device" ];
+        bindsTo = [ "run-netns-novpn.mount" "sys-devices-virtual-net-novpn0.device" ];
+        wantedBy = [ "multi-user.target" ];
+
+        serviceConfig = { 
+          Restart = "on-failure"; 
+          RestartSec = "15"; 
+          Type = "simple"; 
+          NetworkNamespacePath = "/run/netns/novpn"; 
+          User = "socks"; 
+          Group = "socks"; 
+        };
+
+        script = attrs.script;
+        path = with pkgs; [shadowsocks-libev shadowsocks-v2ray-plugin sing-box wireproxy ];
       };
     };
-
+  
+  # IP of the proxies is 192.168.150.2
+  
   socksed = [
-    { name = "socks-v2ray-sweden";   script = "ss-local -c /run/agenix/socks_v2ray_sweden"; } # port 1080
-    { name = "socks-v2ray-canada";   script = "ss-local -c /run/agenix/socks_v2ray_canada"; } # port 1081
-    { name = "socks-v2ray-france";   script = "ss-local -c /run/agenix/socks_v2ray_france"; } # port 1082
-    { name = "socks-v2ray-turkey";   script = "ss-local -c /run/agenix/socks_v2ray_turkey"; } # port 1083
-    { name = "socks-warp";           script = "wireproxy -c /etc/wireguard/warp0.conf"; } # port 3333
-    { name = "socks-reality-sweden"; script = "sing-box run --config /run/agenix/socks_reality_sweden"; } # port 2080
+    { name = "socks-v2ray-sweden";      script = "ss-local -c /run/agenix/socks_v2ray_sweden";                } # port 1080
+    { name = "socks-v2ray-canada";      script = "ss-local -c /run/agenix/socks_v2ray_canada";                } # port 1081
+    { name = "socks-v2ray-france";      script = "ss-local -c /run/agenix/socks_v2ray_france";                } # port 1082
+    { name = "socks-v2ray-turkey";      script = "ss-local -c /run/agenix/socks_v2ray_turkey";                } # port 1083
+    { name = "socks-reality-sweden";    script = "sing-box run --config /run/agenix/socks_reality_sweden";    } # port 2080
+    { name = "socks-reality-austria";   script = "sing-box run --config /run/agenix/socks_reality_austria";   } # port 2081
+    { name = "socks-warp";              script = "wireproxy -c /etc/wireguard/warp0.conf";                    } # port 3333
   ];
 
   start_novpn = pkgs.writeScriptBin "start_novpn" ''
@@ -81,7 +93,9 @@ let
 
     get_default_interface
     create_netns
-    sleep 2 # wait before they actually start to make sense
+    sleep 2
+    systemctl start ${lib.concatStringsSep " " (map (s: "${s.name}.service") socksed)}
+
     ip monitor route | while read -r event; do
       case "$event" in
           'local '*)
@@ -112,6 +126,7 @@ let
     ip rule del to 192.168.150.2 table 150
     ip link del novpn0
     ip netns del novpn
+    rm -rf /var/run/netns/novpn/ 
     exit 0
   '';
 
@@ -120,31 +135,31 @@ let
     description = "novpn namespace";
     after = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
-    wants = [
-      "network-online.target"
-      "socks-reality-sweden.service" 
-      "socks-v2ray-sweden.service" 
-      "socks-v2ray-france.service" 
-      "socks-v2ray-turkey.service" 
-      "socks-v2ray-canada.service" 
-      "socks-warp.service" 
-    ];
+
     serviceConfig = {
       Restart = "on-failure";
       RestartSec = "15";
       ExecStart = "${start_novpn}/bin/start_novpn";
       ExecStop = "${stop_novpn}/bin/stop_novpn";
+      Type = "simple";
     };
     
     preStart = "${stop_novpn}/bin/stop_novpn";
-
     path = with pkgs; [ gawk iproute2 iptables sysctl coreutils ];
   };
 in {
   users.users.socks = {
     group = "socks";
     isSystemUser = true;
-  };  
+  };
+
   users.groups.socks = {};
   systemd.services = builtins.listToAttrs (map socksBuilder socksed) // { novpn = novpn; };
+
+  users.users.cute.packages = [ (pkgs.makeDesktopItem {
+    name = "firefox-russia";
+    desktopName = "Firefox Russia";
+    icon = "firefox-developer-edition";
+    exec = ''firejail --blacklist="/var/run/nscd" --ignore="include whitelist-run-common.inc" --netns=novpn firefox -P russia -no-remote'';
+  }) ];
 }

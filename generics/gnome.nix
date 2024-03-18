@@ -97,6 +97,7 @@ in {
             "unite@hardpixel.eu" 
             "user-theme@gnome-shell-extensions.gcampax.github.com"
             "pip-on-top@rafostar.github.com"
+            "cloudflare-warp-toggle@khaled.is-a.dev"
           ];
         };
         "org/gnome/desktop/input-sources" = {
@@ -155,6 +156,7 @@ in {
     gnomeExtensions.gsconnect
     gnomeExtensions.clipboard-indicator
     gnomeExtensions.pip-on-top
+    gnomeExtensions.cloudflare-warp-toggle
     gnome.gnome-tweaks
     mojave-gtk-theme
     adw-gtk3
