@@ -8,9 +8,9 @@ let
       inherit (attrs) name;
       value = {
         enable = true;
-        description = "avoid censorship";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        after = [ "novpn.service" ];
+        bindsTo = [ "novpn.service" ];
+        wantedBy = [ "novpn.service" ];
         serviceConfig = { Restart = "on-failure"; RestartSec = "15"; Type = "simple"; };
         script = prefixedScript;
         path = with pkgs; [shadowsocks-libev shadowsocks-v2ray-plugin sing-box wireproxy gawk sudo iproute2 ];
@@ -90,7 +90,7 @@ let
 
             if [[ ! -z "$default_gateway_new" ]]; then
               if [[ ! "$default_gateway_new" == "$default_gateway" ]]; then
-                default_interface=$default_gateway_new
+                default_interface=$default_interface_new
                 default_gateway=$default_gateway_new
                 echo "New gateway $default_gateway_new"
               fi
@@ -106,20 +106,10 @@ let
 
   stop_novpn = pkgs.writeScriptBin "stop_novpn" ''
     #!${pkgs.bash}/bin/bash
-    
-    echo "Terminating all processes inside of novpn namespace..."
-    pids=$(find -L /proc/[1-9]*/task/*/ns/net -samefile /run/netns/novpn | cut -d/ -f5) &> /dev/null
-    kill -SIGINT -$pids &> /dev/null
-    kill -SIGTERM -$pids &> /dev/null
-    echo "Waiting 3 seconds before SIGKILL..."
-    sleep 3
-    kill -SIGKILL -$pids &> /dev/null
     rm -rf /etc/netns/novpn/
-
     ip rule del fwmark 100 table 150
     ip rule del from 192.168.150.2 table 150
     ip rule del to 192.168.150.2 table 150
-
     ip link del novpn0
     ip netns del novpn
     exit 0
@@ -128,14 +118,25 @@ let
   novpn = {
     enable = true;
     description = "novpn namespace";
-    after = [ "network.target" ];
+    after = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
+    wants = [
+      "network-online.target"
+      "socks-reality-sweden.service" 
+      "socks-v2ray-sweden.service" 
+      "socks-v2ray-france.service" 
+      "socks-v2ray-turkey.service" 
+      "socks-v2ray-canada.service" 
+      "socks-warp.service" 
+    ];
     serviceConfig = {
       Restart = "on-failure";
       RestartSec = "15";
       ExecStart = "${start_novpn}/bin/start_novpn";
       ExecStop = "${stop_novpn}/bin/stop_novpn";
     };
+    
+    preStart = "${stop_novpn}/bin/stop_novpn";
 
     path = with pkgs; [ gawk iproute2 iptables sysctl coreutils ];
   };
