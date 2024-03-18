@@ -2,7 +2,7 @@
 let
   socksBuilder = attrs:
     let
-      prefixedScript = "default_interface=$(ip route show default | awk '/default/ {print $5}')\n" + attrs.script;
+      prefixedScript = "ip netns exec novpn sudo -u socks -g socks " + attrs.script;
     in
     {
       inherit (attrs) name;
@@ -11,33 +11,121 @@ let
         description = "avoid censorship";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        serviceConfig = { Restart = "on-failure"; RestartSec = "15"; User = "socks"; Group = "socks"; Type = "simple"; };
+        serviceConfig = { Restart = "on-failure"; RestartSec = "15"; Type = "simple"; };
         script = prefixedScript;
-        path = with pkgs; [shadowsocks-libev shadowsocks-v2ray-plugin sing-box wireproxy iproute2 gawk];
+        path = with pkgs; [shadowsocks-libev shadowsocks-v2ray-plugin sing-box wireproxy gawk sudo iproute2 ];
       };
     };
 
   socksed = [
-    { name = "socks-v2ray-sweden";   script = "ss-local -c /run/agenix/socks_v2ray_sweden -i $default_interface"; } # port 1080
-    { name = "socks-v2ray-canada";   script = "ss-local -c /run/agenix/socks_v2ray_canada -i $default_interface"; } # port 1081
-    { name = "socks-v2ray-france";   script = "ss-local -c /run/agenix/socks_v2ray_france -i $default_interface"; } # port 1082
-    { name = "socks-v2ray-turkey";   script = "ss-local -c /run/agenix/socks_v2ray_turkey -i $default_interface"; } # port 1083
+    { name = "socks-v2ray-sweden";   script = "ss-local -c /run/agenix/socks_v2ray_sweden"; } # port 1080
+    { name = "socks-v2ray-canada";   script = "ss-local -c /run/agenix/socks_v2ray_canada"; } # port 1081
+    { name = "socks-v2ray-france";   script = "ss-local -c /run/agenix/socks_v2ray_france"; } # port 1082
+    { name = "socks-v2ray-turkey";   script = "ss-local -c /run/agenix/socks_v2ray_turkey"; } # port 1083
     { name = "socks-warp";           script = "wireproxy -c /etc/wireguard/warp0.conf"; } # port 3333
-    { name = "socks-reality-sweden"; script = ''
-      cp -f /run/agenix/socks_reality_sweden /tmp/socks_reality_sweden
-      sed -i "s/DEFAULT_INTERFACE/$default_interface/" /tmp/socks_reality_sweden
-      sing-box run --config /tmp/socks_reality_sweden
-    ''; } # port 2080
+    { name = "socks-reality-sweden"; script = "sing-box run --config /run/agenix/socks_reality_sweden"; } # port 2080
   ];
-in {
-  users.users.socks = {
-    group = "socks";
-    isSystemUser = true;
-  };  
-  users.groups.socks = {};
-  systemd.services = builtins.listToAttrs (map socksBuilder socksed);
 
-  systemd.services.novpn = {
+  start_novpn = pkgs.writeScriptBin "start_novpn" ''
+    #!${pkgs.bash}/bin/bash
+    get_default_interface() {
+      default_gateway=$(ip route | awk '/default/ {print $3}')
+      default_interface=$(ip route | awk '/default/ {print $5}')
+
+      if [[ -z "$default_interface" ]]; then
+        echo "No default interface, are you connected to the internet?"
+        exit 1
+      fi
+
+      echo "Default gateway: $default_gateway"
+      echo "Default interface: $default_interface"
+    }
+
+    ########################################################################################################################
+
+    purge_rules() {
+      ip rule del fwmark 100 table 150
+      ip rule del from 192.168.150.2 table 150
+      ip rule del to 192.168.150.2 table 150
+      ip route del default via $default_gateway dev $default_interface table 150
+      ip route del 192.168.150.2 via 192.168.150.1 dev novpn0 table 150
+    }
+
+    create_rules() {
+      ip rule add fwmark 100 table 150
+      ip rule add from 192.168.150.2 table 150
+      ip rule add to 192.168.150.2 table 150
+      ip route add default via $default_gateway dev $default_interface table 150
+      ip route add 192.168.150.2 via 192.168.150.1 dev novpn0 table 150
+    }
+
+    create_netns() {
+      mkdir -p /etc/netns/novpn/
+      echo "nameserver 1.1.1.1" > /etc/netns/novpn/resolv.conf
+      echo "nameserver 1.1.0.1" >> /etc/netns/novpn/resolv.conf
+      sysctl -wq net.ipv4.ip_forward=1
+      iptables -t nat -A POSTROUTING -o "$default_interface" -j MASQUERADE
+
+      ip netns add novpn
+      ip link add novpn0 type veth peer name novpn1
+      ip link set novpn1 netns novpn
+      ip addr add 192.168.150.1/24 dev novpn0
+      ip link set novpn0 up
+      ip netns exec novpn ip link set lo up
+      ip netns exec novpn ip addr add 192.168.150.2/24 dev novpn1
+      ip netns exec novpn ip link set novpn1 up
+      ip netns exec novpn ip route add default via 192.168.150.1
+
+      create_rules
+    }
+
+    get_default_interface
+    create_netns
+    sleep 2 # wait before they actually start to make sense
+    ip monitor route | while read -r event; do
+      case "$event" in
+          'local '*)
+            default_interface_new=$(ip route | awk '/default/ {print $5}')
+            default_gateway_new=$(ip route | awk '/default/ {print $3}')
+
+            if [[ ! -z "$default_gateway_new" ]]; then
+              if [[ ! "$default_gateway_new" == "$default_gateway" ]]; then
+                default_interface=$default_gateway_new
+                default_gateway=$default_gateway_new
+                echo "New gateway $default_gateway_new"
+              fi
+            fi
+
+            echo "Network event detected, readding rules"
+            purge_rules
+            create_rules
+          ;;
+      esac
+    done
+  '';
+
+  stop_novpn = pkgs.writeScriptBin "stop_novpn" ''
+    #!${pkgs.bash}/bin/bash
+    
+    echo "Terminating all processes inside of novpn namespace..."
+    pids=$(find -L /proc/[1-9]*/task/*/ns/net -samefile /run/netns/novpn | cut -d/ -f5) &> /dev/null
+    kill -SIGINT -$pids &> /dev/null
+    kill -SIGTERM -$pids &> /dev/null
+    echo "Waiting 3 seconds before SIGKILL..."
+    sleep 3
+    kill -SIGKILL -$pids &> /dev/null
+    rm -rf /etc/netns/novpn/
+
+    ip rule del fwmark 100 table 150
+    ip rule del from 192.168.150.2 table 150
+    ip rule del to 192.168.150.2 table 150
+
+    ip link del novpn0
+    ip netns del novpn
+    exit 0
+  '';
+
+  novpn = {
     enable = true;
     description = "novpn namespace";
     after = [ "network.target" ];
@@ -45,127 +133,17 @@ in {
     serviceConfig = {
       Restart = "on-failure";
       RestartSec = "15";
+      ExecStart = "${start_novpn}/bin/start_novpn";
+      ExecStop = "${stop_novpn}/bin/stop_novpn";
     };
 
-    script = ''
-      #!${pkgs.bash}/bin/bash
-
-      NETNS_NAME="novpn"
-      NETNS_NAMESERVER_1="1.1.1.1"
-      NETNS_NAMESERVER_2="1.1.0.1"
-
-      VETH0_NAME="novpn0"
-      VETH1_NAME="novpn1"
-      VETH0_IP="192.168.150.1"
-      VETH1_IP="192.168.150.2"
-
-      ########################################################################################################################
-
-      get_default_interface() {
-        default_gateway=$(ip route | awk '/default/ {print $3}')
-        default_interface=$(ip route | awk '/default/ {print $5}')
-
-        if [[ -z "$default_interface" ]]; then
-          echo "No default interface, are you connected to the internet?"
-          exit 1
-        fi
-
-        echo "Default gateway: $default_gateway"
-        echo "Default interface: $default_interface"
-      }
-
-      ########################################################################################################################
-
-      purge_rules() { # Run only before deleting namespace
-        ip rule del fwmark 100 table 100
-        ip rule del from $VETH1_IP table 100
-        ip rule del to $VETH1_IP table 100
-        ip route del default via $default_gateway dev $default_interface table 100
-        ip route del $VETH1_IP via $VETH0_IP dev $VETH0_NAME table 100
-      }
-
-      create_rules() { # Run after creating namespace
-        ip rule add fwmark 100 table 100
-        ip rule add from $VETH1_IP table 100
-        ip rule add to $VETH1_IP table 100
-        ip route add default via $default_gateway dev $default_interface table 100
-        ip route add $VETH1_IP via $VETH0_IP dev $VETH0_NAME table 100
-      }
-
-      delete_netns() {
-        rm -rf /etc/netns/$NETNS_NAME/
-
-        purge_rules
-        iptables -t nat -D POSTROUTING -o "$default_interface" -j MASQUERADE
-
-        ip link del $VETH0_NAME
-        ip netns del $NETNS_NAME
-      }
-
-      create_netns() {
-        if ip netns | grep -q "$NETNS_NAME"; then
-          delete_netns
-        fi
-
-        mkdir -p /etc/netns/$NETNS_NAME/
-        echo "nameserver $NETNS_NAMESERVER_1" > /etc/netns/$NETNS_NAME/resolv.conf
-        echo "nameserver $NETNS_NAMESERVER_2" >> /etc/netns/$NETNS_NAME/resolv.conf
-        sysctl -wq net.ipv4.ip_forward=1
-        iptables -t nat -A POSTROUTING -o "$default_interface" -j MASQUERADE
-
-        ip netns add $NETNS_NAME
-        ip link add $VETH0_NAME type veth peer name $VETH1_NAME
-        ip link set $VETH1_NAME netns $NETNS_NAME
-        ip addr add $VETH0_IP/24 dev $VETH0_NAME
-        ip link set $VETH0_NAME up
-        ip netns exec $NETNS_NAME ip link set lo up
-        ip netns exec $NETNS_NAME ip addr add $VETH1_IP/24 dev $VETH1_NAME
-        ip netns exec $NETNS_NAME ip link set $VETH1_NAME up
-        ip netns exec $NETNS_NAME ip route add default via $VETH0_IP
-
-        create_rules
-      }
-
-      ########################################################################################################################
-
-      cleanup() {
-        echo "Terminating all processes inside of $NETNS_NAME namespace..."
-        pids=$(find -L /proc/[1-9]*/task/*/ns/net -samefile /run/netns/$NETNS_NAME | cut -d/ -f5) &> /dev/null
-        kill -SIGINT -$pids &> /dev/null
-        kill -SIGTERM -$pids &> /dev/null
-        echo "Waiting 3 seconds before SIGKILL..."
-        sleep 3
-        kill -SIGKILL -$pids &> /dev/null
-        delete_netns
-        exit 0
-      }
-
-      ########################################################################################################################
-
-      get_default_interface
-      trap cleanup INT
-      create_netns
-      sleep 2 # wait before they actually start to make sense
-      ip monitor route | while read -r event; do
-        case "$event" in
-            'local '*)
-              default_interface_new=$(ip route | awk '/default/ {print $5}')
-              default_gateway_new=$(ip route | awk '/default/ {print $3}')
-
-              if [[ ! -z "$default_gateway_new" ]]; then
-                if [[ ! "$default_gateway_new" == "$default_gateway" ]]; then
-                  default_interface=$default_gateway_new
-                  default_gateway=$default_gateway_new
-                  echo "New gateway $default_gateway_new"
-                fi
-              fi
-
-              echo "Network event detected, readding rules"
-              purge_rules
-              create_rules
-            ;;
-        esac
-      done
-    '';
+    path = with pkgs; [ gawk iproute2 iptables sysctl coreutils ];
   };
+in {
+  users.users.socks = {
+    group = "socks";
+    isSystemUser = true;
+  };  
+  users.groups.socks = {};
+  systemd.services = builtins.listToAttrs (map socksBuilder socksed) // { novpn = novpn; };
 }
