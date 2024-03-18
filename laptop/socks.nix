@@ -1,9 +1,6 @@
 { pkgs, lib, ... }:
 let
   socksBuilder = attrs:
-    # let
-    #   prefixedScript = "ip netns exec novpn sudo -u socks -g socks " + attrs.script;
-    # in
     {
       inherit (attrs) name;
       value = {
