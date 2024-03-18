@@ -8,8 +8,9 @@ let
       inherit (attrs) name;
       value = {
         enable = true;
-        after = [ "run-netns-novpn.mount" "sys-devices-virtual-net-novpn0.device" ];
-        bindsTo = [ "run-netns-novpn.mount" "sys-devices-virtual-net-novpn0.device" ];
+        after = [ "novpn.service" "network-online.target" ];
+        wants = [ "novpn.service" "network-online.target" ];
+        bindsTo = [ "novpn.service" ];
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = { 
@@ -22,7 +23,9 @@ let
         };
 
         script = attrs.script;
-        path = with pkgs; [shadowsocks-libev shadowsocks-v2ray-plugin sing-box wireproxy ];
+        preStart = "while true; do ip addr show dev novpn1 | grep -q 'inet' && break; sleep 1; done";
+
+        path = with pkgs; [shadowsocks-libev shadowsocks-v2ray-plugin sing-box wireproxy iproute2 ];
       };
     };
   
@@ -40,30 +43,13 @@ let
 
   start_novpn = pkgs.writeScriptBin "start_novpn" ''
     #!${pkgs.bash}/bin/bash
-    get_default_interface() {
-      default_gateway=$(ip route | awk '/default/ {print $3}')
-      default_interface=$(ip route | awk '/default/ {print $5}')
-
-      if [[ -z "$default_interface" ]]; then
-        echo "No default interface, are you connected to the internet?"
-        exit 1
-      fi
-
-      echo "Default gateway: $default_gateway"
-      echo "Default interface: $default_interface"
-    }
-
-    ########################################################################################################################
-
-    purge_rules() {
+    configure_rules() {
       ip rule del fwmark 100 table 150
       ip rule del from 192.168.150.2 table 150
       ip rule del to 192.168.150.2 table 150
       ip route del default via $default_gateway dev $default_interface table 150
       ip route del 192.168.150.2 via 192.168.150.1 dev novpn0 table 150
-    }
-
-    create_rules() {
+      
       ip rule add fwmark 100 table 150
       ip rule add from 192.168.150.2 table 150
       ip rule add to 192.168.150.2 table 150
@@ -71,30 +57,31 @@ let
       ip route add 192.168.150.2 via 192.168.150.1 dev novpn0 table 150
     }
 
-    create_netns() {
-      mkdir -p /etc/netns/novpn/
-      echo "nameserver 1.1.1.1" > /etc/netns/novpn/resolv.conf
-      echo "nameserver 1.1.0.1" >> /etc/netns/novpn/resolv.conf
-      sysctl -wq net.ipv4.ip_forward=1
-      iptables -t nat -A POSTROUTING -o "$default_interface" -j MASQUERADE
+    default_gateway=$(ip route | awk '/default/ {print $3}')
+    default_interface=$(ip route | awk '/default/ {print $5}')
 
-      ip netns add novpn
-      ip link add novpn0 type veth peer name novpn1
-      ip link set novpn1 netns novpn
-      ip addr add 192.168.150.1/24 dev novpn0
-      ip link set novpn0 up
-      ip netns exec novpn ip link set lo up
-      ip netns exec novpn ip addr add 192.168.150.2/24 dev novpn1
-      ip netns exec novpn ip link set novpn1 up
-      ip netns exec novpn ip route add default via 192.168.150.1
+    if [[ -z "$default_interface" ]]; then
+      echo "No default interface"
+      exit 1
+    fi
 
-      create_rules
-    }
+    mkdir -p /etc/netns/novpn/
+    echo "nameserver 1.1.1.1" > /etc/netns/novpn/resolv.conf
+    echo "nameserver 1.1.0.1" >> /etc/netns/novpn/resolv.conf
+    sysctl -wq net.ipv4.ip_forward=1
+    iptables -t nat -A POSTROUTING -o "$default_interface" -j MASQUERADE
 
-    get_default_interface
-    create_netns
-    sleep 2
-    systemctl start ${lib.concatStringsSep " " (map (s: "${s.name}.service") socksed)}
+    ip link add novpn0 type veth peer name novpn1
+    ip link set novpn1 netns novpn
+    ip addr add 192.168.150.1/24 dev novpn0
+    ip link set novpn0 up
+    ip netns exec novpn ip link set lo up
+    ip netns exec novpn ip addr add 192.168.150.2/24 dev novpn1
+    ip netns exec novpn ip link set novpn1 up
+    ip netns exec novpn ip route add default via 192.168.150.1
+
+    configure_rules
+    sleep 3
 
     ip monitor route | while read -r event; do
       case "$event" in
@@ -106,13 +93,10 @@ let
               if [[ ! "$default_gateway_new" == "$default_gateway" ]]; then
                 default_interface=$default_interface_new
                 default_gateway=$default_gateway_new
-                echo "New gateway $default_gateway_new"
               fi
             fi
 
-            echo "Network event detected, readding rules"
-            purge_rules
-            create_rules
+            configure_rules
           ;;
       esac
     done
@@ -135,6 +119,7 @@ let
     description = "novpn namespace";
     after = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
+    wants = map (s: "${s.name}.service") socksed;
 
     serviceConfig = {
       Restart = "on-failure";
@@ -144,7 +129,7 @@ let
       Type = "simple";
     };
     
-    preStart = "${stop_novpn}/bin/stop_novpn";
+    preStart = "${stop_novpn}/bin/stop_novpn && ip netns add novpn";
     path = with pkgs; [ gawk iproute2 iptables sysctl coreutils ];
   };
 in {
