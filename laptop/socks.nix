@@ -86,11 +86,9 @@ let
             default_interface_new=$(ip route | awk '/default/ {print $5}')
             default_gateway_new=$(ip route | awk '/default/ {print $3}')
 
-            if [[ ! -z "$default_gateway_new" ]]; then
-              if [[ ! "$default_gateway_new" == "$default_gateway" ]]; then
-                default_interface=$default_interface_new
-                default_gateway=$default_gateway_new
-              fi
+            if [[ ! -z "$default_interface_new" && ! -z "$default_gateway_new" ]]; then
+              default_interface=$default_interface_new
+              default_gateway=$default_gateway_new
             fi
 
             configure_rules
