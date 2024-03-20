@@ -140,7 +140,7 @@ in {
   home-manager.users.cute = {
     home.username = "cute";
     home.stateVersion = "23.11";
-    
+
     programs.firefox = {
       enable = true;
       policies = {

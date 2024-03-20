@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }: with lib.gvariant;
+{ pkgs, lib, inputs, ... }: with lib.gvariant;
 
 let
   wallpaper = pkgs.stdenv.mkDerivation {
@@ -10,9 +10,21 @@ let
     '';
   };
 in {
+  imports = [
+    inputs.home-manager.nixosModules.home-manager
+  ];
+
   environment.sessionVariables = { 
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
     MOZ_ENABLE_WAYLAND = "0";
+  };
+
+  home-manager.users.cute.home.pointerCursor = {
+    gtk.enable = true;  
+    x11.enable = true;
+    package = pkgs.gnome.adwaita-icon-theme;
+    name = "Adwaita";
+    size = 12;
   };
 
   nixpkgs.overlays = [
