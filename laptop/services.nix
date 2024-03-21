@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 
 {
   systemd.tmpfiles.rules = [
@@ -84,7 +84,7 @@
   #services.cloudflared.tunnels = {
   #   "unified" = {
   #     default = "http_status:404";
-  #     credentialsFile = "/run/agenix/cloudflared";
+  #     credentialsFile = "${config.age.secrets.cloudflared.path}";
   #   };
   # };
   

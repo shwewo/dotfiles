@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, ... }:
+{ pkgs, lib, inputs, config, ... }:
 
 {
   imports = [
@@ -48,7 +48,7 @@
           NEKO_CONTROL_PROTECTION = "true";
         };
         environmentFiles = [
-          "/run/agenix/neko_chromium"
+          "${config.age.secrets.neko_chromium.path}"
         ];
       };
       neko-xfce = {
@@ -65,7 +65,7 @@
           NEKO_CONTROL_PROTECTION = "true";
         };
         environmentFiles = [
-          "/run/agenix/neko_xfce"
+          "${config.age.secrets.neko_xfce.path}"
         ];
       };
     };

@@ -1,7 +1,7 @@
-{ pkgs, lib, inputs, stable, ... }: 
+{ pkgs, lib, inputs, stable, config, ... }: 
 
 let
-  wrappers = import ./wrappers.nix { inherit inputs pkgs lib; };
+  wrappers = import ./wrappers.nix { inherit inputs pkgs lib config; };
   lock-false = {
     Value = false;
     Status = "locked";
@@ -123,6 +123,8 @@ in {
     autostartDesktopItem
     ephemeralbrowser
     ephemeralbrowserDesktopItem
+    firefoxRussia
+    firefoxRussiaDesktopItem
   ]);
 
   # Those are system-wide, this is a limitation of NixOS :\
@@ -218,11 +220,20 @@ in {
       enable = true;
       extensions = with pkgs.vscode-extensions; [
         matklad.rust-analyzer
-        bbenoist.nix
+        jnoortheen.nix-ide
       ];
       enableUpdateCheck = false;
       userSettings = {
         "window.titleBarStyle" = "custom";
+        "nix.enableLanguageServer"= true;
+        "nix.serverPath" = "${pkgs.nil}/bin/nil";
+        "nix.serverSettings" = {
+          nil = {
+            formatting = {
+              command = [ "${pkgs.nixfmt}/bin/nixfmt" ];
+            };
+          };
+        };
       };
     };
   

@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, ... }:
+{ pkgs, lib, inputs, config, ... }:
 
 {
   ephemeralbrowser = pkgs.writeScriptBin "ephemeralbrowser" ''
@@ -102,7 +102,7 @@
   keepassxc = pkgs.writeScriptBin "keepassxc" ''
     #!/usr/bin/env bash
     QT_QPA_PLATFORM=wayland
-    ${pkgs.coreutils}/bin/cat /run/agenix/precise | ${pkgs.keepassxc}/bin/keepassxc --pw-stdin ~/Dropbox/Sync/passwords.kdbx &
+    ${pkgs.coreutils}/bin/cat ${config.age.secrets.precise.path} | ${pkgs.keepassxc}/bin/keepassxc --pw-stdin ~/Dropbox/Sync/passwords.kdbx &
     exit 0
   '';
 
@@ -133,9 +133,9 @@
   cloudsync = pkgs.writeScriptBin "cloudsync"  ''
     #!/usr/bin/env bash
     ${pkgs.libnotify}/bin/notify-send "Syncing" "Compressing sync folder" --icon=globe
-    ${pkgs.p7zip}/bin/7z a -mhe=on /tmp/Sync.7z ~/Dropbox/Sync -p$(cat /run/agenix/backup)
+    ${pkgs.p7zip}/bin/7z a -mhe=on /tmp/Sync.7z ~/Dropbox/Sync -p$(cat ${config.age.secrets.backup.path})
 
-    rclone_pass=$(cat /run/agenix/rclone);
+    rclone_pass=$(cat ${config.age.secrets.rclone.path});
     ${pkgs.libnotify}/bin/notify-send "Syncing" "Syncing koofr" --icon=globe;
     ${pkgs.coreutils}/bin/echo "Syncing koofr...";
     RCLONE_CONFIG_PASS="$rclone_pass" rclone -vvvv copy /tmp/Sync.7z koofr:
@@ -161,7 +161,7 @@
     fi
 
     sudo ${pkgs.fuse}/bin/fusermount -uz ~/.encryptedfit
-    ${pkgs.gocryptfs}/bin/gocryptfs -passfile=/run/agenix/backup /run/media/cute/samsungfit/Encrypted ~/.encryptedfit && \
+    ${pkgs.gocryptfs}/bin/gocryptfs -passfile=${config.age.secrets.backup.path} /run/media/cute/samsungfit/Encrypted ~/.encryptedfit && \
     ${pkgs.rsync}/bin/rsync -r -t -v --progress -s ~/Dropbox --delete ~/.encryptedfit/ --exclude "Sync/" --exclude ".dropbox.cache" && \
     ${pkgs.rsync}/bin/rsync -r -t -v --progress -s ~/Dropbox/Sync --delete /run/media/cute/samsungfit && \
     ${pkgs.coreutils}/bin/sync && \
@@ -182,6 +182,18 @@
     
     exit 0
   '';
+
+  firefoxRussia = pkgs.writeScriptBin "firefox-russia" ''
+    #!/usr/bin/env bash
+    firejail --blacklist="/var/run/nscd" --ignore="include whitelist-run-common.inc" --net=$(${pkgs.iproute2}/bin/ip route | ${pkgs.gawk}/bin/awk '/default/ {print $5}') --dns=77.88.8.1 firefox --class firefox-russia  -P russia -no-remote
+  '';
+
+  firefoxRussiaDesktopItem = pkgs.makeDesktopItem {
+    name = "firefox-russia";
+    desktopName = "Firefox Russia";
+    icon = "firefox-developer-edition";
+    exec = "firefox-russia";
+  };
 
   namespaced = pkgs.writeScriptBin "namespaced" ''
     #!/usr/bin/env bash

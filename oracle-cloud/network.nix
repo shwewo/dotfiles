@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 
 {
   users.groups.no-net = {};
@@ -62,7 +62,7 @@
   services.cloudflared.tunnels = {
     "unified" = {
       default = "http_status:404";
-      credentialsFile = "/run/agenix/cloudflared";
+      credentialsFile = "${config.age.secrets.cloudflared.path}";
     };
   };
 

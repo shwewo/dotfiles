@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
   let socksBuilder = attrs: {
     inherit (attrs) name;
     value = {
@@ -12,8 +12,8 @@
   };
 
   socksed = [
-    { name = "socks-v2ray";   script = "ss-server -c /run/agenix/socks"; }
-    { name = "socks-reality"; script = "rm -f /tmp/reality.json && ln -s /run/agenix/reality /tmp/reality.json && xray -c /tmp/reality.json"; }
+    { name = "socks-v2ray";   script = "ss-server -c ${config.age.secrets.socks.path}"; }
+    { name = "socks-reality"; script = "rm -f /tmp/reality.json && ln -s ${config.age.secrets.reality.path} /tmp/reality.json && xray -c /tmp/reality.json"; }
   ];
 in {
   users.users.socks = {
