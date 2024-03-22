@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, lib, config, inputs, ... }:
 let
   socksBuilder = attrs:
     {
@@ -127,7 +127,7 @@ in {
     description = "novpn namespace";
     after = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
-    # wants = map (s: "${s.name}.service") socksed;
+    wants = map (s: "${s.name}.service") socksed ++ [ "network-online.target"];
 
     serviceConfig = {
       Restart = "on-failure";
@@ -140,4 +140,21 @@ in {
     preStart = "${stop_novpn}/bin/stop_novpn && ip netns add novpn";
     path = with pkgs; [ gawk iproute2 iptables sysctl coreutils ];
   };};
+
+  users.users.cute.packages = [
+    (pkgs.writeScriptBin "nyx" ''sudo -u tor -g tor ${inputs.nixpkgs2105.legacyPackages."x86_64-linux".nyx}/bin/nyx $@'')
+  ];
+
+  services.tor = {
+    enable = true;
+    client = {
+      enable = true;
+      socksListenAddress = 9050;
+    };
+    settings = {
+      Socks5Proxy = "192.168.150.2:3333";
+      ControlPort = 9051;
+      CookieAuthentication = true;
+    };
+  };
 }
