@@ -207,12 +207,12 @@ in {
       shellAliases = {
         fru = "trans ru:en";
         fen = "trans en:ru";
+        icat = "kitten icat";
       };
       shellInit = ''
         set -U __done_kitty_remote_control 1
         set -U __done_kitty_remote_control_password "kitty-notification-password-fish"
-        set -U __done_notification_command "${pkgs.libnotify}/bin/notify-send --icon=kitty --app-name=kitty \$title \$argv[1]"
-        set -U __done_notification_urgency_level_failure critical
+        set -U __done_notification_command 'notify-send --icon=kitty --app-name=kitty \$title \$argv[1] && '
       '';
     };
 

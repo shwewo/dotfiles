@@ -103,6 +103,7 @@
     #!/usr/bin/env bash
     QT_QPA_PLATFORM=wayland
     ${pkgs.coreutils}/bin/cat ${config.age.secrets.precise.path} | ${pkgs.keepassxc}/bin/keepassxc --pw-stdin ~/Dropbox/Sync/passwords.kdbx &
+    ${pkgs.glib}/bin/gdbus call --session --dest org.gnome.Shell --object-path /de/lucaswerkmeister/ActivateWindowByTitle --method de.lucaswerkmeister.ActivateWindowByTitle.activateByWmClass 'KeePassXC'
     exit 0
   '';
 
