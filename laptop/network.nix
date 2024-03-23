@@ -88,7 +88,7 @@
     '';
   };
 
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = [
     (pkgs.writeScriptBin "warp-cli" "${pkgs.cloudflare-warp}/bin/warp-cli $@")
   ];
   

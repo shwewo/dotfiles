@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, stable, config, ... }: 
+{ pkgs, lib, inputs, config, ... }: 
 
 let
   wrappers = import ./wrappers.nix { inherit inputs pkgs lib config; };
@@ -32,7 +32,7 @@ in {
     unzip
     zip
     inotify-tools
-    stable.spotdl
+    inputs.stable.legacyPackages.${pkgs.system}.spotdl
     # Messengers
     element-desktop
     inputs.tdesktop.packages.${pkgs.system}.default

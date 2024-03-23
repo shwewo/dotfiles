@@ -83,7 +83,6 @@ pkgs.stdenv.mkDerivation rec {
     description = "An application to stream audio between devices";
     homepage = "https://audiorelay.net";
     license = licenses.unfree;
-#    platforms = platforms.x86_64-linux;
-    maintainers = with maintainers; [];
+    maintainers = [];
   };
 }

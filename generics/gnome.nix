@@ -177,9 +177,8 @@ in {
     wallpaper
   ];
 
-  environment.gnome.excludePackages = (with pkgs; [
-    gnome-tour
-  ]) ++ (with pkgs.gnome; [
+  environment.gnome.excludePackages = (with pkgs.gnome; [ 
+    pkgs.gnome-tour
     cheese # webcam tool
     gnome-music
     epiphany # web browser

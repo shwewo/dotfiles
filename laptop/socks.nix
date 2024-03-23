@@ -1,4 +1,4 @@
-{ pkgs, lib, config, inputs, ... }:
+{ pkgs, config, inputs, ... }:
 let
   socksBuilder = attrs:
     {
@@ -142,7 +142,7 @@ in {
   };};
 
   users.users.cute.packages = [
-    (pkgs.writeScriptBin "nyx" ''sudo -u tor -g tor ${inputs.nixpkgs2105.legacyPackages."x86_64-linux".nyx}/bin/nyx $@'')
+    (pkgs.writeScriptBin "nyx" ''sudo -u tor -g tor ${inputs.nixpkgs2105.legacyPackages."${pkgs.system}".nyx}/bin/nyx $@'')
   ];
 
   services.tor = {

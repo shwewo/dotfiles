@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, ... }:
+{ pkgs, inputs, ... }:
 
 let
   run = pkgs.writeScriptBin "run" ''
@@ -74,6 +74,7 @@ in {
     nix-output-monitor
     fishPlugins.done
     inputs.nh.packages.${pkgs.system}.default
+    (pkgs.writeScriptBin "reboot" ''read -p "Do you REALLY want to reboot? (y/N) " answer; [[ $answer == [Yy]* ]] && ${pkgs.systemd}/bin/reboot'')
   ];
 
   security.wrappers = {
@@ -83,4 +84,5 @@ in {
   };
 
   security.rtkit.enable = true;
+  boot.tmp.cleanOnBoot = true;
 }
