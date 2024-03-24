@@ -120,7 +120,6 @@ in {
     keepassxc keepassxcDesktopItem
     autostart autostartDesktopItem
     ephemeralbrowser ephemeralbrowserDesktopItem
-    firefoxRussia firefoxRussiaDesktopItem
     googleChromeRussia googleChromeRussiaDesktopItem
   ]);
 

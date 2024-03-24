@@ -77,18 +77,6 @@
     type = "Application";
   };
 
-  firefoxRussia = pkgs.writeScriptBin "firefox-russia" ''
-    #!/usr/bin/env bash
-    firejail --blacklist="/var/run/nscd" --ignore="include whitelist-run-common.inc" --net=$(${pkgs.iproute2}/bin/ip route | ${pkgs.gawk}/bin/awk '/default/ {print $5}') --dns=77.88.8.1 firefox --class firefox-russia --name firefox-russia -P russia -no-remote
-  '';
-
-  firefoxRussiaDesktopItem = pkgs.makeDesktopItem {
-    name = "firefox-russia";
-    desktopName = "Firefox Russia";
-    icon = "firefox-developer-edition";
-    exec = "firefox-russia";
-  };
-
   googleChromeRussia = pkgs.writeScriptBin "google-chrome-russia" ''
     mkdir -p $HOME/.google-chrome-russia/.pki/nssdb/
     ${pkgs.nssTools}/bin/certutil -d sql:$HOME/.google-chrome-russia/.pki/nssdb -A -t "C,," -n "Russian Trusted Root" -i ${builtins.fetchurl {
