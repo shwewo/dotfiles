@@ -1,7 +1,7 @@
-{ pkgs, lib, inputs, config, self, ... }: 
+{ pkgs, lib, inputs, config, self, stdenv, ... }: 
 
 let
-  wrappers = import ./wrappers.nix { inherit inputs pkgs lib config self; };
+  wrappers = import ./wrappers.nix { inherit inputs pkgs lib config self stdenv; };
   lock-false = {
     Value = false;
     Status = "locked";
@@ -119,7 +119,7 @@ in {
     kitty_wrapped
     keepassxc keepassxcDesktopItem
     autostart autostartDesktopItem
-    ephemeralbrowser ephemeralbrowserDesktopItem
+    ephemeralBrowser ephemeralBrowserDesktopItem
     googleChromeRussia googleChromeRussiaDesktopItem
   ]);
 

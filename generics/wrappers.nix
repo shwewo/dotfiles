@@ -4,8 +4,8 @@
   ephemeralbrowser = pkgs.writeScriptBin "ephemeralbrowser" ''
     #!/usr/bin/env bash
 
-    default_interface=$(${pkgs.iproute2}/bin/ip route show default | ${pkgs.gawk}/bin/awk '/default/ {print $5}')
-    interfaces=$(${pkgs.iproute2}/bin/ip -o -4 addr show | ${pkgs.gawk}/bin/awk '$4 ~ /\/24/ {print $2}' | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/|/g')
+    default_interface=$(ip route show default | awk '/default/ {print $5; exit}')
+    interfaces=$(ip -o -4 addr show | awk '$4 ~ /\/24/ {print $2}' | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/|/g')
 
     # The difference between default_interface and and default chose option is that default_interface is used to get dhcp and use novpn profile, and default is for leave network as is without tweaking it (e.g. VPN/proxy/whatever)
 
@@ -19,21 +19,21 @@
       exit 1
     fi
 
-    browser=$(${pkgs.coreutils}/bin/echo "$result" | cut -d'|' -f1)
-    interface=$(${pkgs.coreutils}/bin/echo "$result" | cut -d'|' -f2) 
-    dns=$(${pkgs.coreutils}/bin/echo "$result" | cut -d'|' -f3)
+    browser=$(echo "$result" | cut -d'|' -f1)
+    interface=$(echo "$result" | cut -d'|' -f2) 
+    dns=$(echo "$result" | cut -d'|' -f3)
 
     if [[ $interface == "novpn" ]]; then
       interface=$default_interface
     fi
 
     if [[ $dns == "dhcp" ]]; then
-      ${pkgs.coreutils}/bin/echo "Getting DNS from DHCP..."
-      dns=$(${pkgs.networkmanager}/bin/nmcli device show $default_interface | ${pkgs.gnugrep}/bin/grep 'IP4.DNS\[1\]' | ${pkgs.coreutils}/bin/head -n 1 | ${pkgs.gawk}/bin/awk '{print $2}')
-      ${pkgs.coreutils}/bin/echo "DHCP's dns is $dns"
+      echo "Getting DNS from DHCP..."
+      dns=$(nmcli device show $default_interface | grep 'IP4.DNS\[1\]' | head -n 1 | awk '{print $2}')
+      echo "DHCP's dns is $dns"
     fi
 
-    ${pkgs.coreutils}/bin/mkdir -p /tmp/ephemeralbrowser
+    mkdir -p /tmp/ephemeralbrowser
 
     if [[ $browser == "google_chrome" ]]; then
       browser_path="${pkgs.google-chrome}/bin/google-chrome-stable https://ifconfig.me --class=ephemeralbrowser --app-id=ephemeralbrowser"
@@ -87,7 +87,7 @@
       url = "https://gu-st.ru/content/lending/russian_trusted_sub_ca_pem.crt";
       sha256 = "sha256:19jffjrawgbpdlivdvpzy7kcqbyl115rixs86vpjjkvp6sgmibph";
     }}  
-    firejail --blacklist="/var/run/nscd" --ignore="include whitelist-run-common.inc" --private=$HOME/.google-chrome-russia --net=$(${pkgs.iproute2}/bin/ip route | ${pkgs.gawk}/bin/awk '/default/ {print $5}') --dns=77.88.8.1 --profile=google-chrome ${pkgs.google-chrome}/bin/google-chrome-stable --class=google-chrome-russia --app-id=google-chrome-russia
+    firejail --blacklist="/var/run/nscd" --ignore="include whitelist-run-common.inc" --private=$HOME/.google-chrome-russia --net=$(${pkgs.iproute2}/bin/ip route | ${pkgs.gawk}/bin/awk '/default/ {print $5; exit}') --dns=77.88.8.1 --profile=google-chrome ${pkgs.google-chrome}/bin/google-chrome-stable --class=google-chrome-russia --app-id=google-chrome-russia
   '';
 
   googleChromeRussiaDesktopItem = pkgs.makeDesktopItem {
@@ -101,14 +101,13 @@
     #!/usr/bin/env bash
     ${pkgs.coreutils}/bin/sleep 5
     PID=$$
-    ${pkgs.gtk3}/bin/gtk-launch dropbox.desktop
-    ${pkgs.gtk3}/bin/gtk-launch org.telegram.desktop.desktop
-    ${pkgs.gtk3}/bin/gtk-launch vesktop.desktop
-    ${pkgs.gtk3}/bin/gtk-launch ayugram.desktop
-    ${pkgs.gtk3}/bin/gtk-launch spotify.desktop
-    ${pkgs.gtk3}/bin/gtk-launch firefox.desktop
-    ${pkgs.gtk3}/bin/gtk-launch keepassxc.desktop                       
-    exit 0
+    gtk-launch dropbox.desktop
+    gtk-launch org.telegram.desktop.desktop
+    gtk-launch vesktop.desktop
+    gtk-launch ayugram.desktop
+    gtk-launch spotify.desktop
+    gtk-launch firefox.desktop
+    gtk-launch keepassxc.desktop                       
   '';
 
   autostartDesktopItem = pkgs.makeDesktopItem {
@@ -122,9 +121,8 @@
   keepassxc = pkgs.writeScriptBin "keepassxc" ''
     #!/usr/bin/env bash
     QT_QPA_PLATFORM=wayland
-    ${pkgs.coreutils}/bin/cat ${config.age.secrets.precise.path} | ${pkgs.keepassxc}/bin/keepassxc --pw-stdin ~/Dropbox/Sync/passwords.kdbx &
-    ${pkgs.glib}/bin/gdbus call --session --dest org.gnome.Shell --object-path /de/lucaswerkmeister/ActivateWindowByTitle --method de.lucaswerkmeister.ActivateWindowByTitle.activateByWmClass 'KeePassXC'
-    exit 0
+    cat ${config.age.secrets.precise.path} | ${pkgs.keepassxc}/bin/keepassxc --pw-stdin ~/Dropbox/Sync/passwords.kdbx &
+    gdbus call --session --dest org.gnome.Shell --object-path /de/lucaswerkmeister/ActivateWindowByTitle --method de.lucaswerkmeister.ActivateWindowByTitle.activateByWmClass 'KeePassXC'
   '';
 
   keepassxcDesktopItem = pkgs.makeDesktopItem {
@@ -135,22 +133,6 @@
     type = "Application";
   };
 
-  # ayugram-desktop = pkgs.writeScriptBin "ayugram-desktop" ''
-  #   #!/usr/bin/env bash
-  #   exec env QT_QPA_PLATFORM=wayland ${inputs.ayugram-desktop.packages.${pkgs.system}.default}/bin/ayugram-desktop "$@"
-  #   exit 0
-  # '';
-
-  # ayugram-desktopDesktopItem = pkgs.makeDesktopItem {
-  #   name = "com.ayugram.desktop";
-  #   desktopName = "Telegram Desktop";
-  #   icon = "telegram-desktop";
-  #   exec = "/etc/profiles/per-user/cute/bin/ayugram-desktop";
-  #   type = "Application";
-  #   startupWMClass = "com.ayugram";
-  #   mimeTypes = [ "x-scheme-handler/tg" ];
-  # };
-
   cloudsync = pkgs.writeScriptBin "cloudsync"  ''
     #!/usr/bin/env bash
     ${pkgs.libnotify}/bin/notify-send "Syncing" "Compressing sync folder" --icon=globe
@@ -158,26 +140,26 @@
 
     rclone_pass=$(cat ${config.age.secrets.rclone.path});
     ${pkgs.libnotify}/bin/notify-send "Syncing" "Syncing koofr" --icon=globe;
-    ${pkgs.coreutils}/bin/echo "Syncing koofr...";
+    echo "Syncing koofr...";
     RCLONE_CONFIG_PASS="$rclone_pass" rclone -vvvv copy /tmp/Sync.7z koofr:
 
     ${pkgs.libnotify}/bin/notify-send "Syncing" "Syncing pcloud" --icon=globe
-    ${pkgs.coreutils}/bin/echo "Syncing pcloud..."
+    echo "Syncing pcloud..."
     RCLONE_CONFIG_PASS="$rclone_pass" rclone -vvvv copy /tmp/Sync.7z pcloud:
 
     ${pkgs.libnotify}/bin/notify-send "Syncing" "Syncing mega" --icon=globe
-    ${pkgs.coreutils}/bin/echo "Syncing mega..."
+    echo "Syncing mega..."
     RCLONE_CONFIG_PASS="$rclone_pass" rclone -vvvv copy /tmp/Sync.7z mega:
 
-    ${pkgs.coreutils}/bin/echo "Sync complete"
+    echo "Sync complete"
     ${pkgs.libnotify}/bin/notify-send "Syncing" "Cloud sync complete" --icon=globe
-    ${pkgs.coreutils}/bin/sleep infinity
+    sleep infinity
   '';
 
   fitsync = pkgs.writeScriptBin "fitsync" ''
     #!/usr/bin/env bash
     if [ ! -f "/home/cute/Dropbox/Sync/recovery.kdbx" ]; then
-      ${pkgs.coreutils}/bin/echo "Warning, 'recovery keys' database not found!"
+      echo "Warning, 'recovery keys' database not found!"
       exit
     fi
 
@@ -185,27 +167,26 @@
     ${pkgs.gocryptfs}/bin/gocryptfs -passfile=${config.age.secrets.backup.path} /run/media/cute/samsungfit/Encrypted ~/.encryptedfit && \
     ${pkgs.rsync}/bin/rsync -r -t -v --progress -s ~/Dropbox --delete ~/.encryptedfit/ --exclude "Sync/" --exclude ".dropbox.cache" && \
     ${pkgs.rsync}/bin/rsync -r -t -v --progress -s ~/Dropbox/Sync --delete /run/media/cute/samsungfit && \
-    ${pkgs.coreutils}/bin/sync && \
+    sync && \
     sudo ${pkgs.fuse}/bin/fusermount -uz ~/.encryptedfit && \
-    ${pkgs.coreutils}/bin/echo "Sync complete"
+    echo "Sync complete"
     ${pkgs.libnotify}/bin/notify-send "Syncing" "USB sync complete" --icon=usb
   '';
 
   kitty_wrapped = pkgs.writeScriptBin "kitty_wrapped" ''
     #!/usr/bin/env bash
-    pid=$(${pkgs.procps}/bin/pgrep "kitty")
+    pid=$(pgrep "kitty")
 
     if [[ -z "$pid" ]]; then
       kitty --start-as maximized &
     else
-      ${pkgs.glib}/bin/gdbus call --session --dest org.gnome.Shell --object-path /de/lucaswerkmeister/ActivateWindowByTitle --method de.lucaswerkmeister.ActivateWindowByTitle.activateByWmClass 'kitty'
+      gdbus call --session --dest org.gnome.Shell --object-path /de/lucaswerkmeister/ActivateWindowByTitle --method de.lucaswerkmeister.ActivateWindowByTitle.activateByWmClass 'kitty'
     fi
-    
-    exit 0
   '';
 
   namespaced = pkgs.writeScriptBin "namespaced" ''
     #!/usr/bin/env bash
+
     RUN_COMMAND="" # Any command you want to run
     RUN_COMMAND_USER="$SUDO_USER"
     RUN_COMMAND_REDIRECT_STDOUT=false;
@@ -319,8 +300,8 @@
     }
 
     get_default_interface() {
-      default_gateway=$(ip route | awk '/default/ {print $3}')
-      default_interface=$(ip route | awk '/default/ {print $5}')
+      default_gateway=$(ip route | awk '/default/ {print $3; exit}')
+      default_interface=$(ip route | awk '/default/ {print $5; exit}')
 
       if [[ -z "$default_interface" ]]; then
         log "No default interface, are you connected to the internet?"
@@ -424,7 +405,7 @@
       ip monitor route | while read -r event; do
         case "$event" in
             'local '*)
-              default_gateway_new=$(ip route | awk '/default/ {print $3}')
+              default_gateway_new=$(ip route | awk '/default/ {print $3; exit}')
 
               if [[ ! -z "$default_gateway_new" ]]; then
                 if [[ ! "$default_gateway_new" == "$default_gateway" ]]; then
