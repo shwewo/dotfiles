@@ -67,6 +67,7 @@
     linuxPackages.usbip
     android-tools
     wl-clipboard
+    jamesdsp # audio compressor
   ];
 
   nh = {

@@ -9,6 +9,26 @@ let
       NIXPKGS_ALLOW_UNFREE=1 nix run --impure nixpkgs#"$1" -- "''\${@:2}"
     fi
   '';
+  fzf = pkgs.fzf.overrideAttrs (oldAttrs: {
+    postInstall = oldAttrs.postInstall + ''
+      # Remove shell integrations
+      rm -rf $out/share/fzf $out/share/fish $out/bin/fzf-share
+    '' + (builtins.replaceStrings
+      [
+        ''
+          # Install shell integrations
+          install -D shell/* -t $out/share/fzf/
+          install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
+          mkdir -p $out/share/fish/vendor_conf.d
+          cat << EOF > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+            status is-interactive; or exit 0
+            fzf_key_bindings
+          EOF
+        ''
+      ]
+      [""]
+      oldAttrs.postInstall);
+  });
 in {
   users.users.cute = {
     isNormalUser = true;
@@ -59,6 +79,7 @@ in {
     rebuild = "nh os switch -- --option warn-dirty false";
     haste = "HASTE_SERVER=https://haste.eww.workers.dev ${pkgs.haste-client}/bin/haste";
     rollback = "sudo nixos-rebuild switch --rollback --flake ~/dev/dotfiles/";
+    ls = "${pkgs.lsd}/bin/lsd";
   };
 
   services.vnstat.enable = true;
@@ -73,11 +94,23 @@ in {
     tshark
     git
     wget
+    micro
     any-nix-shell
     ncdu
+    fd
+    fzf
+    sysz
+    grc
+    bat
     fishPlugins.done
-    inputs.nh.packages.${pkgs.system}.default
+    fishPlugins.grc
+    fishPlugins.autopair
+    fishPlugins.z
+    fishPlugins.fzf-fish
+    fishPlugins.sponge
+    (nerdfonts.override { fonts = [ "Iosevka" ]; })
     (pkgs.writeScriptBin "reboot" ''read -p "Do you REALLY want to reboot? (y/N) " answer; [[ $answer == [Yy]* ]] && ${pkgs.systemd}/bin/reboot'')
+    inputs.nh.packages.${pkgs.system}.default
   ];
 
   security.wrappers = {

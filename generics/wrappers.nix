@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, self, ... }:
 
 {
   ephemeralbrowser = pkgs.writeScriptBin "ephemeralbrowser" ''
@@ -36,13 +36,13 @@
     ${pkgs.coreutils}/bin/mkdir -p /tmp/ephemeralbrowser
 
     if [[ $browser == "google_chrome" ]]; then
-      browser_path="${pkgs.google-chrome}/bin/google-chrome-stable https://ifconfig.me"
+      browser_path="${pkgs.google-chrome}/bin/google-chrome-stable https://ifconfig.me --class=ephemeralbrowser --app-id=ephemeralbrowser"
       profile="google-chrome"
     elif [[ $browser == "ungoogled_chromium" ]]; then
-      browser_path="${pkgs.ungoogled-chromium}/bin/chromium https://ifconfig.me"
+      browser_path="${pkgs.ungoogled-chromium}/bin/chromium https://ifconfig.me --class=ephemeralbrowser --app-id=ephemeralbrowser"
       profile="chromium"
     elif [[ $browser == "firefox" ]]; then
-      browser_path="${pkgs.firefox}/bin/firefox -no-remote https://ifconfig.me"
+      browser_path="${pkgs.firefox}/bin/firefox -no-remote https://ifconfig.me --class ephemeralbrowser --name ephemeralbrowser"
       profile="firefox"
     fi
 
@@ -72,9 +72,41 @@
   ephemeralbrowserDesktopItem = pkgs.makeDesktopItem {
     name = "ephemeralbrowser";
     desktopName = "Ephemeral Browser";
-    icon = "google-chrome-unstable";
+    icon = "browser";
     exec = "/etc/profiles/per-user/cute/bin/ephemeralbrowser";
     type = "Application";
+  };
+
+  firefoxRussia = pkgs.writeScriptBin "firefox-russia" ''
+    #!/usr/bin/env bash
+    firejail --blacklist="/var/run/nscd" --ignore="include whitelist-run-common.inc" --net=$(${pkgs.iproute2}/bin/ip route | ${pkgs.gawk}/bin/awk '/default/ {print $5}') --dns=77.88.8.1 firefox --class firefox-russia --name firefox-russia -P russia -no-remote
+  '';
+
+  firefoxRussiaDesktopItem = pkgs.makeDesktopItem {
+    name = "firefox-russia";
+    desktopName = "Firefox Russia";
+    icon = "firefox-developer-edition";
+    exec = "firefox-russia";
+  };
+
+  googleChromeRussia = pkgs.writeScriptBin "google-chrome-russia" ''
+    mkdir -p $HOME/.google-chrome-russia/.pki/nssdb/
+    ${pkgs.nssTools}/bin/certutil -d sql:$HOME/.google-chrome-russia/.pki/nssdb -A -t "C,," -n "Russian Trusted Root" -i ${builtins.fetchurl {
+      url = "https://gu-st.ru/content/lending/russian_trusted_root_ca_pem.crt";
+      sha256 = "sha256:0135zid0166n0rwymb38kd5zrd117nfcs6pqq2y2brg8lvz46slk";
+    }}
+    ${pkgs.nssTools}/bin/certutil -d sql:$HOME/.google-chrome-russia/.pki/nssdb -A -t "C,," -n "Russian Trusted Sub CA" -i ${builtins.fetchurl {
+      url = "https://gu-st.ru/content/lending/russian_trusted_sub_ca_pem.crt";
+      sha256 = "sha256:19jffjrawgbpdlivdvpzy7kcqbyl115rixs86vpjjkvp6sgmibph";
+    }}  
+    firejail --blacklist="/var/run/nscd" --ignore="include whitelist-run-common.inc" --private=$HOME/.google-chrome-russia --net=$(${pkgs.iproute2}/bin/ip route | ${pkgs.gawk}/bin/awk '/default/ {print $5}') --dns=77.88.8.1 --profile=google-chrome ${pkgs.google-chrome}/bin/google-chrome-stable --class=google-chrome-russia --app-id=google-chrome-russia
+  '';
+
+  googleChromeRussiaDesktopItem = pkgs.makeDesktopItem {
+    name = "google-chrome-russia";
+    desktopName = "Google Chrome Russia";
+    icon = "google-chrome-unstable";
+    exec = "google-chrome-russia";
   };
 
   autostart = pkgs.writeScriptBin "autostart" ''
@@ -183,18 +215,6 @@
     
     exit 0
   '';
-
-  firefoxRussia = pkgs.writeScriptBin "firefox-russia" ''
-    #!/usr/bin/env bash
-    firejail --blacklist="/var/run/nscd" --ignore="include whitelist-run-common.inc" --net=$(${pkgs.iproute2}/bin/ip route | ${pkgs.gawk}/bin/awk '/default/ {print $5}') --dns=77.88.8.1 firefox --class firefox-russia  -P russia -no-remote
-  '';
-
-  firefoxRussiaDesktopItem = pkgs.makeDesktopItem {
-    name = "firefox-russia";
-    desktopName = "Firefox Russia";
-    icon = "firefox-developer-edition";
-    exec = "firefox-russia";
-  };
 
   namespaced = pkgs.writeScriptBin "namespaced" ''
     #!/usr/bin/env bash

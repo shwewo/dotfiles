@@ -1,7 +1,7 @@
-{ pkgs, lib, inputs, config, ... }: 
+{ pkgs, lib, inputs, config, self, ... }: 
 
 let
-  wrappers = import ./wrappers.nix { inherit inputs pkgs lib config; };
+  wrappers = import ./wrappers.nix { inherit inputs pkgs lib config self; };
   lock-false = {
     Value = false;
     Status = "locked";
@@ -117,14 +117,11 @@ in {
     fitsync
     namespaced
     kitty_wrapped
-    keepassxc
-    keepassxcDesktopItem
-    autostart
-    autostartDesktopItem
-    ephemeralbrowser
-    ephemeralbrowserDesktopItem
-    firefoxRussia
-    firefoxRussiaDesktopItem
+    keepassxc keepassxcDesktopItem
+    autostart autostartDesktopItem
+    ephemeralbrowser ephemeralbrowserDesktopItem
+    firefoxRussia firefoxRussiaDesktopItem
+    googleChromeRussia googleChromeRussiaDesktopItem
   ]);
 
   # Those are system-wide, this is a limitation of NixOS :\
@@ -212,7 +209,7 @@ in {
       shellInit = ''
         set -U __done_kitty_remote_control 1
         set -U __done_kitty_remote_control_password "kitty-notification-password-fish"
-        set -U __done_notification_command 'notify-send --icon=kitty --app-name=kitty \$title \$argv[1] && '
+        set -U __done_notification_command "${pkgs.libnotify}/bin/notify-send --icon=kitty --app-name=kitty \$title \$argv[1]"
       '';
     };
 

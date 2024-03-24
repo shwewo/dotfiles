@@ -14,9 +14,10 @@ let
           Restart = "on-failure"; 
           RestartSec = "15"; 
           Type = "simple"; 
-          NetworkNamespacePath = "/run/netns/novpn"; 
           User = "socks"; 
-          Group = "socks"; 
+          Group = "socks";
+          RuntimeMaxSec=3600;
+          NetworkNamespacePath = "/run/netns/novpn";
         };
 
         script = attrs.script;
@@ -139,7 +140,7 @@ in {
     
     preStart = "${stop_novpn}/bin/stop_novpn && ip netns add novpn";
     path = with pkgs; [ gawk iproute2 iptables sysctl coreutils ];
-  };};
+  }; tor.serviceConfig.RuntimeMaxSec=3600; };
 
   users.users.cute.packages = [
     (pkgs.writeScriptBin "nyx" ''sudo -u tor -g tor ${inputs.nixpkgs2105.legacyPackages."${pkgs.system}".nyx}/bin/nyx $@'')
