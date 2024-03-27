@@ -23,7 +23,13 @@ let
         script = attrs.script;
         preStart = "while true; do ip addr show dev novpn1 | grep -q 'inet' && break; sleep 1; done";
 
-        path = with pkgs; [ shadowsocks-libev shadowsocks-v2ray-plugin sing-box wireproxy iproute2 ];
+        path = with pkgs; [ 
+          iproute2 
+          shadowsocks-libev 
+          shadowsocks-v2ray-plugin 
+          sing-box 
+          wireproxy 
+          (callPackage ../derivations/microsocks.nix {}) ];
       };
     };
   
@@ -37,6 +43,7 @@ let
     { name = "socks-reality-sweden";    script = "sing-box run --config ${config.age.secrets.socks_reality_sweden.path}";  } # port 2080
     { name = "socks-reality-austria";   script = "sing-box run --config ${config.age.secrets.socks_reality_austria.path}"; } # port 2081
     { name = "socks-warp";              script = "wireproxy -c /etc/wireguard/warp0.conf";                                 } # port 3333
+    { name = "socks-novpn";             script = "microsocks -i 192.168.150.2 -p 3535 ";                                   } # port 3535
   ];
 
   delete_rules = pkgs.writeScriptBin "delete_rules" ''

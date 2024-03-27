@@ -36,13 +36,13 @@
     mkdir -p /tmp/ephemeralbrowser
 
     if [[ $browser == "google_chrome" ]]; then
-      browser_path="${pkgs.google-chrome}/bin/google-chrome-stable https://ifconfig.me --class=ephemeralbrowser --app-id=ephemeralbrowser"
+      browser_path="${pkgs.google-chrome}/bin/google-chrome-stable --class=ephemeralbrowser https://ifconfig.me"
       profile="google-chrome"
     elif [[ $browser == "ungoogled_chromium" ]]; then
-      browser_path="${pkgs.ungoogled-chromium}/bin/chromium https://ifconfig.me --class=ephemeralbrowser --app-id=ephemeralbrowser"
+      browser_path="${pkgs.ungoogled-chromium}/bin/chromium --class=ephemeralbrowser --user-data-dir=/tmp/ephemeralbrowser/.config/chromium https://ifconfig.me"
       profile="chromium"
     elif [[ $browser == "firefox" ]]; then
-      browser_path="${pkgs.firefox}/bin/firefox -no-remote https://ifconfig.me --class ephemeralbrowser --name ephemeralbrowser"
+      browser_path="${pkgs.firefox}/bin/firefox -no-remote --class ephemeralbrowser --name ephemeralbrowser https://ifconfig.me"
       profile="firefox"
     fi
 
