@@ -41,8 +41,8 @@ let
 
   delete_rules = pkgs.writeScriptBin "delete_rules" ''
     #!${pkgs.bash}/bin/bash
-    default_gateway=$(cat /etc/netns/novpn/default_gateway)
-    default_interface=$(cat /etc/netns/novpn/default_interface)
+    default_gateway=$(cat /var/lib/novpn/default_gateway)
+    default_interface=$(cat /var/lib/novpn/default_interface)
 
     ip rule del fwmark 150 table 150
     ip rule del from 192.168.150.2 table 150
@@ -64,14 +64,14 @@ let
     }
 
     set_gateway() {
-      default_interface_new=$(ip route | awk '/default/ {print $5}')
-      default_gateway_new=$(ip route | awk '/default/ {print $3}')
+      default_interface_new=$(ip route show default | awk '{print $5; exit}')
+      default_gateway_new=$(ip route show default | awk '{print $3; exit}')
 
       if [[ ! -z "$default_interface_new" && ! -z "$default_gateway_new" ]]; then
         default_interface=$default_interface_new
         default_gateway=$default_gateway_new
-        echo "$default_gateway" > /etc/netns/novpn/default_gateway
-        echo "$default_interface" > /etc/netns/novpn/default_interface
+        echo "$default_gateway" > /var/lib/novpn/default_gateway
+        echo "$default_interface" > /var/lib/novpn/default_interface
       fi
     }
 
@@ -112,6 +112,7 @@ let
     #!${pkgs.bash}/bin/bash
     ${delete_rules}/bin/delete_rules
     rm -rf /etc/netns/novpn/
+    rm -rf /var/lib/novpn/
     ip link del novpn0
     ip netns del novpn
     rm -rf /var/run/netns/novpn/
@@ -135,6 +136,7 @@ in {
       RestartSec = "15";
       ExecStart = "${start_novpn}/bin/start_novpn";
       ExecStop = "${stop_novpn}/bin/stop_novpn";
+      StateDirectory = "novpn";
       Type = "simple";
     };
     

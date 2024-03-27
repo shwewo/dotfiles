@@ -68,6 +68,7 @@
     android-tools
     wl-clipboard
     jamesdsp # audio compressor
+    easyeffects
   ];
 
   nh = {

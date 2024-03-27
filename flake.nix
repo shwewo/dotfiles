@@ -10,7 +10,6 @@
     tdesktop.url = "github:shwewo/telegram-desktop-patched";
     secrets.url = "git+ssh://git@github.com/shwewo/secrets";
     agenix.url = "github:ryantm/agenix";
-    flake-utils.url = "github:numtide/flake-utils";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -25,19 +24,26 @@
 
   outputs = inputs @ { self, nixpkgs, ... }: 
   let
-    pkgs = nixpkgs.legacyPackages."x86_64-linux";
+    stable_amd64 = import inputs.stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
+    unstable_amd64 = import inputs.unstable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
+    stable_aarch64 = import inputs.stable { system = "aarch64-linux"; config = { allowUnfree = true; }; };
+    unstable_aarch64 = import inputs.unstable { system = "aarch64-linux"; config = { allowUnfree = true; }; };
     specialArgs = { inherit inputs self; };
   in {
-    devShells."${pkgs.system}".default = pkgs.mkShell {
+    devShells."x86_64-linux".default = nixpkgs.legacyPackages."x86_64-linux".mkShell {
       name = "shwewo";
-      packages = with pkgs; [ gitleaks pre-commit ];
+      packages = with nixpkgs.legacyPackages."x86_64-linux"; [ gitleaks pre-commit ];
       shellHook = ''pre-commit install &> /dev/null && gitleaks detect -v'';
     };
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux"; specialArgs = specialArgs; modules = [ ./laptop/system.nix ];
+      system = "x86_64-linux"; 
+      specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 
+      modules = [ ./laptop/system.nix ];
     };
     nixosConfigurations.oracle-cloud = nixpkgs.lib.nixosSystem {
-      system = "aarch64-linux"; specialArgs = specialArgs; modules = [ ./oracle-cloud/system.nix ];
+      system = "aarch64-linux"; 
+      specialArgs = specialArgs // { stable = stable_aarch64; unstable = unstable_aarch64; }; 
+      modules = [ ./oracle-cloud/system.nix ];
     };
   };
 }

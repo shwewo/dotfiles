@@ -1,7 +1,7 @@
-{ pkgs, lib, inputs, config, self, stdenv, ... }: 
+{ pkgs, lib, inputs, config, self, stable, ... }: 
 
 let
-  wrappers = import ./wrappers.nix { inherit inputs pkgs lib config self stdenv; };
+  wrappers = import ./wrappers.nix { inherit inputs pkgs lib config self; };
   lock-false = {
     Value = false;
     Status = "locked";
@@ -32,7 +32,7 @@ in {
     unzip
     zip
     inotify-tools
-    inputs.stable.legacyPackages.${pkgs.system}.spotdl
+    stable.spotdl
     # Messengers
     element-desktop
     inputs.tdesktop.packages.${pkgs.system}.default
@@ -92,14 +92,14 @@ in {
     jq # needed for kitty
 
     (callPackage ../derivations/audiorelay.nix {})
-    (callPackage ../derivations/spotify.nix {})
+    (callPackage ../derivations/spotify.nix { spotify = stable.spotify; })
 
     (vesktop.overrideAttrs (oldAttrs: {
       desktopItems = [ (pkgs.makeDesktopItem {
         name = "vesktop";
         desktopName = "Discord";
         exec = "vesktop %U";
-        icon = "discord-canary";
+        icon = "discord";
         startupWMClass = "Vesktop";
         genericName = "Internet Messenger";
         keywords = [ "discord" "vencord" "electron" "chat" ];
@@ -138,6 +138,8 @@ in {
   home-manager.users.cute = {
     home.username = "cute";
     home.stateVersion = "23.11";
+
+    # imports = [ "${self}/generics/theme.nix" ];
 
     programs.firefox = {
       enable = true;

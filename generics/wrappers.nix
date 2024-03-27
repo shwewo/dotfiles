@@ -1,10 +1,10 @@
 { pkgs, config, self, ... }:
 
 {
-  ephemeralbrowser = pkgs.writeScriptBin "ephemeralbrowser" ''
+  ephemeralBrowser = pkgs.writeScriptBin "ephemeralbrowser" ''
     #!/usr/bin/env bash
 
-    default_interface=$(ip route show default | awk '/default/ {print $5; exit}')
+    default_interface=$(ip route show default | awk '{print $5; exit}')
     interfaces=$(ip -o -4 addr show | awk '$4 ~ /\/24/ {print $2}' | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/|/g')
 
     # The difference between default_interface and and default chose option is that default_interface is used to get dhcp and use novpn profile, and default is for leave network as is without tweaking it (e.g. VPN/proxy/whatever)
@@ -69,7 +69,7 @@
     fi
   '';
 
-  ephemeralbrowserDesktopItem = pkgs.makeDesktopItem {
+  ephemeralBrowserDesktopItem = pkgs.makeDesktopItem {
     name = "ephemeralbrowser";
     desktopName = "Ephemeral Browser";
     icon = "browser";
@@ -87,12 +87,13 @@
       url = "https://gu-st.ru/content/lending/russian_trusted_sub_ca_pem.crt";
       sha256 = "sha256:19jffjrawgbpdlivdvpzy7kcqbyl115rixs86vpjjkvp6sgmibph";
     }}  
-    firejail --blacklist="/var/run/nscd" --ignore="include whitelist-run-common.inc" --private=$HOME/.google-chrome-russia --net=$(${pkgs.iproute2}/bin/ip route | ${pkgs.gawk}/bin/awk '/default/ {print $5; exit}') --dns=77.88.8.1 --profile=google-chrome ${pkgs.google-chrome}/bin/google-chrome-stable --class=google-chrome-russia --app-id=google-chrome-russia
+    firejail --blacklist="/var/run/nscd" --ignore="include whitelist-run-common.inc" --private=$HOME/.google-chrome-russia --net=$(ip route show default | awk '{print $5; exit}') --dns=77.88.8.1 --profile=google-chrome ${pkgs.google-chrome}/bin/google-chrome-stable --class=google-chrome-russia --app-id=google-chrome-russia
   '';
 
   googleChromeRussiaDesktopItem = pkgs.makeDesktopItem {
     name = "google-chrome-russia";
     desktopName = "Google Chrome Russia";
+    genericName = "Web Browser";
     icon = "google-chrome-unstable";
     exec = "google-chrome-russia";
   };
@@ -300,8 +301,8 @@
     }
 
     get_default_interface() {
-      default_gateway=$(ip route | awk '/default/ {print $3; exit}')
-      default_interface=$(ip route | awk '/default/ {print $5; exit}')
+      default_gateway=$(ip route show default | awk '{print $3; exit}')
+      default_interface=$(ip route show default | awk '{print $5; exit}')
 
       if [[ -z "$default_interface" ]]; then
         log "No default interface, are you connected to the internet?"
@@ -405,7 +406,7 @@
       ip monitor route | while read -r event; do
         case "$event" in
             'local '*)
-              default_gateway_new=$(ip route | awk '/default/ {print $3; exit}')
+              default_gateway_new=$(ip route show default | awk '{print $3; exit}')
 
               if [[ ! -z "$default_gateway_new" ]]; then
                 if [[ ! "$default_gateway_new" == "$default_gateway" ]]; then

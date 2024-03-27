@@ -28,6 +28,13 @@ in {
     # XCURSOR_SIZE = "24";
   };
 
+  system.activationScripts."delete_unite_overrides".text = ''
+    rm -f /home/cute/.config/gtk-3.0/gtk.css
+    rm -f /home/cute/.config/gtk-4.0/gtk.css
+    rm -f /home/cute/.config/gtk-3.0/settings.ini
+    rm -f /home/cute/.config/gtk-4.0/settings.ini
+  '';
+
   nixpkgs.overlays = [
     (final: prev: {
       gnome = prev.gnome.overrideScope' (gnomeFinal: gnomePrev: {
@@ -119,7 +126,7 @@ in {
           xkb-options = [ "terminate:ctrl_alt_bksp" "lv3:switch" "compose:ralt" ];
         };
         "org/gnome/desktop/screensaver" = {
-          lock-enabled = false;
+          lock-enabled = true;
         };
         "org/gnome/desktop/notifications" = {
           show-in-lock-screen = false;
@@ -170,6 +177,7 @@ in {
     gnomeExtensions.clipboard-indicator
     gnomeExtensions.pip-on-top
     gnomeExtensions.cloudflare-warp-toggle
+    gnome.gnome-sound-recorder
     gnome.gnome-tweaks
     mojave-gtk-theme
     adw-gtk3
