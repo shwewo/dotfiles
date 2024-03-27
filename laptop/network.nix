@@ -91,6 +91,6 @@
   environment.systemPackages = [
     (pkgs.writeScriptBin "warp-cli" "${pkgs.cloudflare-warp}/bin/warp-cli $@")
   ];
-  
+
   systemd.services.NetworkManager-wait-online.enable = false;
 }

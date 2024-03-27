@@ -44,6 +44,12 @@
     size = 8*1024;
   } ];
 
+  # 5 GHZ wifi hotspot
+  hardware.firmware = with pkgs; [ wireless-regdb ];
+  boot.extraModprobeConfig = ''
+    options cfg80211 ieee80211_regdom="RU"
+  '';
+
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;
   hardware.opengl.driSupport32Bit = true;

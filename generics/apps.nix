@@ -33,6 +33,22 @@ in {
     zip
     inotify-tools
     stable.spotdl
+    # Network
+    dnsutils
+    inetutils
+    linux-router # sudo lnxrouter -g 10.0.0.1 -o enp3s0f3u1u4 --country RU --ap wlp1s0 <ssid> -p <password> --freq-band <band> 
+    wirelesstools
+    gost # gost -L redirect://:3333 -F socks5://192.168.150.2:3333 trans proxy (UDP doesn't work)
+    wireproxy
+    wireguard-tools
+    iw
+    networkmanagerapplet
+    nmap
+    wget
+    trayscale
+    iodine
+    ptunnel
+    remmina
     # Messengers
     element-desktop
     inputs.tdesktop.packages.${pkgs.system}.default
@@ -40,7 +56,6 @@ in {
     pavucontrol
     mission-center
     usbutils
-    dnsutils
     pciutils
     util-linux
     libnotify
@@ -48,8 +63,6 @@ in {
     htop
     killall
     lsof
-    dnsutils
-    inetutils
     virt-manager
     neofetch
     # Utilities
@@ -62,11 +75,6 @@ in {
     libreoffice
     lua5_4
     translate-shell
-    # Network
-    nmap
-    wget
-    trayscale
-    remmina
     # Games
     protonup-qt
     lutris
@@ -195,6 +203,7 @@ in {
             (extension "torrent-control" "{e6e36c9a-8323-446c-b720-a176017e38ff}")
             (extension "unpaywall" "{f209234a-76f0-4735-9920-eb62507a54cd}")
             (extension "ctrl-number-to-switch-tabs" "{84601290-bec9-494a-b11c-1baa897a9683}")
+            (extension "temporary-containers" "{c607c8df-14a7-4f28-894f-29e8722976af}")
           ];
       };
     };

@@ -63,11 +63,6 @@ in {
   programs.command-not-found.enable = false;
   programs.direnv.enable = true;
   programs.direnv.silent = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-    pinentryFlavor = "curses";
-  };
   programs.tmux.enable = true;
   programs.fish.enable = true;
   programs.fish.promptInit = ''
@@ -77,9 +72,10 @@ in {
   '';
   programs.fish.shellAliases = {
     rebuild = "nh os switch -- --option warn-dirty false";
-    haste = "HASTE_SERVER=https://haste.eww.workers.dev ${pkgs.haste-client}/bin/haste";
     rollback = "sudo nixos-rebuild switch --rollback --flake ~/dev/dotfiles/";
+    search = "nix-search -d -m 5 -p";
     ls = "${pkgs.lsd}/bin/lsd";
+    haste = "HASTE_SERVER=https://haste.eww.workers.dev ${pkgs.haste-client}/bin/haste";
   };
 
   services.vnstat.enable = true;
@@ -108,9 +104,11 @@ in {
     fishPlugins.z
     fishPlugins.fzf-fish
     fishPlugins.sponge
+    nix-search-cli
+    nix-index
+    inputs.nh.packages.${pkgs.system}.default
     (nerdfonts.override { fonts = [ "Iosevka" ]; })
     (pkgs.writeScriptBin "reboot" ''read -p "Do you REALLY want to reboot? (y/N) " answer; [[ $answer == [Yy]* ]] && ${pkgs.systemd}/bin/reboot'')
-    inputs.nh.packages.${pkgs.system}.default
   ];
 
   security.wrappers = {
