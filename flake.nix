@@ -2,7 +2,7 @@
   description = "Shwewo's NixOS system configuration";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     stable.url = "github:nixos/nixpkgs/nixos-23.11";
     unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs2105.url = "github:nixos/nixpkgs/nixos-21.05";

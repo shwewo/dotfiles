@@ -68,38 +68,46 @@ in {
         # "org/gnome/mutter" = {
         #   experimental-features = [ "scale-monitor-framebuffer" ];
         # };
+
         "org/gnome/settings-daemon/plugins/media-keys" = {
           custom-keybindings = [
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
           ];
         };
+
         "org/gnome/shell/keybindings" = {
           show-screenshot-ui = [ "<Shift><Super>s" ];
         };
+
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
           binding = "<Alt>Return";
           command = "/etc/profiles/per-user/cute/bin/kitty_wrapped";
           name = "kitty";
         };
+
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
           binding = "<Control><Alt>x";
           command = "/etc/profiles/per-user/cute/bin/keepassxc";
           name = "keepassxc";
         };
+
         "org/gnome/desktop/sound" = {
           allow-volume-above-100-percent = true;
         };
+
         "org/gnome/desktop/wm/keybindings" = {
           # close = mkEmptyAy (type.string);
           switch-input-source = [ "<Shift>Alt_L" ];
           switch-input-source-backward = [ "<Alt>Shift_L" ];
         };
+
         "org/gnome/desktop/interface" = {
           icon-theme = "Papirus-Dark";
           color-scheme = "prefer-dark";
           gtk-theme = "adw-gtk3-dark";
         };
+
         "org/gnome/shell" = {
           favorite-apps = [
             "firefox.desktop" 
@@ -111,29 +119,40 @@ in {
           ];
           disable-user-extensions = false;
           enabled-extensions = [
-            "activate-window-by-title@lucaswerkmeister.de" "appindicatorsupport@rgcjonas.gmail.com" "clipboard-indicator@tudmotu.com" 
+            "activate-window-by-title@lucaswerkmeister.de" 
+            #"appindicatorsupport@rgcjonas.gmail.com" 
+            #"clipboard-indicator@tudmotu.com" 
             "gsconnect@andyholmes.github.io"
             "tailscale@joaophi.github.com"
             "unite@hardpixel.eu" 
             "user-theme@gnome-shell-extensions.gcampax.github.com"
             "pip-on-top@rafostar.github.com"
             "cloudflare-warp-toggle@khaled.is-a.dev"
+            "pano@elhan.io"
+            "always-indicator@martin.zurowietz.de"
+            "overviewbackground@github.com.orbitcorrection"
+            "hide-keyboard-layout@sitnik.ru"
           ];
         };
+
         "org/gnome/desktop/input-sources" = {
           mru-sources = [ (mkTuple [ "xkb" "us" ]) ];
           sources = [ (mkTuple [ "xkb" "us" ]) (mkTuple [ "xkb" "ru" ]) ];
           xkb-options = [ "terminate:ctrl_alt_bksp" "lv3:switch" "compose:ralt" ];
         };
+
         "org/gnome/desktop/screensaver" = {
           lock-enabled = true;
         };
+
         "org/gnome/desktop/notifications" = {
           show-in-lock-screen = false;
         };
+
         "org/gnome/desktop/session" = {
           idle-delay = mkUint32 0;
         };
+
         "org/gnome/shell/extensions/unite" = {
           enable-titlebar-actions = true; 
           extend-left-box = false;
@@ -148,19 +167,73 @@ in {
           show-window-buttons = "never";
           show-window-title = "never";
         };
+
+        "org/gnome/shell/extensions/pano" = {
+          active-item-border-color = "rgb(222,221,218)";
+          history-length = mkDouble 500;
+          hovered-item-border-color = "rgb(255,255,255)";
+          is-in-incognito = false;
+          item-size = mkUint32 200;
+          play-audio-on-copy = false;
+          send-notification-on-copy = false;
+          show-indicator = false;
+          wiggle-indicator = false;
+          window-position = mkUint32 0;
+        };
+        
+        "org/gnome/shell/extensions/pano/color-item" = {
+          header-bg-color = "rgb(61,56,70)";
+          metadata-bg-color = "rgb(61,56,70)";
+        };
+
+        "org/gnome/shell/extensions/pano/emoji-item" = {
+          body-bg-color = "rgb(61,56,70)";
+          header-bg-color = "rgb(51,209,122)";
+        };
+
+        "org/gnome/shell/extensions/pano/file-item" = {
+          body-bg-color = "rgb(61,56,70)";
+          body-color = "rgb(222,221,218)";
+          header-bg-color = "rgb(152,106,68)";
+        };
+
+        "org/gnome/shell/extensions/pano/image-item" = {
+          header-bg-color = "rgb(53,132,228)";
+        };
+
+        "org/gnome/shell/extensions/pano/link-item" = {
+          body-bg-color = "rgb(61,56,70)";
+          header-bg-color = "rgb(145,65,172)";
+        };
+
+        "org/gnome/shell/extensions/pano/text-item" = {
+          body-bg-color = "rgb(61,56,70)";
+          body-color = "rgb(222,221,218)";
+          char-length = mkUint32 650;
+          header-bg-color = "rgb(53,132,228)";
+        };
+
+        "org/gnome/shell/extensions/always-indicator" = {
+          color = "rgb(222,221,218)";
+        };
+
         "org/gnome/shell/extensions/user-theme" = {
           name = "Mojave-Dark-solid-alt";
         };
+
         "org/gnome/shell/weather" = {
           automatic-location = true;
         };
+
         "org/gnome/desktop/background" = {
           picture-uri = "file:///run/current-system/sw/share/backgrounds/wallpaper.png";
           picture-uri-dark = "file:///run/current-system/sw/share/backgrounds/wallpaper.png";
         };
+
         "org/gnome/desktop/peripherals/touchpad" = {
           tap-to-click = true;
         };
+
         "org/gnome/settings-daemon/plugins/power" = {
           sleep-inactive-ac-type = "nothing";
         };
@@ -174,12 +247,17 @@ in {
     gnomeExtensions.unite
     gnomeExtensions.tailscale-qs
     gnomeExtensions.gsconnect
-    gnomeExtensions.clipboard-indicator
+    gnomeExtensions.pano
     gnomeExtensions.pip-on-top
     gnomeExtensions.cloudflare-warp-toggle
+    gnomeExtensions.hide-keyboard-layout
+    gnomeExtensions.always-indicator
+    gnomeExtensions.overview-background
     gnome.gnome-sound-recorder
     gnome.gnome-tweaks
     mojave-gtk-theme
+    gsound
+    libgda6
     adw-gtk3
     papirus-icon-theme
     wallpaper

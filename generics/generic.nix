@@ -71,11 +71,7 @@ in {
     any-nix-shell fish --info-right | source
   '';
   programs.fish.shellAliases = {
-    rebuild = "nh os switch -- --option warn-dirty false";
-    rollback = "sudo nixos-rebuild switch --rollback --flake ~/dev/dotfiles/";
-    search = "nix-search -d -m 5 -p";
     ls = "${pkgs.lsd}/bin/lsd";
-    haste = "HASTE_SERVER=https://haste.eww.workers.dev ${pkgs.haste-client}/bin/haste";
   };
 
   services.vnstat.enable = true;
@@ -108,6 +104,10 @@ in {
     nix-index
     inputs.nh.packages.${pkgs.system}.default
     (nerdfonts.override { fonts = [ "Iosevka" ]; })
+    (pkgs.writeScriptBin "search" "nix-search -d -m 5 -p $@")
+    (pkgs.writeScriptBin "haste" "HASTE_SERVER=https://haste.eww.workers.dev ${pkgs.haste-client}/bin/haste $@")
+    (pkgs.writeScriptBin "rebuild" "nh os switch -- --option warn-dirty false")
+    (pkgs.writeScriptBin "rollback" "sudo nixos-rebuild switch --rollback --flake ~/dev/dotfiles/")
     (pkgs.writeScriptBin "reboot" ''read -p "Do you REALLY want to reboot? (y/N) " answer; [[ $answer == [Yy]* ]] && ${pkgs.systemd}/bin/reboot'')
   ];
 

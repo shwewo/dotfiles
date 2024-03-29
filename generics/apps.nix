@@ -22,6 +22,7 @@ in {
     yt-dlp
     freetube
     dropbox
+    (pkgs.writeScriptBin "dropbox-cli" "${pkgs.dropbox-cli}/bin/dropbox $@")
     gocryptfs
     gnome.nautilus
     gnome.file-roller
@@ -36,7 +37,7 @@ in {
     # Network
     dnsutils
     inetutils
-    linux-router # sudo lnxrouter -g 10.0.0.1 -o enp3s0f3u1u4 --country RU --ap wlp1s0 <ssid> -p <password> --freq-band <band> 
+    (linux-router.override { useHaveged = true; }) # sudo lnxrouter -g 10.0.0.1 -o enp3s0f3u1u4 --country RU --ap wlp1s0 <ssid> -p <password> --freq-band <band> 
     wirelesstools
     gost # gost -L redirect://:3333 -F socks5://192.168.150.2:3333 trans proxy (UDP doesn't work)
     wireproxy
@@ -120,6 +121,10 @@ in {
         obs-pipewire-audio-capture
       ];
     })
+
+    (pkgs.writeScriptBin "tru" "trans en:ru $@")
+    (pkgs.writeScriptBin "ten" "trans ru:en $@")
+    (pkgs.writeScriptBin "icat" "kitten icat $@")
   ]) ++ (with wrappers; [
     cloudsync
     fitsync
@@ -146,8 +151,6 @@ in {
   home-manager.users.cute = {
     home.username = "cute";
     home.stateVersion = "23.11";
-
-    # imports = [ "${self}/generics/theme.nix" ];
 
     programs.firefox = {
       enable = true;
@@ -210,16 +213,11 @@ in {
 
     programs.fish = {
       enable = true;
-      
-      shellAliases = {
-        fru = "trans ru:en";
-        fen = "trans en:ru";
-        icat = "kitten icat";
-      };
       shellInit = ''
         set -U __done_kitty_remote_control 1
         set -U __done_kitty_remote_control_password "kitty-notification-password-fish"
-        set -U __done_notification_command "${pkgs.libnotify}/bin/notify-send --icon=kitty --app-name=kitty \$title \$argv[1]"
+        set -U __done_notification_command "${pkgs.libnotify}/bin/notify-send --icon=kitty \$title \$argv[1]"
+        set -U __done_notification_urgency_level_failure critical
       '';
     };
 
@@ -295,6 +293,7 @@ in {
 
     programs.kitty = {
       enable = true;
+      package = stable.kitty;
       shellIntegration.enableFishIntegration = false;
       settings = {
         background = "#171717";

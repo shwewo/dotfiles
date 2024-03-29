@@ -7,7 +7,7 @@
     ./hardware.nix
     ./network.nix
     ./xserver.nix
-    ./socks.nix
+    ./1984.nix
     ./udev.nix
     ./services.nix
     inputs.nh.nixosModules.default

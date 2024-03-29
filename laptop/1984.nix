@@ -1,4 +1,4 @@
-{ pkgs, config, inputs, ... }:
+{ pkgs, lib, config, inputs, ... }:
 let
   socksBuilder = attrs:
     {
@@ -28,8 +28,10 @@ let
           shadowsocks-libev 
           shadowsocks-v2ray-plugin 
           sing-box 
-          wireproxy 
-          (callPackage ../derivations/microsocks.nix {}) ];
+          wireproxy
+          gost
+          (callPackage ../derivations/microsocks.nix {}) 
+        ];
       };
     };
   
@@ -43,7 +45,7 @@ let
     { name = "socks-reality-sweden";    script = "sing-box run --config ${config.age.secrets.socks_reality_sweden.path}";  } # port 2080
     { name = "socks-reality-austria";   script = "sing-box run --config ${config.age.secrets.socks_reality_austria.path}"; } # port 2081
     { name = "socks-warp";              script = "wireproxy -c /etc/wireguard/warp0.conf";                                 } # port 3333
-    { name = "socks-novpn";             script = "microsocks -i 192.168.150.2 -p 3535 ";                                   } # port 3535
+    { name = "socks-novpn";             script = "microsocks -i 192.168.150.2 -p 3535";                                                          } # port 3535
   ];
 
   delete_rules = pkgs.writeScriptBin "delete_rules" ''
@@ -131,28 +133,81 @@ in {
   };
 
   users.groups.socks = {};
-  systemd.services = builtins.listToAttrs (map socksBuilder socksed) // { novpn = {
-    enable = true;
-    description = "novpn namespace";
-    after = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
-    wants = map (s: "${s.name}.service") socksed ++ [ "network-online.target"];
+  systemd.services = builtins.listToAttrs (map socksBuilder socksed) // { 
+    novpn = {
+      enable = true;
+      description = "novpn namespace";
+      after = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+      wants = map (s: "${s.name}.service") socksed ++ [ "network-online.target"];
 
-    serviceConfig = {
-      Restart = "on-failure";
-      RestartSec = "15";
-      ExecStart = "${start_novpn}/bin/start_novpn";
-      ExecStop = "${stop_novpn}/bin/stop_novpn";
-      StateDirectory = "novpn";
-      Type = "simple";
+      serviceConfig = {
+        Restart = "on-failure";
+        RestartSec = "15";
+        ExecStart = "${start_novpn}/bin/start_novpn";
+        ExecStop = "${stop_novpn}/bin/stop_novpn";
+        StateDirectory = "novpn";
+        Type = "simple";
+      };
+      
+      preStart = "${stop_novpn}/bin/stop_novpn && ip netns add novpn";
+      path = with pkgs; [ gawk iproute2 iptables sysctl coreutils ];
     };
-    
-    preStart = "${stop_novpn}/bin/stop_novpn && ip netns add novpn";
-    path = with pkgs; [ gawk iproute2 iptables sysctl coreutils ];
-  }; tor.serviceConfig.RuntimeMaxSec=3600; };
+
+    warp-svc = {
+      enable = true;
+      description = "Cloudflare Zero Trust Client Daemon";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "pre-network.target" ];
+
+      serviceConfig = {
+        Type = "simple";
+        Restart = "on-failure";
+        RestartSec = "15";
+        DynamicUser = "no";
+        # ReadOnlyPaths = "/etc/resolv.conf";
+        CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_PTRACE";
+        AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_PTRACE";
+        StateDirectory = "cloudflare-warp";
+        RuntimeDirectory = "cloudflare-warp";
+        LogsDirectory = "cloudflare-warp";
+        ExecStart = "${pkgs.cloudflare-warp}/bin/warp-svc";
+      };
+
+      postStart = ''
+        while true; do
+          set -e
+          status=$(${pkgs.cloudflare-warp}/bin/warp-cli status || true)
+          set +e
+
+          if [[ "$status" != *"Unable to connect to CloudflareWARP daemon"* ]]; then
+            ${pkgs.cloudflare-warp}/bin/warp-cli set-custom-endpoint 162.159.193.1:2408
+            exit 0
+          fi
+          sleep 1
+        done
+      '';
+    };
+
+    tor.wantedBy = lib.mkForce [];
+  };
 
   users.users.cute.packages = [
     (pkgs.writeScriptBin "nyx" ''sudo -u tor -g tor ${inputs.nixpkgs2105.legacyPackages."${pkgs.system}".nyx}/bin/nyx $@'')
+    (pkgs.writeScriptBin "tor-warp" ''
+      if [[ "$1" == "start" ]]; then
+        echo "Starting..."
+        warp-cli set-mode proxy
+        warp-cli set-proxy-port 4000
+        sudo systemctl start tor
+      elif [[ "$1" == "stop" ]]; then
+        echo "Stopping..."
+        warp-cli set-mode warp
+        sudo systemctl stop tor
+      else
+        echo "Error: specify start or stop"
+      fi
+    '')
   ];
 
   services.tor = {
@@ -162,7 +217,7 @@ in {
       socksListenAddress = 9050;
     };
     settings = {
-      Socks5Proxy = "192.168.150.2:3333";
+      Socks5Proxy = "localhost:4000"; # requires setting warp-svc to proxy mode: warp-cli set-mode proxy && warp-cli set-proxy-port 4000
       ControlPort = 9051;
       CookieAuthentication = true;
     };
