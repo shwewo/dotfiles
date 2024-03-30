@@ -40,7 +40,7 @@
       specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 
       modules = [ ./laptop/system.nix ];
     };
-    nixosConfigurations.oracle-cloud = stable_aarch64.lib.nixosSystem {
+    nixosConfigurations.oracle-cloud = inputs.stable.lib.nixosSystem {
       system = "aarch64-linux"; 
       specialArgs = specialArgs // { stable = stable_aarch64; unstable = unstable_aarch64; }; 
       modules = [ ./oracle-cloud/system.nix ];
