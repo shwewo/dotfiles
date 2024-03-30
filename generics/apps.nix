@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, config, self, stable, ... }: 
+{ pkgs, lib, inputs, config, self, stable, unstable, ... }: 
 
 let
   wrappers = import ./wrappers.nix { inherit inputs pkgs lib config self; };
@@ -15,7 +15,7 @@ in {
     inputs.home-manager.nixosModules.home-manager
   ];
 
-  users.users.cute.packages = (with pkgs; [
+  users.users.cute.packages = (with unstable; [
     # Browsers
     ungoogled-chromium
     # Files

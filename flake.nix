@@ -12,7 +12,7 @@
     agenix.url = "github:ryantm/agenix";
 
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -22,7 +22,7 @@
     };
   };
 
-  outputs = inputs @ { self, nixpkgs, ... }: 
+  outputs = inputs @ { self, nixpkgs, stable, unstable, ... }: 
   let
     stable_amd64 = import inputs.stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
     unstable_amd64 = import inputs.unstable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
@@ -30,17 +30,17 @@
     unstable_aarch64 = import inputs.unstable { system = "aarch64-linux"; config = { allowUnfree = true; }; };
     specialArgs = { inherit inputs self; };
   in {
-    devShells."x86_64-linux".default = nixpkgs.legacyPackages."x86_64-linux".mkShell {
+    devShells."x86_64-linux".default = stable.legacyPackages."x86_64-linux".mkShell {
       name = "shwewo";
-      packages = with nixpkgs.legacyPackages."x86_64-linux"; [ gitleaks pre-commit ];
+      packages = with stable.legacyPackages."x86_64-linux"; [ gitleaks pre-commit ];
       shellHook = ''pre-commit install &> /dev/null && gitleaks detect -v'';
     };
-    nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.laptop = stable.lib.nixosSystem {
       system = "x86_64-linux"; 
       specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 
       modules = [ ./laptop/system.nix ];
     };
-    nixosConfigurations.oracle-cloud = inputs.stable.lib.nixosSystem {
+    nixosConfigurations.oracle-cloud = stable.lib.nixosSystem {
       system = "aarch64-linux"; 
       specialArgs = specialArgs // { stable = stable_aarch64; unstable = unstable_aarch64; }; 
       modules = [ ./oracle-cloud/system.nix ];
