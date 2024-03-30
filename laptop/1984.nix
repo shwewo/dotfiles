@@ -30,7 +30,7 @@ let
           sing-box 
           wireproxy
           gost
-          (callPackage ../derivations/microsocks.nix {}) 
+          # (callPackage ../derivations/microsocks.nix {})
         ];
       };
     };
@@ -45,7 +45,7 @@ let
     { name = "socks-reality-sweden";    script = "sing-box run --config ${config.age.secrets.socks_reality_sweden.path}";  } # port 2080
     { name = "socks-reality-austria";   script = "sing-box run --config ${config.age.secrets.socks_reality_austria.path}"; } # port 2081
     { name = "socks-warp";              script = "wireproxy -c /etc/wireguard/warp0.conf";                                 } # port 3333
-    { name = "socks-novpn";             script = "microsocks -i 192.168.150.2 -p 3535";                                                          } # port 3535
+    { name = "socks-novpn";             script = "gost -L socks5://192.168.150.2:3535";                                    } # port 3535
   ];
 
   delete_rules = pkgs.writeScriptBin "delete_rules" ''
@@ -192,7 +192,8 @@ in {
     tor.wantedBy = lib.mkForce [];
   };
 
-  users.users.cute.packages = [
+  environment.systemPackages = [
+    (pkgs.writeScriptBin "warp-cli" "${pkgs.cloudflare-warp}/bin/warp-cli $@")
     (pkgs.writeScriptBin "nyx" ''sudo -u tor -g tor ${inputs.nixpkgs2105.legacyPackages."${pkgs.system}".nyx}/bin/nyx $@'')
     (pkgs.writeScriptBin "tor-warp" ''
       if [[ "$1" == "start" ]]; then

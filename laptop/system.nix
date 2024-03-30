@@ -52,12 +52,6 @@
   services.flatpak.enable = true;
   services.printing.enable = true;
   services.printing.drivers = with pkgs; [ foo2zjs fxlinuxprint ];  
-  
-  programs.captive-browser = {
-    browser = ''firejail --ignore="include whitelist-run-common.inc" --private --profile=chromium ${pkgs.bash}/bin/bash -c '${pkgs.coreutils}/bin/env XDG_CONFIG_HOME="$PREV_CONFIG_HOME" ${pkgs.ungoogled-chromium}/bin/chromium --user-data-dir=''${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive --proxy-server="socks5://$PROXY" --host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE localhost" --no-first-run --new-window --incognito -no-default-browser-check http://cache.nixos.org/' '';
-    interface = "wlp1s0";
-    enable = true;
-  };
 
   services.pcscd.enable = true; # yubikey
 

@@ -87,7 +87,7 @@
       url = "https://gu-st.ru/content/lending/russian_trusted_sub_ca_pem.crt";
       sha256 = "sha256:19jffjrawgbpdlivdvpzy7kcqbyl115rixs86vpjjkvp6sgmibph";
     }}  
-    firejail --blacklist="/var/run/nscd" --ignore="include whitelist-run-common.inc" --private=$HOME/.google-chrome-russia --net=$(ip route show default | awk '{print $5; exit}') --dns=77.88.8.1 --profile=google-chrome ${pkgs.google-chrome}/bin/google-chrome-stable --class=google-chrome-russia --app-id=google-chrome-russia
+    firejail --blacklist="/var/run/nscd" --ignore="include whitelist-run-common.inc" --private=$HOME/.google-chrome-russia --net=$(ip route show default | awk '{print $5; exit}') --dns=77.88.8.1 --profile=google-chrome ${pkgs.google-chrome}/bin/google-chrome-stable --class=google-chrome-russia https://ifconfig.me
   '';
 
   googleChromeRussiaDesktopItem = pkgs.makeDesktopItem {
@@ -98,8 +98,44 @@
     exec = "google-chrome-russia";
   };
 
+  captiveBrowser = pkgs.writeScriptBin "captive-browser" ''
+    default_interface="wlp1s0"
+    dns=$(${pkgs.networkmanager}/bin/nmcli device show wlp1s0 | ${pkgs.gnugrep}/bin/grep 'IP4.DNS\[1\]' | ${pkgs.coreutils}/bin/head -n 1 | ${pkgs.gawk}/bin/awk '{print $2}')
+
+    if [[ -z $dns ]]; then
+      echo "No DHCP dns found, exiting..."
+      ${pkgs.libnotify}/bin/notify-send --icon=nix-snowflake "Captive Portal Browser" "No DHCP dns found"
+      exit 1
+    fi
+
+    ${pkgs.libnotify}/bin/notify-send --icon=nix-snowflake "Captive Portal Browser" "DHCP dns: $dns"
+
+    firejail \
+      --blacklist="/var/run/nscd" \
+      --ignore="include whitelist-run-common.inc" \
+      --private \
+      --net=$default_interface \
+      --dns=$dns \
+      --profile=chromium \
+      ${pkgs.ungoogled-chromium}/bin/chromium \
+        --class=captive-browser \
+        --user-data-dir=$HOME/.config/chromium \
+        --no-first-run \
+        --new-window \
+        -no-default-browser-check \
+        --app=http://ifconfig.me
+  '';
+
+  captiveBrowserDesktopItem = pkgs.makeDesktopItem {
+    name = "captive-browser";
+    desktopName = "Captive Portal Browser";
+    icon = "nix-snowflake";
+    exec = "captive-browser";
+    type = "Application";
+    categories = [ "Network" "WebBrowser" ];
+  };
+
   autostart = pkgs.writeScriptBin "autostart" ''
-    #!/usr/bin/env bash
     ${pkgs.coreutils}/bin/sleep 5
     PID=$$
     gtk-launch dropbox.desktop

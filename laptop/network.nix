@@ -1,6 +1,8 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, inputs, ... }:
 
-{
+let
+
+in {
   services.openssh = {
     enable = true;
     listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
@@ -8,11 +10,15 @@
   };
 
   services.tailscale.enable = true;
-  users.groups.no-net = {};
   networking = {
     networkmanager = { 
       enable = true;
       dns = "none";
+      extraConfig = ''
+        [connectivity]
+        uri=http://146.190.62.39/
+        response="HTTP Forever"
+      '';
     };
     nameservers = [ "100.122.26.102" ];
     hostName = "laptop";
@@ -43,15 +49,8 @@
       allowedTCPPortRanges = [ { from = 1714; to = 1764; } ]; # kde connect
       allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
       checkReversePath = "loose";
-      extraCommands = ''
-        iptables -A OUTPUT -m owner --gid-owner no-net -j REJECT
-      '';
     };
   };
-
-  environment.systemPackages = [
-    (pkgs.writeScriptBin "warp-cli" "${pkgs.cloudflare-warp}/bin/warp-cli $@")
-  ];
 
   systemd.services.NetworkManager-wait-online.enable = false;
 }

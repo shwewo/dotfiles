@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, ... }: with lib.gvariant;
+{ pkgs, lib, inputs, stable, ... }: with lib.gvariant;
 
 let
   wallpaper = pkgs.stdenv.mkDerivation {
@@ -244,7 +244,7 @@ in {
   environment.systemPackages = with pkgs; [
     gnomeExtensions.appindicator
     gnomeExtensions.activate-window-by-title
-    gnomeExtensions.unite
+    stable.gnomeExtensions.unite
     gnomeExtensions.tailscale-qs
     gnomeExtensions.gsconnect
     gnomeExtensions.pano

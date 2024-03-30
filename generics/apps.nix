@@ -40,6 +40,7 @@ in {
     (linux-router.override { useHaveged = true; }) # sudo lnxrouter -g 10.0.0.1 -o enp3s0f3u1u4 --country RU --ap wlp1s0 <ssid> -p <password> --freq-band <band> 
     wirelesstools
     gost # gost -L redirect://:3333 -F socks5://192.168.150.2:3333 trans proxy (UDP doesn't work)
+    (callPackage ../derivations/microsocks.nix {})
     wireproxy
     wireguard-tools
     iw
@@ -71,6 +72,7 @@ in {
     obsidian
     appimage-run
     scrcpy
+    tldr
     gnome.zenity
     distrobox
     libreoffice
@@ -87,7 +89,7 @@ in {
     ffmpeg
     drawing
     imagemagick
-    v4l-utils
+    # v4l-utils
     flameshot
     # Other stuff
     monero-gui
@@ -121,10 +123,6 @@ in {
         obs-pipewire-audio-capture
       ];
     })
-
-    (pkgs.writeScriptBin "tru" "trans en:ru $@")
-    (pkgs.writeScriptBin "ten" "trans ru:en $@")
-    (pkgs.writeScriptBin "icat" "kitten icat $@")
   ]) ++ (with wrappers; [
     cloudsync
     fitsync
@@ -134,6 +132,7 @@ in {
     autostart autostartDesktopItem
     ephemeralBrowser ephemeralBrowserDesktopItem
     googleChromeRussia googleChromeRussiaDesktopItem
+    captiveBrowser captiveBrowserDesktopItem
   ]);
 
   # Those are system-wide, this is a limitation of NixOS :\
@@ -163,7 +162,7 @@ in {
         DisableFirefoxScreenshots = true;
         DisplayBookmarksToolbar = "never";
         DNSOverHTTPS = {
-          Enabled = true;
+          Enabled = false;
           ProviderURL = "https://mozilla.cloudflare-dns.com/dns-query";
           Locked = false;
         };
@@ -172,9 +171,10 @@ in {
           "ui.key.menuAccessKeyFocuses" = lock-false;
           "signon.generation.enabled" = lock-false;
           "browser.compactmode.show" = lock-true;
-          "browser.uidensity" = { Value = 1; Status = "Locked"; };
-          "mousewheel.with_alt.action" = { Value = "-1"; Status = "Locked"; };
+          "browser.uidensity" = { Value = 1; Status = "locked"; };
+          # "mousewheel.with_alt.action" = { Value = "-1"; Status = "Locked"; }; # Not allowed for stability reason; do manually
           "browser.tabs.firefox-view" = lock-false;
+          # "full-screen-api.ignore-widgets" = lock-true; # Not allowed for stability reason; do manually
         };
 
         # https://discourse.nixos.org/t/declare-firefox-extensions-and-settings/36265/17
@@ -207,12 +207,18 @@ in {
             (extension "unpaywall" "{f209234a-76f0-4735-9920-eb62507a54cd}")
             (extension "ctrl-number-to-switch-tabs" "{84601290-bec9-494a-b11c-1baa897a9683}")
             (extension "temporary-containers" "{c607c8df-14a7-4f28-894f-29e8722976af}")
+            (extension "tree-style-tab" "treestyletab@piro.sakura.ne.jp")
           ];
       };
     };
 
     programs.fish = {
       enable = true;
+      shellAliases = {
+        fru = "trans ru:en";
+        fen = "trans en:ru";
+        icat = "kitten icat";
+      };
       shellInit = ''
         set -U __done_kitty_remote_control 1
         set -U __done_kitty_remote_control_password "kitty-notification-password-fish"
@@ -282,13 +288,6 @@ in {
           port = 55755;
         };
       };
-    };
-
-    programs.obs-studio = {
-      enable = true;
-      plugins = with pkgs.obs-studio-plugins; [
-        obs-pipewire-audio-capture
-      ];
     };
 
     programs.kitty = {
