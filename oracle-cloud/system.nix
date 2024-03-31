@@ -1,8 +1,8 @@
-{ pkgs, lib, inputs, config, ... }:
+{ pkgs, lib, inputs, config, self, ... }:
 
 {
   imports = [
-    ../generics/generic.nix
+    "${self}/generics/default.nix"
     ./hardware.nix
     ./network.nix
     ./socks.nix

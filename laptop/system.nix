@@ -1,15 +1,14 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, self, unstable, USER, ... }:
 
 {
   imports = [
-    ../generics/generic.nix
-    ../generics/apps.nix
+    "${self}/generics/default.nix"
+    "${self}/generics/${USER}.nix"
+    "${self}/generics/services.nix"
     ./hardware.nix
     ./network.nix
     ./xserver.nix
-    ./1984.nix
     ./udev.nix
-    ./services.nix
     inputs.nh.nixosModules.default
     inputs.secrets.nixosModules.laptop
   ];

@@ -1,4 +1,4 @@
-{ pkgs, lib, config, modulesPath, stable, ... }:
+{ pkgs, lib, config, modulesPath, stable, unstable, ... }:
 
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
@@ -27,7 +27,7 @@
   };
   boot.kernelModules = [ "usbip" "kvm-amd" "vfat" "nls_cp437" "nls_iso8859-1" "usbhid" "nvme" "xhci_pci" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ usbip.out ];
-  boot.kernelPackages = stable.linuxPackages_zen;
+  boot.kernelPackages = unstable.linuxPackages_zen;
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/f650daf8-6b92-4a0b-83d7-94b64d4dd189";

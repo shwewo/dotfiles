@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, USER, ... }:
 
 let
   run = pkgs.writeScriptBin "run" ''
@@ -30,12 +30,12 @@ let
       oldAttrs.postInstall);
   });
 in {
-  users.users.cute = {
+  users.users.${USER} = {
     isNormalUser = true;
-    description = "cute";
+    description = USER;
     extraGroups = [ "networkmanager" "wheel" "audio" "libvirtd" "wireshark" "dialout" "plugdev" "adbusers" ];
     openssh.authorizedKeys.keys = [ 
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ9blPuLoJkCfTl88JKpqnSUmybCm7ci5EgWAUvfEmwb cute@laptop" 
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ9blPuLoJkCfTl88JKpqnSUmybCm7ci5EgWAUvfEmwb" 
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAZX2ByyBbuOfs6ndbzn/hbLaCAFiMXFsqbjplmx9GfVTx2T1aaDKFRNFtQU1rv6y3jyQCrEbjgvIjdCM4ptDf8=" # ipod
     ];
   };
@@ -77,7 +77,7 @@ in {
   services.vnstat.enable = true;
   users.defaultUserShell = pkgs.fish;
 
-  environment.sessionVariables.FLAKE = "/home/cute/dev/dotfiles";
+  environment.sessionVariables.FLAKE = "/home/${USER}/dev/dotfiles";
   environment.systemPackages = with pkgs; [
     run
     vnstat

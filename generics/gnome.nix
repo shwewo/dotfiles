@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, stable, ... }: with lib.gvariant;
+{ pkgs, lib, inputs, stable, unstable, USER, ... }: with lib.gvariant;
 
 let
   wallpaper = pkgs.stdenv.mkDerivation {
@@ -14,25 +14,16 @@ in {
     inputs.home-manager.nixosModules.home-manager
   ];
 
-  # home-manager.users.cute.home.pointerCursor = {
-  #   gtk.enable = true;  
-  #   x11.enable = true;
-  #   package = pkgs.gnome.adwaita-icon-theme;
-  #   name = "Adwaita";
-  #   size = 24;
-  # };
-
   environment.sessionVariables = { 
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
     MOZ_ENABLE_WAYLAND = "0";
-    # XCURSOR_SIZE = "24";
   };
 
   system.activationScripts."delete_unite_overrides".text = ''
-    rm -f /home/cute/.config/gtk-3.0/gtk.css
-    rm -f /home/cute/.config/gtk-4.0/gtk.css
-    rm -f /home/cute/.config/gtk-3.0/settings.ini
-    rm -f /home/cute/.config/gtk-4.0/settings.ini
+    rm -f /home/${USER}/.config/gtk-3.0/gtk.css
+    rm -f /home/${USER}/.config/gtk-4.0/gtk.css
+    rm -f /home/${USER}/.config/gtk-3.0/settings.ini
+    rm -f /home/${USER}/.config/gtk-4.0/settings.ini
   '';
 
   nixpkgs.overlays = [
@@ -82,13 +73,13 @@ in {
 
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
           binding = "<Alt>Return";
-          command = "/etc/profiles/per-user/cute/bin/kitty_wrapped";
+          command = "/etc/profiles/per-user/${USER}/bin/kitty_wrapped";
           name = "kitty";
         };
 
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
           binding = "<Control><Alt>x";
-          command = "/etc/profiles/per-user/cute/bin/keepassxc";
+          command = "/etc/profiles/per-user/${USER}/bin/keepassxc";
           name = "keepassxc";
         };
 
@@ -218,7 +209,7 @@ in {
         };
 
         "org/gnome/shell/extensions/user-theme" = {
-          name = "Mojave-Dark-solid-alt";
+          name = "Mojave-Dark-solid";
         };
 
         "org/gnome/shell/weather" = {
