@@ -1,6 +1,12 @@
-{ pkgs, inputs, self, unstable, USER, ... }:
+{ pkgs, inputs, self, stable, unstable, USER, ... }:
 
 {
+  # Mitigates https://github.com/NixOS/nixpkgs/issues/300055
+  # --impure flag is required
+  system.replaceRuntimeDependencies = [
+    { original = pkgs.xz; replacement = inputs.nixpkgs2105.legacyPackages.${pkgs.system}.xz; }
+  ];
+
   imports = [
     "${self}/generics/default.nix"
     "${self}/generics/${USER}.nix"

@@ -26,6 +26,7 @@ in {
     networkmanager = { 
       enable = true;
       dns = "none";
+      wifi.macAddress = "stable";
     };
     nameservers = [ "100.122.26.102" ];
     hostName = "laptop";
