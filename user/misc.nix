@@ -40,4 +40,12 @@
     echo "Sync complete"
     ${pkgs.libnotify}/bin/notify-send "Syncing" "USB sync complete" --icon=usb
   '';
+
+  virt = pkgs.writeScriptBin "virt" ''
+    #!/usr/bin/env bash
+    mkdir /tmp/ephemeral
+    cd /tmp/ephemeral
+    nix run $FLAKE#nixosConfigurations.$1.config.system.build.nixos-shell
+    rm -r /tmp/ephemeral
+  '';
 }

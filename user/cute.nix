@@ -72,6 +72,7 @@ in {
     neofetch
     # Utilities
     inputs.agenix.packages.${pkgs.system}.default
+    misc.virt
     appimage-run
     scrcpy
     tldr
