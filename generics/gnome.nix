@@ -246,11 +246,11 @@ in {
     gnomeExtensions.overview-background
     gnome.gnome-sound-recorder
     gnome.gnome-tweaks
-    mojave-gtk-theme
+    unstable.mojave-gtk-theme
     gsound
     libgda6
     adw-gtk3
-    papirus-icon-theme
+    unstable.papirus-icon-theme
     wallpaper
   ];
 

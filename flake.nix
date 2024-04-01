@@ -6,6 +6,7 @@
     stable.url = "github:nixos/nixpkgs/nixos-23.11";
     unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs2105.url = "github:nixos/nixpkgs/nixos-21.05";
+    chromium-gost.url = "/home/cute/dev/chromium-gost-nix";
     
     tdesktop.url = "github:shwewo/telegram-desktop-patched";
     secrets.url = "git+ssh://git@github.com/shwewo/secrets";
@@ -19,6 +20,12 @@
     nh = {
       url = "github:viperML/nh";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    shwewo = {
+      url = "github:shwewo/flake";
+      inputs.nixpkgs.follows = "stable";
+      inputs.nixpkgs-stable.follows = "stable";
     };
   };
 
@@ -36,7 +43,7 @@
       packages = with stable.legacyPackages."x86_64-linux"; [ gitleaks pre-commit ];
       shellHook = ''pre-commit install &> /dev/null && gitleaks detect -v'';
     };
-    nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.laptop = stable.lib.nixosSystem {
       system = "x86_64-linux"; 
       specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 
       modules = [ ./laptop/system.nix ];
@@ -45,6 +52,11 @@
       system = "aarch64-linux"; 
       specialArgs = specialArgs // { stable = stable_aarch64; unstable = unstable_aarch64; }; 
       modules = [ ./oracle-cloud/system.nix ];
+    };
+    nixosConfigurations.virtual = stable.lib.nixosSystem {
+      system = "x86_64-linux"; 
+      specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 
+      modules = [ ./virtual/system.nix ];
     };
   };
 }

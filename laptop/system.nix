@@ -1,15 +1,9 @@
 { pkgs, inputs, self, stable, unstable, USER, ... }:
 
 {
-  # Mitigates https://github.com/NixOS/nixpkgs/issues/300055
-  # --impure flag is required
-  system.replaceRuntimeDependencies = [
-    { original = pkgs.xz; replacement = inputs.nixpkgs2105.legacyPackages.${pkgs.system}.xz; }
-  ];
-
   imports = [
+    "${self}/user/${USER}.nix"
     "${self}/generics/default.nix"
-    "${self}/generics/${USER}.nix"
     "${self}/generics/services.nix"
     ./hardware.nix
     ./network.nix
@@ -18,7 +12,7 @@
     inputs.nh.nixosModules.default
     inputs.secrets.nixosModules.laptop
   ];
-
+  
   system.stateVersion = "23.11";
   time.timeZone = "Europe/Moscow";
 

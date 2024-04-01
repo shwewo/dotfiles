@@ -1,0 +1,68 @@
+#! /nix/store/r9h133c9m8f6jnlsqzwf89zg9w0w78s8-bash-5.2-p15/bin/bash
+
+export PATH=/nix/store/rk067yylvhyb7a360n8k1ps4lb4xsbl3-coreutils-9.3/bin${PATH:+:}$PATH
+
+set -e
+
+# Create an empty ext4 filesystem image. A filesystem image does not
+# contain a partition table but just a filesystem.
+createEmptyFilesystemImage() {
+  local name=$1
+  local size=$2
+  local temp=$(mktemp)
+  /nix/store/km1cmbc3gpcvxxwz079fqyqc7anzzjy8-qemu-host-cpu-only-8.1.5/bin/qemu-img create -f raw "$temp" "$size"
+  /nix/store/l9sv8g6xlv06wwbsmqxx4hwpa22q7nq0-e2fsprogs-1.47.0-bin/bin/mkfs.ext4 -L nixos "$temp"
+  /nix/store/km1cmbc3gpcvxxwz079fqyqc7anzzjy8-qemu-host-cpu-only-8.1.5/bin/qemu-img convert -f raw -O qcow2 "$temp" "$name"
+  rm "$temp"
+}
+
+NIX_DISK_IMAGE=$(readlink -f "${NIX_DISK_IMAGE:-./nixosvm.qcow2}") || test -z "$NIX_DISK_IMAGE"
+
+if test -n "$NIX_DISK_IMAGE" && ! test -e "$NIX_DISK_IMAGE"; then
+    echo "Disk image do not exist, creating the virtualisation disk image..."
+
+    createEmptyFilesystemImage "$NIX_DISK_IMAGE" "1024M"
+
+    echo "Virtualisation disk image created."
+fi
+
+# Create a directory for storing temporary data of the running VM.
+if [ -z "$TMPDIR" ] || [ -z "$USE_TMPDIR" ]; then
+    TMPDIR=$(mktemp -d nix-vm.XXXXXXXXXX --tmpdir)
+fi
+
+
+
+# Create a directory for exchanging data with the VM.
+mkdir -p "$TMPDIR/xchg"
+
+
+
+
+
+
+
+cd "$TMPDIR"
+
+
+
+
+# Start QEMU.
+exec /nix/store/km1cmbc3gpcvxxwz079fqyqc7anzzjy8-qemu-host-cpu-only-8.1.5/bin/qemu-kvm -cpu max \
+    -name nixosvm \
+    -m 8192 \
+    -smp 6 \
+    -device virtio-rng-pci \
+    -net nic,netdev=user.0,model=virtio -netdev user,id=user.0,"$QEMU_NET_OPTS" \
+    -virtfs local,path=/nix/store,security_model=none,mount_tag=nix-store \
+    -virtfs local,path="${SHARED_DIR:-$TMPDIR/xchg}",security_model=none,mount_tag=shared \
+    -virtfs local,path="$TMPDIR"/xchg,security_model=none,mount_tag=xchg \
+    -drive cache=writeback,file="$NIX_DISK_IMAGE",id=drive1,if=none,index=1,werror=report -device virtio-blk-pci,bootindex=1,drive=drive1,serial=root \
+    -device virtio-keyboard \
+    -usb \
+    -device usb-tablet,bus=usb-bus.0 \
+    -kernel ${NIXPKGS_QEMU_KERNEL_nixosvm:-/nix/store/qjhpjadrab26gvv5pmb216kin5lmwi18-nixos-system-nixosvm-23.11.20240328.219951b/kernel} \
+    -initrd /nix/store/jw2gn3vpp48z19qk0pvz8w6aggw4k7fg-initrd-linux-6.8.1/initrd \
+    -append "$(cat /nix/store/qjhpjadrab26gvv5pmb216kin5lmwi18-nixos-system-nixosvm-23.11.20240328.219951b/kernel-params) init=/nix/store/qjhpjadrab26gvv5pmb216kin5lmwi18-nixos-system-nixosvm-23.11.20240328.219951b/init regInfo=/nix/store/ahqz8zrgsdipq1hk73dcbbvm3bwhv001-closure-info/registration console=ttyS0,115200n8 console=tty0 $QEMU_KERNEL_PARAMS" \
+    $QEMU_OPTS \
+    "$@"

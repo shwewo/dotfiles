@@ -17,6 +17,7 @@
   };
 
   systemd.services.qbitnox = {
+    enable = true;
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Restart = "always";

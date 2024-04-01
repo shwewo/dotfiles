@@ -27,10 +27,9 @@ let
           iproute2 
           shadowsocks-libev 
           shadowsocks-v2ray-plugin 
-          sing-box 
-          wireproxy
-          gost
-          # (callPackage ../derivations/microsocks.nix {})
+          unstable.sing-box 
+          unstable.wireproxy
+          unstable.gost
         ];
       };
     };
@@ -86,14 +85,17 @@ let
     ip netns exec novpn ip addr add 192.168.150.2/24 dev novpn1
     ip netns exec novpn ip link set novpn1 up
     ip netns exec novpn ip route add default via 192.168.150.1
-
-    set_gateway
-    if [[ -z "$default_interface" ]]; then
-      echo "No default interface"
-      exit 1
-    fi
-    add_rules
-    sleep 3
+ 
+    while true; do
+      set_gateway
+      if [[ -z "$default_interface" ]]; then
+        echo "No default interface"
+      else
+        add_rules
+        break
+      fi
+      sleep 3
+    done
 
     ip monitor route | while read -r event; do
       case "$event" in

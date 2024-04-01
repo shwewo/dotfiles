@@ -12,7 +12,7 @@ socksed = [
 ];
 in {
   imports = [
-    (import "${self}/generics/proxy.nix" {inherit pkgs lib inputs unstable socksed;})
+    (import "${self}/generics/proxy.nix" { inherit pkgs lib inputs unstable socksed; })
   ];
 
   services.openssh = {
