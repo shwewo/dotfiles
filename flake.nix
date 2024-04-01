@@ -6,11 +6,11 @@
     stable.url = "github:nixos/nixpkgs/nixos-23.11";
     unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs2105.url = "github:nixos/nixpkgs/nixos-21.05";
-    chromium-gost.url = "/home/cute/dev/chromium-gost-nix";
     
     tdesktop.url = "github:shwewo/telegram-desktop-patched";
     secrets.url = "git+ssh://git@github.com/shwewo/secrets";
     agenix.url = "github:ryantm/agenix";
+    nixos-shell.url = "github:Mic92/nixos-shell";
 
     home-manager = {
       url = "github:nix-community/home-manager/release-23.11";
@@ -56,7 +56,7 @@
     nixosConfigurations.virtual = stable.lib.nixosSystem {
       system = "x86_64-linux"; 
       specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 
-      modules = [ ./virtual/system.nix ];
+      modules = [ ./virtual/default.nix ];
     };
   };
 }

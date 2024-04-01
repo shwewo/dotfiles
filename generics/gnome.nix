@@ -246,6 +246,8 @@ in {
     gnomeExtensions.overview-background
     gnome.gnome-sound-recorder
     gnome.gnome-tweaks
+    gnome.nautilus
+    gnome.file-roller
     unstable.mojave-gtk-theme
     gsound
     libgda6
