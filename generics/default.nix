@@ -1,35 +1,5 @@
-{ pkgs, inputs, USER, ... }:
-
-let
-  run = pkgs.writeScriptBin "run" ''
-    #!/usr/bin/env bash
-    if [[ $# -eq 0 ]]; then
-      echo "Error: Missing argument"
-    else
-      NIXPKGS_ALLOW_UNFREE=1 nix run --impure nixpkgs#"$1" -- "''\${@:2}"
-    fi
-  '';
-  fzf = pkgs.fzf.overrideAttrs (oldAttrs: {
-    postInstall = oldAttrs.postInstall + ''
-      # Remove shell integrations
-      rm -rf $out/share/fzf $out/share/fish $out/bin/fzf-share
-    '' + (builtins.replaceStrings
-      [
-        ''
-          # Install shell integrations
-          install -D shell/* -t $out/share/fzf/
-          install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
-          mkdir -p $out/share/fish/vendor_conf.d
-          cat << EOF > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
-            status is-interactive; or exit 0
-            fzf_key_bindings
-          EOF
-        ''
-      ]
-      [""]
-      oldAttrs.postInstall);
-  });
-in {
+{ pkgs, inputs, unstable, USER, ... }:
+{
   users.users.${USER} = {
     isNormalUser = true;
     description = USER;
@@ -54,11 +24,10 @@ in {
     };
   };
 
+  nixpkgs.config.allowUnfree = true;
   boot.kernel.sysctl."kernel.sysrq" = 1;
   boot.tmp.cleanOnBoot = true;
-
   i18n.defaultLocale = "en_GB.UTF-8";
-  nixpkgs.config.allowUnfree = true;
 
   programs.firejail.enable = true;
   programs.command-not-found.enable = false;
@@ -73,14 +42,15 @@ in {
   '';
   programs.fish.shellAliases = {
     ls = "${pkgs.lsd}/bin/lsd";
+    search = "nix-search -d -m 5 -p";
   };
 
   services.vnstat.enable = true;
   users.defaultUserShell = pkgs.fish;
 
   environment.sessionVariables.FLAKE = "/home/${USER}/dev/dotfiles";
+
   environment.systemPackages = with pkgs; [
-    run
     vnstat
     htop
     tree
@@ -91,7 +61,6 @@ in {
     any-nix-shell
     ncdu
     fd
-    fzf
     sysz
     grc
     bat
@@ -101,15 +70,45 @@ in {
     fishPlugins.z
     fishPlugins.fzf-fish
     fishPlugins.sponge
-    nix-search-cli
+    unstable.nix-search-cli
     nix-index
-    inputs.nh.packages.${pkgs.system}.default
+    unstable.nh
     (nerdfonts.override { fonts = [ "Iosevka" ]; })
-    (pkgs.writeScriptBin "search" "nix-search -d -m 5 -p $@")
     (pkgs.writeScriptBin "haste" "HASTE_SERVER=https://haste.eww.workers.dev ${pkgs.haste-client}/bin/haste $@")
     (pkgs.writeScriptBin "rebuild" "nh os switch -- --option warn-dirty false")
     (pkgs.writeScriptBin "rollback" "sudo nixos-rebuild switch --rollback --flake ~/dev/dotfiles/")
     (pkgs.writeScriptBin "reboot" ''read -p "Do you REALLY want to reboot? (y/N) " answer; [[ $answer == [Yy]* ]] && ${pkgs.systemd}/bin/reboot'')
+    (pkgs.writeScriptBin "shell" ''
+      #!/usr/bin/env bash
+      packages=""
+      for package in "$@"; do
+        packages+="nixpkgs#$package "
+      done
+      packages=$(echo "$packages" | xargs)
+
+      NIXPKGS_ALLOW_UNFREE=1 .any-nix-wrapper fish --impure $packages
+    '')
+    (pkgs.writeScriptBin "run" ''NIXPKGS_ALLOW_UNFREE=1 nix run --impure nixpkgs#"$1" -- "''${@:2}"'')
+    (pkgs.fzf.overrideAttrs (oldAttrs: {
+      postInstall = oldAttrs.postInstall + ''
+        # Remove shell integrations
+        rm -rf $out/share/fzf $out/share/fish $out/bin/fzf-share
+      '' + (builtins.replaceStrings
+        [
+          ''
+            # Install shell integrations
+            install -D shell/* -t $out/share/fzf/
+            install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
+            mkdir -p $out/share/fish/vendor_conf.d
+            cat << EOF > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+              status is-interactive; or exit 0
+              fzf_key_bindings
+            EOF
+          ''
+        ]
+        [""]
+        oldAttrs.postInstall);
+    }))
   ];
 
   security.wrappers = {

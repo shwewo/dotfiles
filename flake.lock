@@ -275,6 +275,22 @@
         "type": "github"
       }
     },
+    "nixpkgs2305": {
+      "locked": {
+        "lastModified": 1704290814,
+        "narHash": "sha256-LWvKHp7kGxk/GEtlrGYV68qIvPHkU9iToomNFGagixU=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "70bdadeb94ffc8806c0570eb5c2695ad29f0e421",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-23.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1628465643,
@@ -378,6 +394,7 @@
         "nixos-shell": "nixos-shell",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs2105": "nixpkgs2105",
+        "nixpkgs2305": "nixpkgs2305",
         "secrets": "secrets",
         "shwewo": "shwewo",
         "stable": "stable",
@@ -416,11 +433,11 @@
         "tdesktop": "tdesktop"
       },
       "locked": {
-        "lastModified": 1711959161,
-        "narHash": "sha256-ej7Hh3EVBVzShki9mos3Q5Qvo/HpPMd2uZvf976oO5U=",
+        "lastModified": 1711995482,
+        "narHash": "sha256-tyBewtchaYOVywYFVBwycZfHclhDoE6ZNv4Nd+T3/kE=",
         "owner": "shwewo",
         "repo": "flake",
-        "rev": "a0244de6627da804b5fc6aba24011ab4103d638e",
+        "rev": "fb166e20648743750d468d9550c15f0c61989800",
         "type": "github"
       },
       "original": {

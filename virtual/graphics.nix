@@ -1,4 +1,4 @@
-{ pkgs, lib, ...}: 
+{ pkgs, lib, inputs, ...}: 
 {
   imports = [
     ./default.nix
@@ -17,13 +17,15 @@
     desktopManager = {
       xterm.enable = false;
       xfce.enable = true;
+      gnome.enable = true;
     };
     displayManager = {
-      defaultSession = "xfce";
+      defaultSession = "gnome";
       autoLogin = { 
         enable = true;
         user = "virtual";
       };
+      gdm.enable = true;
     };
   };
 
@@ -34,8 +36,6 @@
   environment.systemPackages = with pkgs; [
     firefox
     xfce.xfce4-clipman-plugin
-    xfce.xfce4-weather-plugin
     xfce.xfce4-pulseaudio-plugin
-    xfce.xfce4-xkb-plugin
   ];
 }

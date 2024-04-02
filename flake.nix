@@ -6,6 +6,7 @@
     stable.url = "github:nixos/nixpkgs/nixos-23.11";
     unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs2105.url = "github:nixos/nixpkgs/nixos-21.05";
+    nixpkgs2305.url = "github:nixos/nixpkgs/nixos-23.05";
     
     tdesktop.url = "github:shwewo/telegram-desktop-patched";
     secrets.url = "git+ssh://git@github.com/shwewo/secrets";
