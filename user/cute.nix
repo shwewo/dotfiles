@@ -16,10 +16,6 @@ in {
     ./home.nix
   ];
 
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-25.9.0"
-  ];  
-
   users.users.${USER}.packages = (with pkgs; [
     # Browsers
     ungoogled-chromium

@@ -18,19 +18,23 @@
 
   systemd.services.qbitnox = {
     enable = true;
+    after = [ "novpn.service" "network-online.target" ];
+    wants = [ "novpn.service" "network-online.target" ];
+    bindsTo = [ "novpn.service" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Restart = "always";
-      RestartSec = 10;
-      RuntimeMaxSec=86400;
+      RuntimeMaxSec = 86400;
       User = "qbit";
       Group = "qbit";
+      NetworkNamespacePath = "/run/netns/novpn";
     };
-
-    script = ''
-      ${pkgs.qbittorrent-nox}/bin/qbittorrent-nox
-    '';
+    preStart = "while true; do ip addr show dev novpn1 | grep -q 'inet' && break; sleep 1; done";
+    script = "${pkgs.qbittorrent-nox}/bin/qbittorrent-nox";
+    path = with pkgs; [ iproute2 ];
   };
+
+  systemd.services.novpn.wants = [ "qbitnox.service" ];
 
   services.minidlna = {
     enable = true;

@@ -39,10 +39,7 @@
       fsType = "vfat";
     };
 
-  swapDevices = [ {
-    device = "/var/lib/swapfile";
-    size = 8*1024;
-  } ];
+  zramSwap.enable = true;
 
   # 5 GHZ wifi hotspot
   hardware.firmware = with pkgs; [ wireless-regdb ];
