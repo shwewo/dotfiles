@@ -44,7 +44,7 @@
       packages = with stable.legacyPackages."x86_64-linux"; [ gitleaks pre-commit ];
       shellHook = ''pre-commit install &> /dev/null && gitleaks detect -v'';
     };
-    nixosConfigurations.laptop = stable.lib.nixosSystem {
+    nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux"; 
       specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 
       modules = [ ./laptop/system.nix ];

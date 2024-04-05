@@ -11,7 +11,7 @@
   lnxrouter = unstable.linux-router.override { useHaveged = true; };
   dropbox-cli = pkgs.writeScriptBin "dropbox-cli" "${pkgs.dropbox-cli}/bin/dropbox $@";
 
-  vesktop = (unstable.vesktop.override { electron = stable.electron; }).overrideAttrs (oldAttrs: {
+  vesktop = (unstable.vesktop.override { electron = pkgs.electron; }).overrideAttrs (oldAttrs: {
     desktopItems = [ (pkgs.makeDesktopItem {
       name = "vesktop";
       desktopName = "Discord";

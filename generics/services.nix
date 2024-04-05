@@ -26,6 +26,7 @@
       User = "qbit";
       Group = "qbit";
     };
+
     script = ''
       ${pkgs.qbittorrent-nox}/bin/qbittorrent-nox
     '';

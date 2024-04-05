@@ -2,6 +2,7 @@
 
 {
   imports = [
+    "${self}/generics/gateway.nix"
     (import "${self}/generics/proxy.nix" { 
       inherit pkgs lib inputs unstable;
       socksed = [

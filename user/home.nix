@@ -90,7 +90,7 @@ in {
       shellInit = ''
         set -U __done_kitty_remote_control 1
         set -U __done_kitty_remote_control_password "kitty-notification-password-fish"
-        set -U __done_notification_command "${pkgs.libnotify}/bin/notify-send --icon=kitty --app-name=kitty --wait \$title \$argv[1] > /dev/null 2>&1 &"
+        set -U __done_notification_command "${pkgs.libnotify}/bin/notify-send --icon=kitty --app-name=kitty --wait \$title \$argv[1] > /dev/null 2>&1 & disown"
         set -U __done_notification_urgency_level_failure critical
       '';
     };
