@@ -33,6 +33,7 @@
     };
     nameservers = [ "100.122.26.102" ];
     hostName = "laptop";
+    hostid = "e56b176f";
     useDHCP = lib.mkDefault true;
     interfaces.wlp1s0.proxyARP = true;
     iproute2.enable = true;
