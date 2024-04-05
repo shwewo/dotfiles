@@ -27,7 +27,7 @@
   # };
   boot.kernelModules = [ "usbip" "kvm-amd" "vfat" "nls_cp437" "nls_iso8859-1" "usbhid" "nvme" "xhci_pci" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ usbip.out ];
-  boot.kernelPackages = unstable.linuxPackages_zen;
+  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
 
   boot.initrd.postDeviceCommands = lib.mkAfter ''
     zfs rollback -r hnw19r/local/root@blank
