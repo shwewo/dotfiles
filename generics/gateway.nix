@@ -13,7 +13,7 @@ let
     iptables -t nat -D POSTROUTING -o "$default_interface" -j MASQUERADE
   '';
 
-  start_novpn = pkgs.writeScriptBin "start_novpn" ''
+  novpn = pkgs.writeScriptBin "novpn" ''
     #!${pkgs.bash}/bin/bash
     add_rules() {
       ip rule add fwmark 150 table 150
@@ -37,8 +37,8 @@ let
     }
 
     mkdir -p /etc/netns/novpn/
-    echo "nameserver 1.1.1.1" > /etc/netns/novpn/resolv.conf
-    echo "nameserver 1.1.0.1" >> /etc/netns/novpn/resolv.conf
+    echo "nameserver 8.8.8.8" > /etc/netns/novpn/resolv.conf
+    echo "nameserver 8.8.4.4" >> /etc/netns/novpn/resolv.conf
     sysctl -wq net.ipv4.ip_forward=1
 
     ip link add novpn0 type veth peer name novpn1
@@ -53,19 +53,22 @@ let
     set_gateway
     add_rules
     sleep 3
+    ${check_network}/bin/check_network
 
     ip monitor route | while read -r event; do
       case "$event" in 
           'local '*)
-            ${delete_rules}/bin/delete_rules
-            set_gateway
-            add_rules
+            ${delete_rules}/bin/delete_rules &> /dev/null
+            set_gateway &> /dev/null
+            add_rules &> /dev/null
+            sleep 2
+            ${check_network}/bin/check_network
           ;;
       esac
     done
   '';
 
-  stop_novpn = pkgs.writeScriptBin "stop_novpn" ''
+  stop = pkgs.writeScriptBin "stop" ''
     #!${pkgs.bash}/bin/bash
     ${delete_rules}/bin/delete_rules
     rm -rf /etc/netns/novpn/
@@ -74,26 +77,54 @@ let
     ip netns del novpn
     rm -rf /var/run/netns/novpn/
   '';
+
+  check_network = pkgs.writeScriptBin "check_network" ''
+    retry_count=0
+
+    while true; do
+      response=$(ip netns exec novpn sudo -u nobody curl -m 3 -s ipinfo.io | sudo -u nobody jq -r "(.country)")
+      if [ $? -eq 0 ] && [ -n "$response" ]; then
+        if [[ $response != "RU" ]]; then
+          echo "Country is not RU, stopping."
+          sudo -u cute DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus notify-send -t 2000 -i network-error-symbolic "No VPN service" "Country is not RU"
+          systemctl stop novpn.service
+          exit 1
+        else
+          echo "Country is RU, continuing."
+          break
+        fi
+      else
+        echo "Curl request failed, retrying..."
+        ((retry_count++))
+        if [ $retry_count -ge 3 ]; then
+          echo "Exceeded maximum retry attempts, restarting"
+          systemctl restart novpn.service
+          exit 1
+        fi
+        sleep 1
+      fi
+    done
+  '';
 in {
   systemd.services.novpn = {
     enable = true;
     description = "novpn namespace";
     after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
-    wants = [ "network-online.target"];
 
     serviceConfig = {
       Restart = "on-failure";
       RestartSec = "15";
-      ExecStart = "${start_novpn}/bin/start_novpn";
-      ExecStop = "${stop_novpn}/bin/stop_novpn";
+      ExecStart = "${novpn}/bin/novpn";
+      ExecStop = "${stop}/bin/stop";
       StateDirectory = "novpn";
       Type = "simple";
     };
     
     preStart = ''
-      ${stop_novpn}/bin/stop_novpn 
-      ip netns add novpn
+      ${stop}/bin/stop &> /dev/null
+      ip netns add novpn &> /dev/null
       while true; do
         interface=$(ip route show default | awk '{print $5; exit}')
         if [ -n "$interface" ]; then
@@ -101,6 +132,6 @@ in {
         fi
       done
     '';
-    path = with pkgs; [ gawk iproute2 iptables sysctl coreutils ];
+    path = with pkgs; [ gawk iproute2 iptables sysctl coreutils curl jq sudo libnotify ];
   };
 }

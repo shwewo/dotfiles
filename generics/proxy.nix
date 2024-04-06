@@ -76,6 +76,7 @@ in {
     };
 
     tor.wantedBy = lib.mkForce [];
+    novpn.wants = map (s: "${s.name}.service") socksed;
   };
 
   environment.systemPackages = [
