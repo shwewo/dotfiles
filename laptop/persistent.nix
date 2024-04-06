@@ -26,5 +26,44 @@
       "/etc/machine-id"
       { file = "/var/keys/secret_file"; parentDirectory = { mode = "u=rwx,g=,o="; }; }
     ];
+    users.${USER} = {
+      directories = [
+        "Downloads"
+        "Documents"
+        "Music"
+        "Pictures"
+        "Videos"
+
+        "Monero"
+        "Dropbox"
+        "dev"
+
+        ".google-chrome-russia"
+        ".dropbox"
+        ".dropbox-dist"
+        ".mozilla"
+        ".minecraft"
+        ".tlauncher"
+        ".vscode"
+        ".config/vesktop"
+        ".config/Element"
+        ".config/Code"
+        ".config/obsidian"
+        ".config/obs-studio"
+        ".config/keepassxc"
+        ".config/spotify"
+        ".config/gsconnect"
+        ".config/monero-project"
+        ".config/rclone"
+        ".local/share/TelegramDesktop"
+        ".local/share/audiorelay"
+        ".local/share/org.localsend.localsend_app"
+        ".local/share/pano@elhan.io"
+        ".local/share/direnv"
+        { directory = ".local/share/keyrings"; mode = "0700"; }
+        { directory = ".ssh"; mode = "0700"; }
+        { directory = ".gnupg"; mode = "0700"; }
+      ];
+    };
   };
 }
