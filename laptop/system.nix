@@ -1,4 +1,4 @@
-{ pkgs, inputs, self, stable, unstable, USER, ... }:
+{ pkgs, inputs, self, config, USER, ... }:
 
 {
   imports = [
@@ -6,6 +6,7 @@
     "${self}/generics/default.nix"
     "${self}/generics/services.nix"
     ./hardware.nix
+    ./persistent.nix
     ./network.nix
     ./xserver.nix
     ./udev.nix
@@ -15,8 +16,9 @@
   
   system.stateVersion = "23.11";
   time.timeZone = "Europe/Moscow";
-
   security.sudo.wheelNeedsPassword = false;
+  users.users.${USER}.hashedPasswordFile = config.age.secrets.login.path;
+  users.users.root.hashedPasswordFile = config.age.secrets.login.path;
 
   virtualisation = {
     podman = {

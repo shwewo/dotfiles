@@ -204,6 +204,21 @@
         "type": "github"
       }
     },
+    "impermanence": {
+      "locked": {
+        "lastModified": 1708968331,
+        "narHash": "sha256-VUXLaPusCBvwM3zhGbRIJVeYluh2uWuqtj4WirQ1L9Y=",
+        "owner": "nix-community",
+        "repo": "impermanence",
+        "rev": "a33ef102a02ce77d3e39c25197664b7a636f9c30",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "impermanence",
+        "type": "github"
+      }
+    },
     "nh": {
       "inputs": {
         "nixpkgs": [
@@ -339,11 +354,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1712122226,
-        "narHash": "sha256-pmgwKs8Thu1WETMqCrWUm0CkN1nmCKX3b51+EXsAZyY=",
+        "lastModified": 1712163089,
+        "narHash": "sha256-Um+8kTIrC19vD4/lUCN9/cU9kcOsD1O1m+axJqQPyMM=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "08b9151ed40350725eb40b1fe96b0b86304a654b",
+        "rev": "fd281bd6b7d3e32ddfa399853946f782553163b5",
         "type": "github"
       },
       "original": {
@@ -389,6 +404,7 @@
       "inputs": {
         "agenix": "agenix",
         "home-manager": "home-manager_2",
+        "impermanence": "impermanence",
         "nh": "nh",
         "nixos-shell": "nixos-shell",
         "nixpkgs": "nixpkgs_3",
@@ -407,11 +423,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1711685239,
-        "narHash": "sha256-EMoPUaTT7vyYSR3Pc/ubZ4La4aZRvCbzaSEPYzwE7SA=",
+        "lastModified": 1712401702,
+        "narHash": "sha256-i2GMWGxQMgap2KF52L0d0KHQgQHqwPqs+91jj/h/KIo=",
         "ref": "refs/heads/main",
-        "rev": "86189e7505d9a3a886d181c3535b744b8a61056b",
-        "revCount": 16,
+        "rev": "d4b120e5486197785433731cf3056be054b786f4",
+        "revCount": 20,
         "type": "git",
         "url": "ssh://git@github.com/shwewo/secrets"
       },

@@ -65,6 +65,7 @@
   fileSystems."/persist" = {
     device = "zpool/persist";
     fsType = "zfs";
+    neededForBoot = true;
   };
 
   # fileSystems."/" =

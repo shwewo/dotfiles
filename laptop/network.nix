@@ -12,7 +12,7 @@
         { name = "socks-v2ray-turkey";      script = "ss-local -c           ${config.age.secrets.socks_v2ray_turkey.path}";    } # port 1083
         { name = "socks-reality-sweden";    script = "sing-box run --config ${config.age.secrets.socks_reality_sweden.path}";  } # port 2080
         { name = "socks-reality-austria";   script = "sing-box run --config ${config.age.secrets.socks_reality_austria.path}"; } # port 2081
-        { name = "socks-warp";              script = "wireproxy -c /etc/wireguard/warp0.conf";                                 } # port 3333
+        { name = "socks-warp";              script = "wireproxy -c /persist/etc/wireguard/warp0.conf";                         } # port 3333
         { name = "socks-novpn";             script = "gost -L socks5://192.168.150.2:3535";                                    } # port 3535
       ];
     })
@@ -25,6 +25,7 @@
   };
 
   services.tailscale.enable = true;
+  
   networking = {
     networkmanager = { 
       enable = true;
@@ -33,7 +34,7 @@
     };
     nameservers = [ "100.122.26.102" ];
     hostName = "laptop";
-    hostId = "e56b176f";
+    hostId = "df3549ee";
     useDHCP = lib.mkDefault true;
     interfaces.wlp1s0.proxyARP = true;
     iproute2.enable = true;

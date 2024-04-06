@@ -11,6 +11,7 @@
     tdesktop.url = "github:shwewo/telegram-desktop-patched";
     secrets.url = "git+ssh://git@github.com/shwewo/secrets";
     agenix.url = "github:ryantm/agenix";
+    impermanence.url = "github:nix-community/impermanence";
     nixos-shell.url = "github:Mic92/nixos-shell";
 
     home-manager = {

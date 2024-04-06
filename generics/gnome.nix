@@ -26,6 +26,20 @@ in {
     rm -f /home/${USER}/.config/gtk-4.0/settings.ini
   '';
 
+  home-manager.users.${USER}.home.file = {
+    ".config/gtk-3.0/gtk.css".text = ''
+      /* UNITE windowDecorations */
+      @import url('/run/current-system/sw/share/gnome-shell/extensions/unite@hardpixel.eu/styles/gtk3/buttons-right/maximized.css');
+      /* windowDecorations UNITE */
+    '';
+    ".config/gtk-4.0/gtk.css".text = ''
+      /* UNITE windowDecorations */
+      @import url('/run/current-system/sw/share/gnome-shell/extensions/unite@hardpixel.eu/styles/gtk3/buttons-right/maximized.css');
+      /* windowDecorations UNITE */
+    '';
+  };
+
+
   nixpkgs.overlays = [
     (final: prev: {
       gnome = prev.gnome.overrideScope' (gnomeFinal: gnomePrev: {
