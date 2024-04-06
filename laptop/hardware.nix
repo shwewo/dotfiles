@@ -29,8 +29,17 @@
   boot.extraModulePackages = with config.boot.kernelPackages; [ usbip.out ];
   boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
 
+  boot.supportedFilesystems = [ "zfs" ];
+ 
+  boot.initrd.luks.devices = {
+    cryptroot = {
+      device = "/dev/disk/by-uuid/3a70efb8-8503-4774-abce-c72120d41cdc";
+      preLVM = true;
+    };
+  };
+
   boot.initrd.postDeviceCommands = lib.mkAfter ''
-    zfs rollback -r hnw19r/local/root@blank
+    zfs rollback -r zpool/root@blank
   '';
 
   fileSystems."/boot" = {
@@ -39,22 +48,22 @@
   };
 
   fileSystems."/" = {
-    device = "hnw19r/local/root";
+    device = "zpool/root";
     fsType = "zfs";
   };
 
   fileSystems."/nix" = {
-    device = "hnw19r/local/nix";
+    device = "zpool/nix";
     fsType = "zfs";
   };
 
   fileSystems."/home" = {
-    device = "hnw19r/safe/home";
+    device = "zpool/home";
     fsType = "zfs";
   };
 
   fileSystems."/persist" = {
-    device = "hnw19r/safe/persist";
+    device = "zpool/persist";
     fsType = "zfs";
   };
 
