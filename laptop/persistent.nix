@@ -19,6 +19,7 @@
       "/var/lib/qbit"
       "/etc/NetworkManager/system-connections"
       "/etc/qemu"
+      { directory = "/var/www"; user = "root"; group = "root"; mode = "u=rwx,g=rwx,o=rwx"; }
       { directory = "/var/lib/colord"; user = "colord"; group = "colord"; mode = "u=rwx,g=rx,o="; }
     ];
     files = [

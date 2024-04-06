@@ -58,21 +58,11 @@ in {
         RuntimeDirectory = "cloudflare-warp";
         LogsDirectory = "cloudflare-warp";
         ExecStart = "${pkgs.cloudflare-warp}/bin/warp-svc";
+        LogLevelMax = 3;
       };
 
-      postStart = ''
-        while true; do
-          set -e
-          status=$(${pkgs.cloudflare-warp}/bin/warp-cli status || true)
-          set +e
-
-          if [[ "$status" != *"Unable to connect to CloudflareWARP daemon"* ]]; then
-            ${pkgs.cloudflare-warp}/bin/warp-cli set-custom-endpoint 162.159.193.1:2408
-            exit 0
-          fi
-          sleep 1
-        done
-      '';
+      # To register, connect to a VPN
+      # Then run: warp-cli set-custom-endpoint 162.159.193.1:2408
     };
 
     tor.wantedBy = lib.mkForce [];

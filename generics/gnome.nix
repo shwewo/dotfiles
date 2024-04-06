@@ -39,7 +39,6 @@ in {
     '';
   };
 
-
   nixpkgs.overlays = [
     (final: prev: {
       gnome = prev.gnome.overrideScope' (gnomeFinal: gnomePrev: {
