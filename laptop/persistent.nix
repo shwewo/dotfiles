@@ -44,6 +44,8 @@
         ".tlauncher"
         ".vscode"
         ".steam"
+        ".cache"
+        
         ".config/vesktop"
         ".config/Element"
         ".config/Code"
