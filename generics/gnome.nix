@@ -27,6 +27,12 @@ in {
   '';
 
   home-manager.users.${USER}.home.file = {
+    # ".config/gtk-3.0/bookmarks".text = ''
+    #   file:///home/cute/dev
+    #   file:///home/cute/Dropbox
+    #   file:///home/cute/dev/dotfiles
+    #   file:///var/www/torrents
+    # '';
     ".config/gtk-3.0/gtk.css".text = ''
       /* UNITE windowDecorations */
       @import url('/run/current-system/sw/share/gnome-shell/extensions/unite@hardpixel.eu/styles/gtk3/buttons-right/maximized.css');

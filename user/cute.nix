@@ -22,8 +22,10 @@ in {
     shwewo.ruchrome
     shwewo.ephemeralbrowser
     # Files
-    dropbox
-    overrides.dropbox-cli
+    # overrides.dropbox
+    # overrides.dropbox-cli
+    maestral
+    maestral-gui
     gocryptfs
     unstable.localsend
     p7zip

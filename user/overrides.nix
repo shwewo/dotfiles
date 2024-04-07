@@ -1,4 +1,4 @@
-{ pkgs, stable, unstable, dbpass, USER, ... }:
+{ pkgs, lib, stable, unstable, dbpass, USER, ... }:
 
 {
   obs = pkgs.wrapOBS {
@@ -9,7 +9,25 @@
 
   obsidian = unstable.obsidian.override { electron = stable.electron; };
   lnxrouter = unstable.linux-router.override { useHaveged = true; };
-  dropbox-cli = pkgs.writeScriptBin "dropbox-cli" "${pkgs.dropbox-cli}/bin/dropbox $@";
+  # I know this is very retarded but this is required for impermanence since dropbox checks for existence of ~/.dropbox-dist, but impermenance mounts it, so it can't be deleted ¯\_(ツ)_/¯
+  dropbox = pkgs.dropbox.override (old: {
+    buildFHSEnv = a: (old.buildFHSEnv (a // {
+      runScript = a.runScript.overrideAttrs (oldAttrs: {
+        buildCommand = oldAttrs.buildCommand + ''
+          substituteInPlace $out \
+            --replace \
+              "if ! [ -d \"\$HOME/.dropbox-dist\" ]; then" \
+              "if [ ! -d \"\$HOME/.dropbox-dist\" ] || [ ! -f \"\$HOME/.dropbox-dist/VERSION\" ]; then"
+          substituteInPlace $out \
+            --replace \
+              "rm -fr \"\$HOME/.dropbox-dist\"" \
+              "rm -fr \"\$HOME/.dropbox-dist\" || true"
+        '';
+      });
+    }));
+  });
+  # dropbox = pkgs.writeScriptBin "dropbox" "env HOME='$HOME/Documents' ${pkgs.dropbox}/bin/dropbox";
+  # dropbox-cli = pkgs.writeScriptBin "dropbox-cli" "${pkgs.dropbox-cli}/bin/dropbox $@";
 
   vesktop = (unstable.vesktop.override { electron = pkgs.electron; }).overrideAttrs (oldAttrs: {
     desktopItems = [ (pkgs.makeDesktopItem {
@@ -67,7 +85,7 @@
     bin = pkgs.writeScriptBin "autostart" ''
       #!/usr/bin/env bash
       sleep 5
-      nohup gtk-launch dropbox.desktop > /dev/null & disown
+      nohup gtk-launch maestral.desktop > /dev/null & disown
       nohup gtk-launch vesktop.desktop > /dev/null & disown
       nohup gtk-launch org.telegram.desktop.desktop > /dev/null & disown
       nohup gtk-launch spotify.desktop > /dev/null & disown

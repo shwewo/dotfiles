@@ -39,30 +39,42 @@
         "dev"
 
         ".google-chrome-russia"
-        ".dropbox"
-        ".dropbox-dist"
         ".mozilla"
         ".minecraft"
         ".tlauncher"
         ".vscode"
+        ".steam"
         ".config/vesktop"
         ".config/Element"
         ".config/Code"
         ".config/obsidian"
+        ".config/maestral"
         ".config/obs-studio"
         ".config/keepassxc"
         ".config/spotify"
         ".config/gsconnect"
         ".config/monero-project"
         ".config/rclone"
+        ".config/autostart"
+        ".config/dconf"
+        ".config/gtk-3.0"
         ".local/share/TelegramDesktop"
         ".local/share/audiorelay"
         ".local/share/org.localsend.localsend_app"
         ".local/share/pano@elhan.io"
         ".local/share/direnv"
+        ".local/share/fish"
+        ".local/share/z"
+        ".local/share/warp"
+        ".local/share/Steam"
+        ".local/share/maestral"
+        ".local/state/wireplumber"
         { directory = ".local/share/keyrings"; mode = "0700"; }
         { directory = ".ssh"; mode = "0700"; }
         { directory = ".gnupg"; mode = "0700"; }
+      ];
+      files = [
+        ".config/mimeapps.list"
       ];
     };
   };

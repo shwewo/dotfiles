@@ -1,4 +1,4 @@
-{ pkgs, inputs, self, config, USER, ... }:
+{ pkgs, lib, inputs, self, config, USER, ... }:
 
 {
   imports = [
@@ -17,7 +17,7 @@
   system.stateVersion = "23.11";
   time.timeZone = "Europe/Moscow";
   security.sudo.wheelNeedsPassword = false;
-  users.users.${USER}.hashedPasswordFile = config.age.secrets.login.path;
+  users.users.${USER} = { hashedPasswordFile = config.age.secrets.login.path; initialHashedPassword = lib.mkForce null; };
   users.users.root.hashedPasswordFile = config.age.secrets.login.path;
 
   virtualisation = {

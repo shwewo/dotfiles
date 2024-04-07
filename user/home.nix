@@ -1,4 +1,4 @@
-{ pkgs, inputs, unstable, USER, ... }:
+{ pkgs, lib, inputs, unstable, USER, ... }:
 let
   lock-false = {
     Value = false;
@@ -18,7 +18,7 @@ in {
   home-manager.users.${USER} = {
     home.username = "${USER}";
     home.stateVersion = "23.11";
-
+   
     programs.firefox = {
       enable = true;
       policies = {
