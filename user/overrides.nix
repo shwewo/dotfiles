@@ -10,22 +10,22 @@
   obsidian = unstable.obsidian.override { electron = stable.electron; };
   lnxrouter = unstable.linux-router.override { useHaveged = true; };
   # I know this is very retarded but this is required for impermanence since dropbox checks for existence of ~/.dropbox-dist, but impermenance mounts it, so it can't be deleted ¯\_(ツ)_/¯
-  dropbox = pkgs.dropbox.override (old: {
-    buildFHSEnv = a: (old.buildFHSEnv (a // {
-      runScript = a.runScript.overrideAttrs (oldAttrs: {
-        buildCommand = oldAttrs.buildCommand + ''
-          substituteInPlace $out \
-            --replace \
-              "if ! [ -d \"\$HOME/.dropbox-dist\" ]; then" \
-              "if [ ! -d \"\$HOME/.dropbox-dist\" ] || [ ! -f \"\$HOME/.dropbox-dist/VERSION\" ]; then"
-          substituteInPlace $out \
-            --replace \
-              "rm -fr \"\$HOME/.dropbox-dist\"" \
-              "rm -fr \"\$HOME/.dropbox-dist\" || true"
-        '';
-      });
-    }));
-  });
+  # dropbox = pkgs.dropbox.override (old: {
+  #   buildFHSEnv = a: (old.buildFHSEnv (a // {
+  #     runScript = a.runScript.overrideAttrs (oldAttrs: {
+  #       buildCommand = oldAttrs.buildCommand + ''
+  #         substituteInPlace $out \
+  #           --replace \
+  #             "if ! [ -d \"\$HOME/.dropbox-dist\" ]; then" \
+  #             "if [ ! -d \"\$HOME/.dropbox-dist\" ] || [ ! -f \"\$HOME/.dropbox-dist/VERSION\" ]; then"
+  #         substituteInPlace $out \
+  #           --replace \
+  #             "rm -fr \"\$HOME/.dropbox-dist\"" \
+  #             "rm -fr \"\$HOME/.dropbox-dist\" || true"
+  #       '';
+  #     });
+  #   }));
+  # });
   # dropbox = pkgs.writeScriptBin "dropbox" "env HOME='$HOME/Documents' ${pkgs.dropbox}/bin/dropbox";
   # dropbox-cli = pkgs.writeScriptBin "dropbox-cli" "${pkgs.dropbox-cli}/bin/dropbox $@";
 

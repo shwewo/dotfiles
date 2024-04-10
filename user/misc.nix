@@ -48,4 +48,40 @@
     nix run $FLAKE#nixosConfigurations.$1.config.system.build.nixos-shell
     rm -r /tmp/ephemeral
   '';
+
+  windows = let
+    bin = pkgs.writeScriptBin "windows" ''
+      #!/usr/bin/env bash
+      stop() {
+        virsh --connect qemu:///system shutdown win10
+      }
+
+      trap stop INT
+
+      virsh --connect qemu:///system start win10
+      virt-viewer -f --connect "qemu:///system" "win10" --attach --class "windows" --name "windows"
+
+      stop
+    '';
+  in pkgs.stdenv.mkDerivation {
+    name = "windows";
+    nativeBuildInputs = [ pkgs.copyDesktopItems ];
+    installPhase = ''
+      mkdir -p $out/bin $out/share
+      cp ${bin}/bin/windows $out/bin/
+      copyDesktopItems
+    '';
+    phases = [ "installPhase" ];
+    
+    desktopItems = [
+      (pkgs.makeDesktopItem {
+        name = "windows";
+        desktopName = "Windows";
+        icon = "windows95";
+        exec = "windows";
+        type = "Application";
+        startupWMClass = "windows";
+      })
+    ];
+  };
 }

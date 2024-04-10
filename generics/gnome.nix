@@ -9,6 +9,16 @@ let
       cp ${../wallpaper.png} $out/share/backgrounds/wallpaper.png
     '';
   };
+  gtk30 = pkgs.writeText "gtk-3.0.css" ''
+    /* UNITE windowDecorations */
+    @import url('/run/current-system/sw/share/gnome-shell/extensions/unite@hardpixel.eu/styles/gtk3/buttons-right/maximized.css');
+    /* windowDecorations UNITE */
+  '';
+  gtk40 = pkgs.writeText "gtk-4.0.css" ''
+    /* UNITE windowDecorations */
+    @import url('/run/current-system/sw/share/gnome-shell/extensions/unite@hardpixel.eu/styles/gtk3/buttons-right/maximized.css');
+    /* windowDecorations UNITE */
+  '';
 in {
   imports = [
     inputs.home-manager.nixosModules.home-manager
@@ -19,31 +29,22 @@ in {
     MOZ_ENABLE_WAYLAND = "0";
   };
 
-  system.activationScripts."delete_unite_overrides".text = ''
-    rm -f /home/${USER}/.config/gtk-3.0/gtk.css
-    rm -f /home/${USER}/.config/gtk-4.0/gtk.css
-    rm -f /home/${USER}/.config/gtk-3.0/settings.ini
-    rm -f /home/${USER}/.config/gtk-4.0/settings.ini
-  '';
+  system.activationScripts."unite_overrides" = ''
+    HOME=/home/${USER}/
+    
+    mkdir $HOME/.config/gtk-3.0 &> /dev/null || true
+    mkdir $HOME/.config/gtk-4.0 &> /dev/null || true
+    chown ${USER}:users $HOME/.config/gtk-3.0
+    chown ${USER}:users $HOME/.config/gtk-4.0
 
-  home-manager.users.${USER}.home.file = {
-    # ".config/gtk-3.0/bookmarks".text = ''
-    #   file:///home/cute/dev
-    #   file:///home/cute/Dropbox
-    #   file:///home/cute/dev/dotfiles
-    #   file:///var/www/torrents
-    # '';
-    ".config/gtk-3.0/gtk.css".text = ''
-      /* UNITE windowDecorations */
-      @import url('/run/current-system/sw/share/gnome-shell/extensions/unite@hardpixel.eu/styles/gtk3/buttons-right/maximized.css');
-      /* windowDecorations UNITE */
-    '';
-    ".config/gtk-4.0/gtk.css".text = ''
-      /* UNITE windowDecorations */
-      @import url('/run/current-system/sw/share/gnome-shell/extensions/unite@hardpixel.eu/styles/gtk3/buttons-right/maximized.css');
-      /* windowDecorations UNITE */
-    '';
-  };
+    rm -f $HOME/.config/gtk-3.0/gtk.css
+    rm -f $HOME/.config/gtk-4.0/gtk.css
+    rm -f $HOME/.config/gtk-3.0/settings.ini
+    rm -f $HOME/.config/gtk-4.0/settings.ini
+
+    ln -s ${gtk30} $HOME/.config/gtk-3.0/gtk.css
+    ln -s ${gtk40} $HOME/.config/gtk-4.0/gtk.css
+  '';
 
   nixpkgs.overlays = [
     (final: prev: {

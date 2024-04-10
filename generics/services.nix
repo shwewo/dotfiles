@@ -2,7 +2,7 @@
 
 {
   systemd.tmpfiles.rules = [
-    "d /var/www/torrents 0775 qbit users"
+    "d /media/torrents 0775 qbit users"
   ];
 
   users.users.qbit = {
@@ -40,9 +40,9 @@
     enable = true;
     openFirewall = true;
     settings = {
-      friendly_name = "Laptop";
+      friendly_name = "hnw19r";
       media_dir = [
-      "V,/var/www/torrents" #Videos files are located here
+      "V,/media/torrents" #Videos files are located here
       ];
       inotify = "yes";
       log_level = "error";
@@ -61,7 +61,7 @@
     script = ''
       #!/bin/sh
 
-      WATCH_DIR="/var/www/torrents"
+      WATCH_DIR="/media/torrents"
 
       inotifywait -m -r -e modify,create,delete "$WATCH_DIR" |
       while read -r directory event file; do

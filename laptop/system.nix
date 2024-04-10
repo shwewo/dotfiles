@@ -57,6 +57,7 @@
   services.pcscd.enable = true; # yubikey
 
   environment.systemPackages = with pkgs; [
+    sbctl # secure boot
     tor-browser # globally because i need to firejail it
     virtiofsd # for qemu
     linuxPackages.usbip

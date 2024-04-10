@@ -40,9 +40,11 @@ in {
           "signon.generation.enabled" = lock-false;
           "browser.compactmode.show" = lock-true;
           "browser.uidensity" = { Value = 1; Status = "locked"; };
-          # "mousewheel.with_alt.action" = { Value = "-1"; Status = "Locked"; }; # Not allowed for stability reason; do manually
           "browser.tabs.firefox-view" = lock-false;
-          # "full-screen-api.ignore-widgets" = lock-true; # Not allowed for stability reason; do manually
+          "dom.security.https_only_mode_ever_enabled" = lock-true;
+          "media.hardware-video-decoding.force-enabled" = { Value = 1; };
+          # "mousewheel.with_alt.action" = { Value = "-1"; Status = "Locked"; }; # Not allowed for stability reason; do manually
+          # "full-screen-api.ignore-widgets" = lock-true;
         };
 
         # https://discourse.nixos.org/t/declare-firefox-extensions-and-settings/36265/17
@@ -83,8 +85,8 @@ in {
     programs.fish = {
       enable = true;
       shellAliases = {
-        fru = "trans ru:en";
-        fen = "trans en:ru";
+        toru = "trans en:ru";
+        toen = "trans ru:en";
         icat = "kitten icat";
       };
       shellInit = ''

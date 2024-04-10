@@ -37,6 +37,9 @@
     hostId = "df3549ee";
     useDHCP = lib.mkDefault true;
     interfaces.wlp1s0.proxyARP = true;
+    hosts = {
+      "192.168.150.2" = [ "novpn" ];
+    };
     iproute2.enable = true;
     firewall = {
       enable = true;

@@ -2,6 +2,7 @@
 
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
@@ -41,14 +42,9 @@
     device = "/dev/disk/by-uuid/7D7A-9385";
     fsType = "vfat";
   };
-
+  
   fileSystems."/" = {
     device = "zpool/root";
-    fsType = "zfs";
-  };
-
-  fileSystems."/nix" = {
-    device = "zpool/nix";
     fsType = "zfs";
   };
   
@@ -58,16 +54,22 @@
     neededForBoot = true;
   };
 
-  # fileSystems."/" =
-  #   { device = "/dev/disk/by-uuid/f650daf8-6b92-4a0b-83d7-94b64d4dd189";
-  #     fsType = "ext4";
-  #   };
+  fileSystems."/virt" = {
+    device = "zpool/virt";
+    fsType = "zfs";
+    neededForBoot = true;
+  };
 
-  # fileSystems."/boot" =
-  #   { device = "/dev/disk/by-uuid/58B4-7151";
-  #     fsType = "vfat";
-  #   };
+  fileSystems."/nix" = {
+    device = "zpool/nix";
+    fsType = "zfs";
+  };
 
+  fileSystems."/media" = {
+    device = "zpool/media";
+    fsType = "zfs";
+  };
+  
   zramSwap.enable = true;
 
   # 5 GHZ wifi hotspot

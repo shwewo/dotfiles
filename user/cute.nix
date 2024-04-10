@@ -67,6 +67,8 @@ in {
     killall
     lsof
     virt-manager
+    virt-viewer
+    misc.windows
     neofetch
     # Utilities
     inputs.agenix.packages.${pkgs.system}.default
