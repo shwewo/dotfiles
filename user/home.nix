@@ -95,6 +95,9 @@ in {
         set -U __done_notification_command "${pkgs.libnotify}/bin/notify-send --icon=kitty --app-name=kitty --wait \$title \$argv[1] > /dev/null 2>&1 & disown"
         set -U __done_notification_urgency_level_failure critical
       '';
+      interactiveShellInit = ''
+        set TERM "xterm-kitty"
+      '';
     };
 
     programs.vscode = {

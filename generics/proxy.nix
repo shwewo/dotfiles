@@ -8,7 +8,6 @@ let
         after = [ "novpn.service" "network-online.target" ];
         wants = [ "novpn.service" "network-online.target" ];
         bindsTo = [ "novpn.service" ];
-        wantedBy = [ "multi-user.target" ];
 
         serviceConfig = { 
           Restart = "on-failure"; 

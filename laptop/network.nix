@@ -26,20 +26,38 @@
 
   services.tailscale.enable = true;
   
+  services.dnscrypt-proxy2 = {
+    enable = true;
+    settings = {
+      ipv6_servers = true;
+      require_dnssec = true;
+      server_names = [ "cloudflare" ];
+      listen_addresses = [ "127.0.0.1:53" "192.168.150.2:53"];
+    };
+  };
+
+  systemd.services.dnscrypt-proxy2 = {
+    wantedBy = lib.mkForce [];
+    serviceConfig = {
+      StateDirectory = "dnscrypt-proxy";
+      NetworkNamespacePath = "/run/netns/novpn";
+    };
+    path = with pkgs; [ iproute2 coreutils ];
+  };
+
+  systemd.services.novpn.wants = [ "dnscrypt-proxy2.service" ];
+
   networking = {
     networkmanager = { 
       enable = true;
       dns = "none";
       wifi.macAddress = "stable";
     };
-    nameservers = [ "100.122.26.102" ];
+    nameservers = [ "192.168.150.2" ];
     hostName = "laptop";
     hostId = "df3549ee";
     useDHCP = lib.mkDefault true;
     interfaces.wlp1s0.proxyARP = true;
-    hosts = {
-      "192.168.150.2" = [ "novpn" ];
-    };
     iproute2.enable = true;
     firewall = {
       enable = true;
