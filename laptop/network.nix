@@ -2,7 +2,6 @@
 
 {
   imports = [
-    "${self}/generics/gateway.nix"
     (import "${self}/generics/proxy.nix" { 
       inherit pkgs lib inputs unstable;
       socksed = [
@@ -25,7 +24,32 @@
   };
 
   services.tailscale.enable = true;
-  
+  systemd.services.tailscaled.wants = [ "tailserve.service" ];
+  systemd.services.tailserve = {
+    serviceConfig.Type = "oneshot";
+    script = ''
+      commands=(
+        "tailscale serve --bg --tcp 22 tcp://localhost:22"
+      )
+
+      containsSubstring() { [[ $1 == *"$2"* ]]; }
+      sleep 5
+
+      for cmd in "''${commands[@]}"; do
+        while true; do
+          echo "Executing: $cmd"
+          if output=$(eval "$cmd" 2>/dev/null); then
+            containsSubstring "$output" "Available within your tailnet:" && break || sleep 5
+          else
+            echo "Error occurred while executing: $cmd"
+            sleep 5
+          fi
+        done
+      done
+    '';
+    path = with pkgs; [ tailscale ];
+  };
+
   services.dnscrypt-proxy2 = {
     enable = true;
     settings = {
@@ -37,16 +61,48 @@
   };
 
   systemd.services.dnscrypt-proxy2 = {
+    after = [ "novpn.service" "network-online.target" ];
+    wants = [ "novpn.service" "network-online.target" ];
+    bindsTo = [ "novpn.service" ];
+
     wantedBy = lib.mkForce [];
     serviceConfig = {
       StateDirectory = "dnscrypt-proxy";
-      NetworkNamespacePath = "/run/netns/novpn";
+      NetworkNamespacePath = "/run/netns/novpn_nsd";
     };
-    path = with pkgs; [ iproute2 coreutils ];
   };
 
-  systemd.services.novpn.wants = [ "dnscrypt-proxy2.service" ];
+  systemd.services.novpn = {
+    enable = true;
+    description = "novpn namespace";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" "dnscrypt-proxy2.service" ];
+    wantedBy = [ "multi-user.target" ];
 
+    serviceConfig = {
+      Restart = "always";
+      RestartSec = "15";
+      Type = "exec";
+    };
+
+    script = ''
+      ${inputs.shwewo.packages.${pkgs.system}.namespaced}/bin/namespaced \
+       --veth0-ip 192.168.150.1 \
+       --veth1-ip 192.168.150.2 \
+       --nokill \
+       --country RU \
+       --name novpn \
+       --fwmark 0x6e736431 \
+       --table 28107
+    '';
+    
+    postStart = ''
+      gost -L=tcp://0.0.0.0:4780/192.168.150.2:4780 &>/dev/null &
+    '';
+
+    path = with pkgs; [ gost ];
+  };
+  
   networking = {
     networkmanager = { 
       enable = true;

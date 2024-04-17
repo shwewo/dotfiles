@@ -16,12 +16,10 @@ let
           User = "socks"; 
           Group = "socks";
           RuntimeMaxSec=3600;
-          NetworkNamespacePath = "/run/netns/novpn";
+          NetworkNamespacePath = "/run/netns/novpn_nsd";
         };
 
         script = attrs.script;
-        preStart = "while true; do ip addr show dev novpn1 | grep -q 'inet' && break; sleep 1; done";
-
         path = with pkgs; [ 
           iproute2 
           shadowsocks-libev 

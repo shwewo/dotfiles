@@ -59,7 +59,7 @@
       trap stop INT
 
       virsh --connect qemu:///system start win10
-      virt-viewer -f --connect "qemu:///system" "win10" --attach --class "windows" --name "windows"
+      virt-viewer --connect "qemu:///system" "win10" --attach --class "windows" --name "windows"
 
       stop
     '';

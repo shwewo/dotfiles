@@ -448,17 +448,16 @@
         "tdesktop": "tdesktop"
       },
       "locked": {
-        "lastModified": 1712419601,
-        "narHash": "sha256-JzeX/8IEsupOLZBgekheagks2CG9psiHBm3i6VDykEk=",
-        "owner": "shwewo",
-        "repo": "flake",
-        "rev": "54af0fc51c0569a06661875ff71dbac0e3dde370",
-        "type": "github"
+        "dirtyRev": "bee6b34078e58bac64397f0126a1ace60d90d04e-dirty",
+        "dirtyShortRev": "bee6b34-dirty",
+        "lastModified": 1713305887,
+        "narHash": "sha256-GHdljT0tKJmkMeTMpEAbmu72xhBJu/LdFBAh+KT5M74=",
+        "type": "git",
+        "url": "file:///home/cute/dev/flake"
       },
       "original": {
-        "owner": "shwewo",
-        "repo": "flake",
-        "type": "github"
+        "type": "git",
+        "url": "file:///home/cute/dev/flake"
       }
     },
     "stable": {

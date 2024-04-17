@@ -24,60 +24,63 @@
         "/etc/machine-id"
         { file = "/var/keys/secret_file"; parentDirectory = { mode = "u=rwx,g=,o="; }; }
       ];
-      users.${USER} = {
-        directories = [
-          "Downloads"
-          "Documents"
-          "Music"
-          "Pictures"
-          "Videos"
+      # users.${USER} = {
+      #   directories = [
+      #     "Downloads"
+      #     "Documents"
+      #     "Music"
+      #     "Pictures"
+      #     "Videos"
 
-          "Monero"
-          "Dropbox"
-          "dev"
+      #     "Monero"
+      #     "Dropbox"
+      #     "dev"
 
-          ".google-chrome-russia"
-          ".mozilla"
-          ".minecraft"
-          ".tlauncher"
-          ".vscode"
-          ".steam"
-          ".cache"
-          ".java"
+      #     ".google-chrome-russia"
+      #     ".mozilla"
+      #     ".minecraft"
+      #     ".tlauncher"
+      #     ".vscode"
+      #     ".steam"
+      #     ".cache"
+      #     ".java"
           
-          ".config/vesktop"
-          ".config/Element"
-          ".config/Code"
-          ".config/obsidian"
-          ".config/maestral"
-          ".config/obs-studio"
-          ".config/keepassxc"
-          ".config/spotify"
-          ".config/gsconnect"
-          ".config/monero-project"
-          ".config/rclone"
-          ".config/autostart"
-          ".config/dconf"
-          ".config/gtk-3.0"
-          ".local/share/TelegramDesktop"
-          ".local/share/org.localsend.localsend_app"
-          ".local/share/pano@elhan.io"
-          ".local/share/direnv"
-          ".local/share/fish"
-          ".local/share/z"
-          ".local/share/warp"
-          ".local/share/Steam"
-          ".local/share/maestral"
-          ".local/state/wireplumber"
-          { directory = ".local/share/keyrings"; mode = "0700"; }
-          { directory = ".ssh"; mode = "0700"; }
-          { directory = ".gnupg"; mode = "0700"; }
-        ];
-        files = [
-          ".config/mimeapps.list"
-          ".config/monitors.xml"
-        ];
-      };
+      #     ".config/vesktop"
+      #     ".config/Element"
+      #     ".config/Code"
+      #     ".config/obsidian"
+      #     ".config/maestral"
+      #     ".config/obs-studio"
+      #     ".config/keepassxc"
+      #     ".config/spotify"
+      #     ".config/gsconnect"
+      #     ".config/monero-project"
+      #     ".config/rclone"
+      #     ".config/autostart"
+      #     ".config/dconf"
+      #     ".config/gtk-3.0"
+      #     ".config/jamesdsp"
+      #     ".config/easyeffects"
+      #     ".local/share/TelegramDesktop"
+      #     ".local/share/org.localsend.localsend_app"
+      #     ".local/share/pano@elhan.io"
+      #     ".local/share/direnv"
+      #     ".local/share/fish"
+      #     ".local/share/z"
+      #     ".local/share/warp"
+      #     ".local/share/Steam"
+      #     ".local/share/maestral"
+      #     ".local/state/wireplumber"
+      #     ".local/share/Trash"
+      #     { directory = ".local/share/keyrings"; mode = "0700"; }
+      #     { directory = ".ssh"; mode = "0700"; }
+      #     { directory = ".gnupg"; mode = "0700"; }
+      #   ];
+      #   files = [
+      #     ".config/mimeapps.list"
+      #     ".config/monitors.xml"
+      #   ];
+      # };
     };
     "/virt" = {
       hideMounts = true;

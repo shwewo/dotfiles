@@ -21,15 +21,15 @@
     after = [ "novpn.service" "network-online.target" ];
     wants = [ "novpn.service" "network-online.target" ];
     bindsTo = [ "novpn.service" ];
-    wantedBy = [ "multi-user.target" ];
+
     serviceConfig = {
       Restart = "always";
       RuntimeMaxSec = 86400;
       User = "qbit";
       Group = "qbit";
-      NetworkNamespacePath = "/run/netns/novpn";
+      NetworkNamespacePath = "/run/netns/novpn_nsd";
     };
-    preStart = "while true; do ip addr show dev novpn1 | grep -q 'inet' && break; sleep 1; done";
+
     script = "${pkgs.qbittorrent-nox}/bin/qbittorrent-nox";
     path = with pkgs; [ iproute2 ];
   };

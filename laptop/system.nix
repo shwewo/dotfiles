@@ -4,7 +4,7 @@
   imports = [
     "${self}/user/${USER}.nix"
     "${self}/generics/default.nix"
-    "${self}/generics/services.nix"
+    ./services.nix
     ./hardware.nix
     ./persistent.nix
     ./network.nix
