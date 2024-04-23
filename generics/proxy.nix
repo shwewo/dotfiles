@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, unstable, socksed, ... }:
+{ pkgs, lib, inputs, stable, unstable, socksed, ... }:
 let
   socksBuilder = attrs:
     {
@@ -25,7 +25,7 @@ let
           shadowsocks-libev 
           shadowsocks-v2ray-plugin 
           unstable.sing-box 
-          unstable.wireproxy
+          stable.wireproxy
           unstable.gost
         ];
       };

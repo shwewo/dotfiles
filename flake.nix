@@ -5,9 +5,10 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     stable.url = "github:nixos/nixpkgs/nixos-23.11";
     unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    staging.url = "github:nixos/nixpkgs/staging-next";
     nixpkgs2105.url = "github:nixos/nixpkgs/nixos-21.05";
     nixpkgs2305.url = "github:nixos/nixpkgs/nixos-23.05";
-    
+
     tdesktop.url = "github:shwewo/telegram-desktop-patched";
     secrets.url = "git+ssh://git@github.com/shwewo/secrets";
     agenix.url = "github:ryantm/agenix";
@@ -16,11 +17,6 @@
 
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nh = {
-      url = "github:viperML/nh";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -41,11 +37,11 @@
     unstable_aarch64 = import inputs.unstable { system = "aarch64-linux"; config = { allowUnfree = true; }; };
     specialArgs = { inherit inputs self USER; };
   in {
-    devShells."x86_64-linux".default = stable.legacyPackages."x86_64-linux".mkShell {
-      name = "shwewo";
-      packages = with stable.legacyPackages."x86_64-linux"; [ gitleaks pre-commit ];
-      shellHook = ''pre-commit install &> /dev/null && gitleaks detect -v'';
-    };
+    # devShells."x86_64-linux".default = stable.legacyPackages."x86_64-linux".mkShell {
+    #   name = "shwewo";
+    #   packages = with stable.legacyPackages."x86_64-linux"; [ gitleaks pre-commit ];
+    #   shellHook = ''pre-commit install &> /dev/null && gitleaks detect -v'';
+    # };
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux"; 
       specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 

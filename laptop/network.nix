@@ -1,9 +1,9 @@
-{ pkgs, lib, inputs, config, self, unstable, ... }:
+{ pkgs, lib, inputs, config, self, stable, unstable, ... }:
 
 {
   imports = [
     (import "${self}/generics/proxy.nix" { 
-      inherit pkgs lib inputs unstable;
+      inherit pkgs lib inputs stable unstable;
       socksed = [
         { name = "socks-v2ray-sweden";      script = "ss-local -c           ${config.age.secrets.socks_v2ray_sweden.path}";    } # port 1080
         { name = "socks-v2ray-canada";      script = "ss-local -c           ${config.age.secrets.socks_v2ray_canada.path}";    } # port 1081
@@ -89,7 +89,6 @@
       ${inputs.shwewo.packages.${pkgs.system}.namespaced}/bin/namespaced \
        --veth0-ip 192.168.150.1 \
        --veth1-ip 192.168.150.2 \
-       --nokill \
        --country RU \
        --name novpn \
        --fwmark 0x6e736431 \
@@ -124,8 +123,6 @@
         59100
         # localsend
         53317
-        # dropbox
-        17500
       ];
       allowedUDPPorts = [
         # audiorelay
@@ -133,12 +130,21 @@
         59200
         # localsend 
         53317
-        # dropbox
-        17500
       ];
       allowedTCPPortRanges = [ { from = 1714; to = 1764; } ]; # kde connect
       allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
       checkReversePath = "loose";
+      # # No fun allowed
+      # extraCommands = ''
+      #   iptables -A INPUT -i wlp1s0 -p icmp -j ACCEPT
+      #   iptables -A INPUT -i wlp1s0 -m state --state ESTABLISHED,RELATED -j ACCEPT
+      #   iptables -A INPUT -i wlp1s0 -j DROP
+      # '';
+      # extraStopCommands = ''
+      #   iptables -D INPUT -i wlp1s0 -p icmp -j ACCEPT
+      #   iptables -D INPUT -i wlp1s0 -m state --state ESTABLISHED,RELATED -j ACCEPT
+      #   iptables -D INPUT -i wlp1s0 -j DROP
+      # '';
     };
   };
   

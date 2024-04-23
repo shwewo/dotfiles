@@ -14,6 +14,7 @@ let
 in {
   imports = [
     ./home.nix
+    ./patchdesktop.nix
   ];
 
   users.users.${USER}.packages = (with pkgs; [
@@ -28,48 +29,29 @@ in {
     maestral-gui
     gocryptfs
     unstable.localsend
-    p7zip
-    rclone
-    unzip
-    zip
     inotify-tools
     misc.cloudsync
     misc.fitsync
     # Network
-    shwewo.namespaced
-    dnsutils
-    inetutils
-    overrides.lnxrouter # sudo lnxrouter -g 10.0.0.1 -o enp3s0f3u1u4 --country RU --ap wlp1s0 <ssid> -p <password> --freq-band <band> 
-    wirelesstools
     gost # gost -L redirect://:3333 -F socks5://192.168.150.2:3333 trans proxy (UDP doesn't work)
     wireproxy
-    wireguard-tools
-    iw
     networkmanagerapplet
-    nmap
-    wget
     trayscale
     iodine
     ptunnel
     remmina
+    shwewo.namespaced
+    overrides.lnxrouter
     # Messengers
     element-desktop
     shwewo.tdesktop
     overrides.vesktop
     # Administration
     mission-center
-    usbutils
-    pciutils
-    util-linux
     stable.libnotify
-    lm_sensors
-    htop
-    killall
-    lsof
     virt-manager
     virt-viewer
     misc.windows
-    neofetch
     # Utilities
     inputs.agenix.packages.${pkgs.system}.default
     misc.virt
@@ -79,7 +61,6 @@ in {
     gnome.zenity
     distrobox
     libreoffice
-    lua5_4
     translate-shell
     overrides.autostart
     overrides.obsidian
@@ -99,20 +80,20 @@ in {
     celluloid
     overrides.obs
     # Graphics
+    gromit-mpx
     krita
     inkscape
-    ffmpeg
     drawing
-    imagemagick
     flameshot
     # Secrets
     overrides.keepassxc
     yubioath-flutter
     yubikey-manager-qt
-    # Other stuff
+    # Misc
     monero-gui
-    openjfx11
-    openjdk11 
+    # openjfx11
+    # openjdk11
+    zulu11 # java 
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
@@ -120,7 +101,7 @@ in {
   ]);
 
   programs = {
-    wireshark = { enable = true; package = pkgs.wireshark; };
+    wireshark = { enable = true; package = stable.wireshark; };
     gamemode.enable = true;
     gamescope.enable = true;
     steam.enable = true;

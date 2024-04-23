@@ -28,10 +28,34 @@
       User = "qbit";
       Group = "qbit";
       NetworkNamespacePath = "/run/netns/novpn_nsd";
+      PrivateTmp = false;
+      PrivateNetwork = false;
+      RemoveIPC = true;
+      NoNewPrivileges = true;
+      PrivateDevices = true;
+      PrivateUsers = true;
+      ProtectHome = "yes";
+      ProtectProc = "invisible";
+      ProcSubset = "pid";
+      ProtectSystem = "full";
+      ProtectClock = true;
+      ProtectHostname = true;
+      ProtectKernelLogs = true;
+      ProtectKernelModules = true;
+      ProtectKernelTunables = true;
+      ProtectControlGroups = true;
+      RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_NETLINK" ];
+      RestrictNamespaces = true;
+      RestrictRealtime = true;
+      RestrictSUIDSGID = true;
+      LockPersonality = true;
+      MemoryDenyWriteExecute = true;
+      SystemCallArchitectures = "native";
+      CapabilityBoundingSet = "";
+      SystemCallFilter = [ "@system-service" ];
     };
 
     script = "${pkgs.qbittorrent-nox}/bin/qbittorrent-nox";
-    path = with pkgs; [ iproute2 ];
   };
 
   systemd.services.novpn.wants = [ "qbitnox.service" ];

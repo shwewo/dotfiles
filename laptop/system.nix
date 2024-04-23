@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, self, config, USER, ... }:
+{ pkgs, lib, inputs, unstable, self, config, USER, ... }:
 
 {
   imports = [
@@ -10,7 +10,6 @@
     ./network.nix
     ./xserver.nix
     ./udev.nix
-    inputs.nh.nixosModules.default
     inputs.secrets.nixosModules.laptop
   ];
   
@@ -57,7 +56,6 @@
   services.pcscd.enable = true; # yubikey
 
   environment.systemPackages = with pkgs; [
-    sbctl # secure boot
     tor-browser # globally because i need to firejail it
     virtiofsd # for qemu
     linuxPackages.usbip
@@ -65,9 +63,11 @@
     wl-clipboard
     jamesdsp # audio compressor
     easyeffects
+    (unstable.linux-router.override { useHaveged = true; }) # sudo lnxrouter -g 10.0.0.1 -o enp3s0f3u1u4 --country RU --ap wlp1s0 <ssid> -p <password> --freq-band <band> 
+    inputs.shwewo.packages.${pkgs.system}.namespaced
   ];
 
-  nh = {
+  programs.nh = {
     enable = true;
     clean.enable = true;
     clean.extraArgs = "--keep-since 4d --keep 3";

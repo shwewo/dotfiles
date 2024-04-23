@@ -204,6 +204,7 @@ in {
         subs-fallback = "default";
         subs-with-matching-audio = "yes";
         save-position-on-quit = "yes";
+        wayland-disable-vsync = "yes";
       };
       scripts = with pkgs; [ 
         mpvScripts.autoload

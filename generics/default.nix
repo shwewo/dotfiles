@@ -51,15 +51,45 @@
   environment.sessionVariables.FLAKE = "/home/${USER}/dev/dotfiles";
 
   environment.systemPackages = with pkgs; [
-    vnstat
-    htop
-    tree
-    tshark
-    git
+    # Network
+    dnsutils
+    inetutils
+    iw
+    wirelesstools
+    wireguard-tools
+    nmap
     wget
-    micro
-    any-nix-shell
+    wget
+    vnstat
+    tshark
+    tcpdump
+    # Administration
+    usbutils
+    pciutils
+    unstable.nh
+    neofetch
+    util-linux
+    htop
+    killall
+    unstable.nix-search-cli
+    nix-index
+    lm_sensors
+    lsof
+    # Files
+    imagemagick
     ncdu
+    ffmpeg
+    p7zip
+    rclone
+    unzip
+    zip
+    tree
+    # Utilities
+    micro
+    git
+    lua5_4
+    # Fish shell
+    any-nix-shell
     fd
     sysz
     grc
@@ -70,10 +100,8 @@
     fishPlugins.z
     fishPlugins.fzf-fish
     fishPlugins.sponge
-    unstable.nix-search-cli
-    nix-index
-    unstable.nh
-    (nerdfonts.override { fonts = [ "Iosevka" ]; })
+    (nerdfonts.override { fonts = [ "Iosevka" ]; })    
+    # Misc
     (pkgs.writeScriptBin "haste" "HASTE_SERVER=https://haste.eww.workers.dev ${pkgs.haste-client}/bin/haste $@")
     (pkgs.writeScriptBin "rebuild" "nh os switch -- --option warn-dirty false")
     (pkgs.writeScriptBin "rollback" "sudo nixos-rebuild switch --rollback --flake ~/dev/dotfiles/")

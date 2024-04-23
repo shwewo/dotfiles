@@ -11,12 +11,18 @@
   boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelModules = [ "usbip" "kvm-amd" "vfat" "nls_cp437" "nls_iso8859-1" "usbhid" "nvme" "xhci_pci" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ usbip.out ];
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  boot.kernelPackages =   
+  with builtins; with lib; let
+    latestCompatibleVersion = config.boot.zfs.package.latestCompatibleLinuxPackages.kernel.version;
+    xanPackages = filterAttrs (name: packages: hasSuffix "_xanmod" name && (tryEval packages).success) pkgs.linuxKernel.packages;
+    compatiblePackages = filter (packages: compareVersions packages.kernel.version latestCompatibleVersion <= 0) (attrValues xanPackages);
+    orderedCompatiblePackages = sort (x: y: compareVersions x.kernel.version y.kernel.version > 0) compatiblePackages;
+  in head orderedCompatiblePackages;
 
   boot.initrd.luks = {
     yubikeySupport = true;
     devices."cryptroot" = {
-      device = "/dev/disk/by-uuid/3a70efb8-8503-4774-abce-c72120d41cdc";
+      device = "/dev/disk/by-uuid/b81f1605-968a-4db0-9a1d-4d32d749567b";
       preLVM = true;
       yubikey = {
         slot = 2;
@@ -76,6 +82,7 @@
   };
   
   zramSwap.enable = true;
+  swapDevices = [ { device = "/dev/nvme0n1p2"; randomEncryption.enable = true; } ];
 
   # 5 GHZ wifi hotspot
   hardware.firmware = with pkgs; [ wireless-regdb ];
