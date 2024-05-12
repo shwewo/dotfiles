@@ -22,7 +22,7 @@ in {
     ungoogled-chromium
     shwewo.ruchrome
     shwewo.ephemeralbrowser
-    # Files
+    # FilesLAND
     # overrides.dropbox
     # overrides.dropbox-cli
     maestral

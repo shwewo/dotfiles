@@ -34,5 +34,13 @@ in {
         "Icon=discord"
       ]
     )
+    # (patchDesktop inputs.shwewo.packages.${pkgs.system}.tdesktop "org.telegram.desktop" 
+    #   [
+    #     "Exec=telegram-desktop -- %u"
+    #   ]
+    #   [
+    #     "Exec=bash -c 'QT_QPA_PLATFORM=xcb telegram-desktop -- %u'"
+    #   ]
+    # )
   ];
 }

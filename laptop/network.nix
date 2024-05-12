@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, config, self, stable, unstable, ... }:
+{ pkgs, lib, inputs, config, self, USER, stable, unstable, ... }:
 
 {
   imports = [
@@ -6,16 +6,26 @@
       inherit pkgs lib inputs stable unstable;
       socksed = [
         { name = "socks-v2ray-sweden";      script = "ss-local -c           ${config.age.secrets.socks_v2ray_sweden.path}";    } # port 1080
-        { name = "socks-v2ray-canada";      script = "ss-local -c           ${config.age.secrets.socks_v2ray_canada.path}";    } # port 1081
-        { name = "socks-v2ray-france";      script = "ss-local -c           ${config.age.secrets.socks_v2ray_france.path}";    } # port 1082
         { name = "socks-v2ray-turkey";      script = "ss-local -c           ${config.age.secrets.socks_v2ray_turkey.path}";    } # port 1083
         { name = "socks-reality-sweden";    script = "sing-box run --config ${config.age.secrets.socks_reality_sweden.path}";  } # port 2080
         { name = "socks-reality-austria";   script = "sing-box run --config ${config.age.secrets.socks_reality_austria.path}"; } # port 2081
-        { name = "socks-warp";              script = "wireproxy -c /persist/etc/wireguard/warp0.conf";                         } # port 3333
         { name = "socks-novpn";             script = "gost -L socks5://192.168.150.2:3535";                                    } # port 3535
       ];
     })
   ];
+
+  systemd.services.socks-usa = {
+    enable = true;
+    after = [ "tailscaled.service" ];
+    wants = [ "tailscaled.service" ];    
+    wantedBy = [ "multi-user.target" ];
+
+    script = ''
+      autossh -M 0 -N -o "ServerAliveInterval 10" -o "ServerAliveCountMax 3" -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -i /home/${USER}/.ssh/id_ed25519 -D 127.0.0.1:8888 cute@100.70.203.32
+    '';
+
+    path = with pkgs; [ autossh openssh ];
+  };
 
   services.openssh = {
     enable = true;

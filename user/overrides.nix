@@ -10,7 +10,7 @@
   vesktop = unstable.vesktop.override { electron = pkgs.electron; withSystemVencord = false; };
   lnxrouter = unstable.linux-router.override { useHaveged = true; };
   obsidian = unstable.obsidian.override { electron = stable.electron; };
-
+  
   kitty_wrapped = pkgs.writeScriptBin "kitty_wrapped" ''
     #!/usr/bin/env bash
     pid=$(pgrep "kitty")
@@ -56,7 +56,7 @@
       sleep 5
       nohup gtk-launch maestral.desktop > /dev/null & disown
       nohup gtk-launch vesktop.desktop > /dev/null & disown
-      nohup gtk-launch org.telegram.desktop.desktop > /dev/null & disown
+      QT_QPA_PLATFORM=xcb nohup telegram-desktop > /dev/null & disown
       nohup gtk-launch spotify.desktop > /dev/null & disown
       nohup gtk-launch firefox.desktop > /dev/null & disown
       nohup gtk-launch keepassxc.desktop > /dev/null & disown

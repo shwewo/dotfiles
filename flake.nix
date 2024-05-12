@@ -2,6 +2,7 @@
   description = "Shwewo's NixOS system configuration";
 
   inputs = {
+#    nixpkgs.url = "github:nixos/nixpkgs?rev=ebce8ace41c8ca0d1776de4c5be5c815fb2fb5f7";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     stable.url = "github:nixos/nixpkgs/nixos-23.11";
     unstable.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -23,7 +24,7 @@
     shwewo = {
       url = "github:shwewo/flake";
       # url = "/home/cute/dev/flake";
-      inputs.nixpkgs.follows = "stable";
+      inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "stable";
     };
   };

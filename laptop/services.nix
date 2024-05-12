@@ -16,6 +16,17 @@
     gid = 10000;
   };
 
+  system.activationScripts."qbitnoxwebui" = ''
+    if [ ! -d "/var/lib/qbit" ]; then
+      mkdir -p /var/lib/qbit
+      chown qbit:qbit /var/lib/qbit
+    fi
+
+    if [ ! -d "/var/lib/qbit/qbittorrent-webui-cjratliff.com" ]; then
+      ${pkgs.git}/bin/git clone https://github.com/Carve/qbittorrent-webui-cjratliff.com /var/lib/qbit/qbittorrent-webui-cjratliff.com
+    fi
+  '';
+
   systemd.services.qbitnox = {
     enable = true;
     after = [ "novpn.service" "network-online.target" ];
