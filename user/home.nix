@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, unstable, USER, ... }:
+{ pkgs, lib, inputs, stable, USER, ... }:
 let
   lock-false = {
     Value = false;
@@ -102,6 +102,7 @@ in {
 
     programs.vscode = {
       enable = true;
+      package = pkgs.vscodium;
       extensions = with pkgs.vscode-extensions; [
         matklad.rust-analyzer
         jnoortheen.nix-ide

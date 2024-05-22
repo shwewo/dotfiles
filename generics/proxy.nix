@@ -1,5 +1,6 @@
 { pkgs, lib, inputs, stable, unstable, socksed, ... }:
 let
+  nixpkgs2305 = import inputs.nixpkgs2305 { system = "${pkgs.system}"; config = { allowUnfree = true; }; };
   socksBuilder = attrs:
     {
       inherit (attrs) name;
@@ -54,7 +55,7 @@ in {
         StateDirectory = "cloudflare-warp";
         RuntimeDirectory = "cloudflare-warp";
         LogsDirectory = "cloudflare-warp";
-        ExecStart = "${pkgs.cloudflare-warp}/bin/warp-svc";
+        ExecStart = "${nixpkgs2305.cloudflare-warp}/bin/warp-svc";
         LogLevelMax = 3;
       };
 
@@ -67,7 +68,7 @@ in {
   };
 
   environment.systemPackages = [
-    (pkgs.writeScriptBin "warp-cli" "${pkgs.cloudflare-warp}/bin/warp-cli $@")
+    (pkgs.writeScriptBin "warp-cli" "${nixpkgs2305.cloudflare-warp}/bin/warp-cli $@")
     (pkgs.writeScriptBin "nyx" ''sudo -u tor -g tor ${inputs.nixpkgs2105.legacyPackages."${pkgs.system}".nyx}/bin/nyx $@'')
     (pkgs.writeScriptBin "tor-warp" ''
       if [[ "$1" == "start" ]]; then
@@ -92,6 +93,9 @@ in {
       socksListenAddress = 9050;
     };
     settings = {
+      # UseBridges = true;
+      # ClientTransportPlugin = "snowflake exec ${pkgs.snowflake}/bin/client";
+      # Bridge = "snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerprint=2B280B23E1107BB62ABFC40DDCC8824814F80A72 url=https://snowflake-broker.torproject.net.global.prod.fastly.net/ fronts=www.shazam.com,www.cosmopolitan.com,www.esquire.com ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478,stun:stun.bluesip.net:3478,stun:stun.dus.net:3478,stun:stun.epygi.com:3478,stun:stun.sonetel.com:3478,stun:stun.uls.co.za:3478,stun:stun.voipgate.com:3478,stun:stun.voys.nl:3478 utls-imitate=hellorandomizedalpn";
       Socks5Proxy = "localhost:4000"; # requires setting warp-svc to proxy mode: warp-cli set-mode proxy && warp-cli set-proxy-port 4000
       ControlPort = 9051;
       CookieAuthentication = true;

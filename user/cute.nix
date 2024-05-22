@@ -68,6 +68,7 @@ in {
     # Games
     protonup-qt
     lutris
+    #inputs.yuzu-nixpkgs.legacyPackages.${pkgs.system}.yuzu-mainline
     steam-run
     prismlauncher
     # Audio
@@ -87,7 +88,7 @@ in {
     flameshot
     # Secrets
     overrides.keepassxc
-    yubioath-flutter
+    stable.yubioath-flutter
     yubikey-manager-qt
     # Misc
     monero-gui

@@ -56,7 +56,7 @@
       sleep 5
       nohup gtk-launch maestral.desktop > /dev/null & disown
       nohup gtk-launch vesktop.desktop > /dev/null & disown
-      QT_QPA_PLATFORM=xcb nohup telegram-desktop > /dev/null & disown
+      nohup gtk-launch org.telegram.desktop.desktop  > /dev/null & disown
       nohup gtk-launch spotify.desktop > /dev/null & disown
       nohup gtk-launch firefox.desktop > /dev/null & disown
       nohup gtk-launch keepassxc.desktop > /dev/null & disown

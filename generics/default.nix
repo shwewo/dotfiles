@@ -43,13 +43,15 @@
   programs.fish.shellAliases = {
     ls = "${pkgs.lsd}/bin/lsd";
     search = "nix-search -d -m 5 -p";
+    reboot = ''read -P "Do you REALLY want to reboot? (y/N) " answer; and string match -q -r '^[Yy]' $answer; and ${pkgs.systemd}/bin/reboot'';
+    rebuild = ''nh os switch -- --option warn-dirty false'';
+    rollback = ''sudo nixos-rebuild switch --rollback --flake ~/dev/dotfiles/'';
   };
 
   services.vnstat.enable = true;
   users.defaultUserShell = pkgs.fish;
 
   environment.sessionVariables.FLAKE = "/home/${USER}/dev/dotfiles";
-
   environment.systemPackages = with pkgs; [
     # Network
     dnsutils
@@ -103,9 +105,7 @@
     (nerdfonts.override { fonts = [ "Iosevka" ]; })    
     # Misc
     (pkgs.writeScriptBin "haste" "HASTE_SERVER=https://haste.eww.workers.dev ${pkgs.haste-client}/bin/haste $@")
-    (pkgs.writeScriptBin "rebuild" "nh os switch -- --option warn-dirty false")
-    (pkgs.writeScriptBin "rollback" "sudo nixos-rebuild switch --rollback --flake ~/dev/dotfiles/")
-    (pkgs.writeScriptBin "reboot" ''read -p "Do you REALLY want to reboot? (y/N) " answer; [[ $answer == [Yy]* ]] && ${pkgs.systemd}/bin/reboot'')
+    (pkgs.writeScriptBin "rollback" "")
     (pkgs.writeScriptBin "shell" ''
       #!/usr/bin/env bash
       packages=""

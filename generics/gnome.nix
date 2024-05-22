@@ -28,6 +28,8 @@ in {
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
     MOZ_ENABLE_WAYLAND = "1";
   };
+ 
+   # its lazy ik
 
   system.activationScripts."unite_overrides" = ''
     HOME=/home/${USER}/
@@ -75,6 +77,8 @@ in {
       });
     })
   ];
+
+  
 
   # https://discourse.nixos.org/t/need-help-for-nixos-gnome-scaling-settings/24590/12 
   programs.dconf.enable = true;
@@ -183,7 +187,7 @@ in {
           enable-titlebar-actions = true; 
           extend-left-box = false;
           hide-activities-button = "never";
-          hide-app-menu-icon = false;
+          hide-app-menu-icon = true;
           notifications-position = "center";
           reduce-panel-spacing = true;
           restrict-to-primary-screen = false;
@@ -270,20 +274,34 @@ in {
   environment.systemPackages = with pkgs; [
     gnomeExtensions.appindicator
     gnomeExtensions.activate-window-by-title
-    stable.gnomeExtensions.unite
+    (gnomeExtensions.unite.overrideAttrs (oldAttrs: {
+      src = pkgs.fetchFromGitHub {
+        owner = "hardpixel";
+        repo = "unite-shell";
+        rev = "master";
+        hash = "sha256-nhBPygtZi1QU9vM0cwdG8ER4XzMJ/zbtVH/FzoyicFI=";
+      };
+    }))
     gnomeExtensions.tailscale-qs
     gnomeExtensions.gsconnect
-    gnomeExtensions.pano
-    gnomeExtensions.pip-on-top
+    # gnomeExtensions.pano
     gnomeExtensions.cloudflare-warp-toggle
     gnomeExtensions.hide-keyboard-layout
-    gnomeExtensions.always-indicator
-    gnomeExtensions.overview-background
+    # gnomeExtensions.always-indicator
+    # gnomeExtensions.overview-background
     gnome.gnome-sound-recorder
     gnome.gnome-tweaks
     gnome.nautilus
     gnome.file-roller
-    unstable.mojave-gtk-theme
+    # (mojave-gtk-theme.overrideAttrs (oldAttrs: {
+    #   version = "ef8fc2f281e4902aada7c322e490429ca60fc55f";
+    #   main_src = pkgs.fetchFromGitHub {
+    #     owner = "vinceliuice";
+    #     repo = "mojave-gtk-theme";
+    #     rev = "ef8fc2f281e4902aada7c322e490429ca60fc55f";
+    #     hash = "sha256-boS/GPjuJV5lZjyHW7tG74T6a3SASQVGnSz++5HkCuw=";
+    #   };
+    # }))
     gsound
     libgda6
     adw-gtk3

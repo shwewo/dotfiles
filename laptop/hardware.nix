@@ -80,7 +80,7 @@
     device = "zpool/media";
     fsType = "zfs";
   };
-  
+
   zramSwap.enable = true;
   swapDevices = [ { device = "/dev/nvme0n1p2"; randomEncryption.enable = true; } ];
 
