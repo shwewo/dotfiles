@@ -106,20 +106,16 @@ in {
     gamescope.enable = true;
     steam = {
       enable = true;
-      package = pkgs.steam.override {
-        # withGameSpecificLibraries = false;
-        extraLibraries = pkgs: with pkgs; [
-          zstd
-          libxml2
-          libdeflate
-          libmd
-          lz4
-          icu
-          libgcrypt
-          libgpg-error
-          libasyncns
-        ];
-      };
+      package = pkgs.steam.override (old: {
+        buildFHSEnv = a: (old.buildFHSEnv (a // {
+          runScript = a.runScript.overrideAttrs (oldAttrs: {
+            buildCommand = oldAttrs.buildCommand + ''
+              sed -i "2i export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt" $out
+              sed -i "3i export SSL_CERT_DIR=${pkgs.cacert.unbundled}/etc/ssl/certs" $out
+            '';
+          });
+        }));
+      });
     };
     adb.enable = true;
     firejail.enable = true;
