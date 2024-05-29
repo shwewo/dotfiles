@@ -3,7 +3,7 @@
   users.users.${USER} = {
     isNormalUser = true;
     description = USER;
-    extraGroups = [ "networkmanager" "wheel" "audio" "libvirtd" "wireshark" "dialout" "plugdev" "adbusers" ];
+    extraGroups = [ "networkmanager" "wheel" "audio" "libvirtd" "wireshark" "dialout" "plugdev" "adbusers" "lxd" ];
     openssh.authorizedKeys.keys = [ 
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ9blPuLoJkCfTl88JKpqnSUmybCm7ci5EgWAUvfEmwb" 
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAZX2ByyBbuOfs6ndbzn/hbLaCAFiMXFsqbjplmx9GfVTx2T1aaDKFRNFtQU1rv6y3jyQCrEbjgvIjdCM4ptDf8=" # ipod
@@ -102,7 +102,7 @@
     fishPlugins.z
     fishPlugins.fzf-fish
     fishPlugins.sponge
-    (nerdfonts.override { fonts = [ "Iosevka" ]; })    
+    (nerdfonts.override { fonts = [ "Iosevka" ]; })  
     # Misc
     (pkgs.writeScriptBin "haste" "HASTE_SERVER=https://haste.eww.workers.dev ${pkgs.haste-client}/bin/haste $@")
     (pkgs.writeScriptBin "rollback" "")

@@ -24,6 +24,9 @@
       enable = true;
       dockerCompat = true;
     };
+    # lxd = {
+    #   enable = true;
+    # };
     spiceUSBRedirection.enable = true;
     libvirtd.enable = true;
   };

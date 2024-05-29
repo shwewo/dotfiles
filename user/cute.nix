@@ -1,13 +1,13 @@
-{ pkgs, lib, inputs, config, self, stable, unstable, USER, ... }: 
+{ pkgs, lib, inputs, config, self, stable, unstable, USER, ... }:
 
 let
-  misc = import ./misc.nix { 
-    inherit inputs pkgs lib config self stable unstable USER; 
+  misc = import ./misc.nix {
+    inherit inputs pkgs lib config self stable unstable USER;
     rclonepass = config.age.secrets.rclone.path;
     backuppass = config.age.secrets.backup.path;
   };
-  overrides = import ./overrides.nix { 
-    inherit inputs pkgs lib config self stable unstable USER; 
+  overrides = import ./overrides.nix {
+    inherit inputs pkgs lib config self stable unstable USER;
     dbpass = config.age.secrets.precise.path;
   };
   shwewo = inputs.shwewo.packages.${pkgs.system};
@@ -69,7 +69,6 @@ in {
     protonup-qt
     lutris
     #inputs.yuzu-nixpkgs.legacyPackages.${pkgs.system}.yuzu-mainline
-    steam-run
     prismlauncher
     # Audio
     shwewo.spotify
@@ -94,7 +93,7 @@ in {
     monero-gui
     # openjfx11
     # openjdk11
-    zulu11 # java 
+    zulu11 # java
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
@@ -105,7 +104,23 @@ in {
     wireshark = { enable = true; package = stable.wireshark; };
     gamemode.enable = true;
     gamescope.enable = true;
-    steam.enable = true;
+    steam = {
+      enable = true;
+      package = pkgs.steam.override {
+        # withGameSpecificLibraries = false;
+        extraLibraries = pkgs: with pkgs; [
+          zstd
+          libxml2
+          libdeflate
+          libmd
+          lz4
+          icu
+          libgcrypt
+          libgpg-error
+          libasyncns
+        ];
+      };
+    };
     adb.enable = true;
     firejail.enable = true;
   };

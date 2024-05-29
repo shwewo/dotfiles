@@ -40,11 +40,6 @@
     unstable_aarch64 = import inputs.unstable { system = "aarch64-linux"; config = { allowUnfree = true; }; };
     specialArgs = { inherit inputs self USER; };
   in {
-    # devShells."x86_64-linux".default = stable.legacyPackages."x86_64-linux".mkShell {
-    #   name = "shwewo";
-    #   packages = with stable.legacyPackages."x86_64-linux"; [ gitleaks pre-commit ];
-    #   shellHook = ''pre-commit install &> /dev/null && gitleaks detect -v'';
-    # };
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux"; 
       specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 

@@ -14,18 +14,18 @@
     })
   ];
 
-  systemd.services.socks-usa = {
-    enable = true;
-    after = [ "tailscaled.service" ];
-    wants = [ "tailscaled.service" ];    
-    wantedBy = [ "multi-user.target" ];
+  # systemd.services.socks-usa = {
+  #   enable = true;
+  #   after = [ "tailscaled.service" ];
+  #   wants = [ "tailscaled.service" ];    
+  #   wantedBy = [ "multi-user.target" ];
 
-    script = ''
-      autossh -M 0 -N -o "ServerAliveInterval 10" -o "ServerAliveCountMax 3" -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -i /home/${USER}/.ssh/id_ed25519 -D 127.0.0.1:8888 cute@100.70.203.32
-    '';
+  #   script = ''
+  #     autossh -M 0 -N -o "ServerAliveInterval 10" -o "ServerAliveCountMax 3" -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -i /home/${USER}/.ssh/id_ed25519 -D 127.0.0.1:8888 cute@100.70.203.32
+  #   '';
 
-    path = with pkgs; [ autossh openssh ];
-  };
+  #   path = with pkgs; [ autossh openssh ];
+  # };
 
   services.openssh = {
     enable = true;
