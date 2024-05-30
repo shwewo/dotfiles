@@ -79,6 +79,8 @@ in {
     yt-dlp
     celluloid
     overrides.obs
+    jamesdsp # audio compressor
+    easyeffects
     # Graphics
     gromit-mpx
     krita
@@ -107,14 +109,10 @@ in {
     steam = {
       enable = true;
       package = pkgs.steam.override (old: {
-        buildFHSEnv = a: (old.buildFHSEnv (a // {
-          runScript = a.runScript.overrideAttrs (oldAttrs: {
-            buildCommand = oldAttrs.buildCommand + ''
-              sed -i "2i export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt" $out
-              sed -i "3i export SSL_CERT_DIR=${pkgs.cacert.unbundled}/etc/ssl/certs" $out
-            '';
-          });
-        }));
+        extraBwrapArgs = [
+          "--setenv SSL_CERT_FILE /etc/ssl/certs/ca-certificates.crt"
+          "--setenv SSL_CERT_DIR ${pkgs.cacert.unbundled}/etc/ssl/certs"
+        ];
       });
     };
     adb.enable = true;

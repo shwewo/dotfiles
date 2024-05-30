@@ -59,12 +59,9 @@
 
   environment.systemPackages = with pkgs; [
     tor-browser # globally because i need to firejail it
+    onionshare-gui
     virtiofsd # for qemu
     linuxPackages.usbip
-    android-tools
-    wl-clipboard
-    jamesdsp # audio compressor
-    easyeffects
     fuse-overlayfs
     (unstable.linux-router.override { useHaveged = true; }) # sudo lnxrouter -g 10.0.0.1 -o enp3s0f3u1u4 --country RU --ap wlp1s0 <ssid> -p <password> --freq-band <band> 
     inputs.shwewo.packages.${pkgs.system}.namespaced
