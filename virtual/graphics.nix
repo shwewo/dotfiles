@@ -34,10 +34,5 @@
 
   virtualisation.graphics = true;
   environment.systemPackages = with pkgs; [
-    unstable.vesktop
-    firefox
-    xfce.xfce4-clipman-plugin
-    xfce.xfce4-pulseaudio-plugin
-    i3
   ];
 }

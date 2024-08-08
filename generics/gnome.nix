@@ -28,6 +28,8 @@ in {
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
     MOZ_ENABLE_WAYLAND = "1";
   };
+
+  services.gnome.gnome-remote-desktop.enable = true;
  
    # its lazy ik
 
@@ -78,7 +80,6 @@ in {
     })
   ];
 
-  
 
   # https://discourse.nixos.org/t/need-help-for-nixos-gnome-scaling-settings/24590/12 
   programs.dconf.enable = true;
@@ -279,7 +280,7 @@ in {
         owner = "hardpixel";
         repo = "unite-shell";
         rev = "master";
-        hash = "sha256-nhBPygtZi1QU9vM0cwdG8ER4XzMJ/zbtVH/FzoyicFI=";
+        hash = "sha256-OyxNibjQn7VBEdAPUaGd0MEgzCzpaFqViMKhF52haUI=";
       };
     }))
     gnomeExtensions.tailscale-qs
@@ -287,8 +288,8 @@ in {
     # gnomeExtensions.pano
     gnomeExtensions.cloudflare-warp-toggle
     gnomeExtensions.hide-keyboard-layout
-    # gnomeExtensions.always-indicator
-    # gnomeExtensions.overview-background
+    gnomeExtensions.always-indicator
+    gnomeExtensions.overview-background
     gnome.gnome-sound-recorder
     gnome.gnome-tweaks
     gnome.nautilus

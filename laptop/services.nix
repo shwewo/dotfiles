@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   systemd.tmpfiles.rules = [
@@ -14,7 +14,7 @@
 
   users.groups.qbit = {
     gid = 10000;
-  };
+  }; 
 
   system.activationScripts."qbitnoxwebui" = ''
     if [ ! -d "/var/lib/qbit" ]; then

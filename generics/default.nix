@@ -7,6 +7,7 @@
     openssh.authorizedKeys.keys = [ 
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ9blPuLoJkCfTl88JKpqnSUmybCm7ci5EgWAUvfEmwb" 
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAZX2ByyBbuOfs6ndbzn/hbLaCAFiMXFsqbjplmx9GfVTx2T1aaDKFRNFtQU1rv6y3jyQCrEbjgvIjdCM4ptDf8=" # ipod
+      "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAF63RgzwPXkOxXz8uT2OH1IcE8oRB5Yf3pmVQKH1D1ip1mWSuA24cjhH6QexVOsuAut0uHZiS4UJqRPasBZsNI53gDy8aY4JlQKX4S0jP3xK5x4G6vp5VsLCd5HovcRUgnVMnX3zvwMuDZ+u5kMWgLlIvSx/iNiwTmbs/D5IA1YUIPEug==" # z8
     ];
     initialHashedPassword = "";
   };
@@ -68,12 +69,12 @@
     # Administration
     usbutils
     pciutils
-    unstable.nh
+    nh
     neofetch
     util-linux
     htop
     killall
-    unstable.nix-search-cli
+    nix-search-cli
     nix-index
     lm_sensors
     lsof

@@ -25,9 +25,9 @@ let
           iproute2 
           shadowsocks-libev 
           shadowsocks-v2ray-plugin 
-          unstable.sing-box 
+          sing-box 
           stable.wireproxy
-          unstable.gost
+          gost
         ];
       };
     };
@@ -55,7 +55,7 @@ in {
         StateDirectory = "cloudflare-warp";
         RuntimeDirectory = "cloudflare-warp";
         LogsDirectory = "cloudflare-warp";
-        ExecStart = "${nixpkgs2305.cloudflare-warp}/bin/warp-svc";
+        ExecStart = "${pkgs.cloudflare-warp}/bin/warp-svc";
         LogLevelMax = 3;
       };
 
@@ -68,7 +68,7 @@ in {
   };
 
   environment.systemPackages = [
-    (pkgs.writeScriptBin "warp-cli" "${nixpkgs2305.cloudflare-warp}/bin/warp-cli $@")
+    (pkgs.writeScriptBin "warp-cli" "${pkgs.cloudflare-warp}/bin/warp-cli $@")
     (pkgs.writeScriptBin "nyx" ''sudo -u tor -g tor ${inputs.nixpkgs2105.legacyPackages."${pkgs.system}".nyx}/bin/nyx $@'')
     (pkgs.writeScriptBin "tor-warp" ''
       if [[ "$1" == "start" ]]; then

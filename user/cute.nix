@@ -76,7 +76,8 @@ in {
     pavucontrol
     shwewo.audiorelay
     # Video
-    yt-dlp
+    unstable.yt-dlp
+    kooha
     celluloid
     overrides.obs
     jamesdsp # audio compressor
@@ -89,7 +90,7 @@ in {
     flameshot
     # Secrets
     overrides.keepassxc
-    stable.yubioath-flutter
+    yubioath-flutter
     yubikey-manager-qt
     # Misc
     monero-gui
@@ -117,5 +118,6 @@ in {
     };
     adb.enable = true;
     firejail.enable = true;
+    noisetorch.enable = true;
   };
 }

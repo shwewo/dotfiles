@@ -17,6 +17,7 @@
         "/var/lib/cloudflare-warp"
         "/var/lib/vnstat"
         "/var/lib/qbit"
+        "/var/lib/alsa"
         "/var/lib/cups"
         "/etc/NetworkManager/system-connections"
         "/etc/ssh"
