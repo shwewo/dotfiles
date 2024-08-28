@@ -10,7 +10,7 @@
     nixpkgs2105.url = "github:nixos/nixpkgs/nixos-21.05";
     nixpkgs2305.url = "github:nixos/nixpkgs/nixos-23.05";
 
-    conduwuit = "github:girlbossceo/conduwuit";
+    conduwuit.url = "github:girlbossceo/conduwuit";
     tdesktop.url = "github:shwewo/telegram-desktop-patched";
     secrets.url = "git+ssh://git@github.com/shwewo/secrets";
     agenix.url = "github:ryantm/agenix";
