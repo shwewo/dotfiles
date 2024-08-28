@@ -4,12 +4,13 @@
   inputs = {
     # nixpkgs.url = "github:nixos/nixpkgs?rev=ebce8ace41c8ca0d1776de4c5be5c815fb2fb5f7";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    stable.url = "github:nixos/nixpkgs/nixos-23.11";
+    stable.url = "github:nixos/nixpkgs/nixos-24.05";
     unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     staging.url = "github:nixos/nixpkgs/staging-next";
     nixpkgs2105.url = "github:nixos/nixpkgs/nixos-21.05";
     nixpkgs2305.url = "github:nixos/nixpkgs/nixos-23.05";
 
+    conduwuit = "github:girlbossceo/conduwuit";
     tdesktop.url = "github:shwewo/telegram-desktop-patched";
     secrets.url = "git+ssh://git@github.com/shwewo/secrets";
     agenix.url = "github:ryantm/agenix";
