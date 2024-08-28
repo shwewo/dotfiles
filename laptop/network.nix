@@ -13,7 +13,7 @@ in {
         { name = "socks-reality-austria";   script = "sing-box run --config ${config.age.secrets.socks_reality_austria.path}";                        } # port 2081
         { name = "socks-novpn";             script = "gost -L socks5://192.168.150.2:3535";                                                           } # port 3535
         { name = "socks-spoofdpi";          script = "${shwewo.spoofdpi}/bin/spoof-dpi -addr 192.168.150.2 -port 9999 -dns-addr 1.1.1.1 -debug true"; } # port 9999
-        { name = "socks-warp";              script = "wireproxy -c /etc/wireproxy.conf";                                                              } # port 25344
+        # { name = "socks-warp";              script = "wireproxy -c /etc/wireproxy.conf";                                                              } # port 25344
       ];
     })
   ];

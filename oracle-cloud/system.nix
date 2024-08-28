@@ -112,7 +112,6 @@
     settings = {
       global = {
         server_name = "***REMOVED***";
-        allow_registration = true;
       };
     };
   };
