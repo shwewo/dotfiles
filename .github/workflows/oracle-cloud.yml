@@ -7,19 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v2
-      with:
-        platforms: aarch64
-
     - uses: cachix/install-nix-action@v25
-
     - uses: webfactory/ssh-agent@v0.9.0
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-    - run: nix build .#nixosConfigurations.oracle-cloud.config.system.build.toplevel --dry-run 
-      env:
-        NIX_TARGET_MACHINE: aarch64-linux
-        QEMU_EXECVE: 1
+    - run: nix build .#nixosConfigurations.oracle-cloud.config.system.build.toplevel --dry-run
