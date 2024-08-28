@@ -58,7 +58,7 @@ in {
     appimage-run
     scrcpy
     tldr
-    gnome.zenity
+    zenity
     distrobox
     libreoffice
     translate-shell

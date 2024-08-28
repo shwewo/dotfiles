@@ -114,7 +114,7 @@ in {
         "nix.serverSettings" = {
           nil = {
             formatting = {
-              command = [ "${pkgs.nixfmt}/bin/nixfmt" ];
+              command = [ "${pkgs.nixfmt-classic}/bin/nixfmt" ];
             };
           };
         };

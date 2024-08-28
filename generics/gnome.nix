@@ -289,10 +289,10 @@ in {
     gnomeExtensions.hide-keyboard-layout
     gnomeExtensions.always-indicator
     gnomeExtensions.overview-background
-    gnome.gnome-sound-recorder
-    gnome.gnome-tweaks
-    gnome.nautilus
-    gnome.file-roller
+    gnome-sound-recorder
+    gnome-tweaks
+    nautilus
+    file-roller
     # (mojave-gtk-theme.overrideAttrs (oldAttrs: {
     #   version = "ef8fc2f281e4902aada7c322e490429ca60fc55f";
     #   main_src = pkgs.fetchFromGitHub {
@@ -308,22 +308,4 @@ in {
     unstable.papirus-icon-theme
     wallpaper
   ];
-
-  environment.gnome.excludePackages = (with pkgs.gnome; [ 
-    pkgs.gnome-tour
-    cheese # webcam tool
-    gnome-music
-    epiphany # web browser
-    geary # email reader
-    gnome-characters
-    totem # video player
-    tali # poker game
-    iagno # go game
-    hitori # sudoku game
-    atomix # puzzle game
-    gnome-maps
-    gnome-software
-    gnome-contacts
-    simple-scan
-  ]);
 }
