@@ -112,7 +112,6 @@
     settings = {
       global = {
         server_name = "matrix.nekolit.eu.org";
-        allow_registration = true;
       };
     };
   };
