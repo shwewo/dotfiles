@@ -1,4 +1,4 @@
-{ config, ... }:
+{ inputs, pkgs, config, ... }:
 
 {
   users.groups.no-net = {};
@@ -12,6 +12,7 @@
       allowedTCPPorts = [ 
         443
         # mediamtx (hls, rtsp, webrtc, rtmp)
+        6969 # tarkov
         8554 
         8000 
         8001 
@@ -21,6 +22,7 @@
         8890 
       ];
       allowedUDPPorts = [ 
+        6969 # tarkov
         # mediamtx (hls, rtsp, webrtc, rtmp)
         8554 
         8000 
@@ -48,7 +50,8 @@
     enable = true;
     extraConfig = '' 
       ClientAliveInterval 500
-      ClientAliveCountMax 50 
+      ClientAliveCountMax 50
+      LoginGraceTime 0 
     '';
     settings.X11Forwarding = true;
     ports = [ 34812 ];

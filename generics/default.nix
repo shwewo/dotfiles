@@ -47,6 +47,7 @@
     reboot = ''read -P "Do you REALLY want to reboot? (y/N) " answer; and string match -q -r '^[Yy]' $answer; and ${pkgs.systemd}/bin/reboot'';
     rebuild = ''nh os switch -- --option warn-dirty false'';
     rollback = ''sudo nixos-rebuild switch --rollback --flake ~/dev/dotfiles/'';
+    ssh = "TERM=xterm-256color /run/current-system/sw/bin/ssh";
   };
 
   services.vnstat.enable = true;

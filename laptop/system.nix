@@ -58,7 +58,6 @@
   services.pcscd.enable = true; # yubikey
 
   environment.systemPackages = with pkgs; [
-    tor-browser # globally because i need to firejail it
     wl-clipboard
     steamcmd
     virtiofsd # for qemu
