@@ -59,8 +59,8 @@
 
   environment.systemPackages = with pkgs; [
     tor-browser # globally because i need to firejail it
+    wl-clipboard
     steamcmd
-    onionshare-gui
     virtiofsd # for qemu
     linuxPackages.usbip
     fuse-overlayfs

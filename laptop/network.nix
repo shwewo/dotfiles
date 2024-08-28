@@ -1,15 +1,19 @@
 { pkgs, lib, inputs, config, self, USER, stable, unstable, ... }:
 
-{
+let
+  shwewo = inputs.shwewo.packages.${pkgs.system};
+in {
   imports = [
     (import "${self}/generics/proxy.nix" { 
       inherit pkgs lib inputs stable unstable;
       socksed = [
-        { name = "socks-v2ray-sweden";      script = "ss-local -c           ${config.age.secrets.socks_v2ray_sweden.path}";    } # port 1080
-        { name = "socks-v2ray-turkey";      script = "ss-local -c           ${config.age.secrets.socks_v2ray_turkey.path}";    } # port 1083
-        { name = "socks-reality-sweden";    script = "sing-box run --config ${config.age.secrets.socks_reality_sweden.path}";  } # port 2080
-        { name = "socks-reality-austria";   script = "sing-box run --config ${config.age.secrets.socks_reality_austria.path}"; } # port 2081
-        { name = "socks-novpn";             script = "gost -L socks5://192.168.150.2:3535";                                    } # port 3535
+        { name = "socks-v2ray-sweden";      script = "ss-local -c           ${config.age.secrets.socks_v2ray_sweden.path}";                           } # port 1080
+        { name = "socks-v2ray-turkey";      script = "ss-local -c           ${config.age.secrets.socks_v2ray_turkey.path}";                           } # port 1083
+        { name = "socks-reality-sweden";    script = "sing-box run --config ${config.age.secrets.socks_reality_sweden.path}";                         } # port 2080
+        { name = "socks-reality-austria";   script = "sing-box run --config ${config.age.secrets.socks_reality_austria.path}";                        } # port 2081
+        { name = "socks-novpn";             script = "gost -L socks5://192.168.150.2:3535";                                                           } # port 3535
+        { name = "socks-spoofdpi";          script = "${shwewo.spoofdpi}/bin/spoof-dpi -addr 192.168.150.2 -port 9999 -dns-addr 1.1.1.1 -debug true"; } # port 9999
+        { name = "socks-warp";              script = "wireproxy -c /etc/wireproxy.conf";                                                              } # port 25344
       ];
     })
   ];

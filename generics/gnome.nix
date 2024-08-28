@@ -285,7 +285,6 @@ in {
     }))
     gnomeExtensions.tailscale-qs
     gnomeExtensions.gsconnect
-    # gnomeExtensions.pano
     gnomeExtensions.cloudflare-warp-toggle
     gnomeExtensions.hide-keyboard-layout
     gnomeExtensions.always-indicator

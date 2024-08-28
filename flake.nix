@@ -24,7 +24,7 @@
 
     shwewo = {
       url = "github:shwewo/flake";
-      #url = "/home/cute/dev/flake";
+      # url = "/home/cute/dev/flake";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "stable";
     };

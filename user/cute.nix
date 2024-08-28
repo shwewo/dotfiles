@@ -62,6 +62,8 @@ in {
     distrobox
     libreoffice
     translate-shell
+    torsocks
+    wl-clipboard
     overrides.autostart
     overrides.obsidian
     overrides.kitty_wrapped
@@ -88,6 +90,8 @@ in {
     inkscape
     drawing
     flameshot
+    gcolor3
+    overrides.pinegrow
     # Secrets
     overrides.keepassxc
     yubioath-flutter

@@ -82,4 +82,44 @@
       })
     ];
   };
+
+  pinegrow = let
+    bin = pkgs.writeScriptBin "pinegrow" ''
+      #!/usr/bin/env bash
+
+      file="$HOME/.config/pinegrow-date.txt"
+      mkdir $HOME/.config/pinegrow
+
+      if [ -f "$file" ]; then
+        current_date=$(cat "$file")
+        echo "Stored Date: $current_date"
+        firejail --private="$HOME/.config/pinegrow" --net=none --profile=chromium ${pkgs.libfaketime}/bin/faketime "$current_date" ${pkgs.pinegrow}/bin/pinegrow
+      else
+        current_date=$(date +"%Y-%m-%d %H:%M:%S")
+        echo "$current_date" > "$file"
+        echo "The file $file didn't exist. Created with the current date and time: $current_date, please register license" 
+        ${pkgs.libnotify}/bin/notify-send "Pinegrow" "The file $file didn't exist. Created with the current date and time: $current_date, please register license"
+        firejail --private="$HOME/.config/pinegrow" --profile=chromium ${pkgs.libfaketime}/bin/faketime "$current_date" ${pkgs.pinegrow}/bin/pinegrow
+      fi
+    '';
+  in pkgs.stdenv.mkDerivation {
+    name = "pinegrow";
+    nativeBuildInputs = [ pkgs.copyDesktopItems ];
+    installPhase = ''
+      mkdir -p $out/bin $out/share
+      cp ${bin}/bin/pinegrow $out/bin/pinegrow
+      copyDesktopItems
+    '';
+    phases = [ "installPhase" ];
+    
+    desktopItems = [
+      (pkgs.makeDesktopItem {
+        name = "pinegrow";
+        desktopName = "Pinegrow";
+        icon = "${pkgs.pinegrow}/opt/pinegrow/icons/pinegrow.png";
+        exec = "pinegrow";
+        type = "Application";
+      })
+    ];
+  };
 }
