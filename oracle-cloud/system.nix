@@ -106,6 +106,17 @@
     appName = "Yet another gitea instance";
   };
 
+  services.matrix-conduit = {
+    enable = true;
+    package = inputs.conduwuit.packages.${pkgs.system}.default; 
+    settings = {
+      global = {
+        server_name = "***REMOVED***";
+        allow_registration = true;
+      };
+    };
+  };
+
   services.adguardhome.enable = true;
   services.adguardhome.settings.http.address = "100.122.26.102:4000";
 }
