@@ -884,22 +884,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-spotify": {
-      "locked": {
-        "lastModified": 1714782413,
-        "narHash": "sha256-tbg0MEuKaPcUrnmGCu4xiY5F+7LW2+ECPKVAJd2HLwM=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "651b4702e27a388f0f18e1b970534162dec09aff",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "651b4702e27a388f0f18e1b970534162dec09aff",
-        "type": "github"
-      }
-    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1711460390,
@@ -1270,23 +1254,23 @@
         "nixpkgs": [
           "nixpkgs"
         ],
-        "nixpkgs-spotify": "nixpkgs-spotify",
         "nixpkgs-stable": [
           "stable"
         ],
         "tdesktop": "tdesktop"
       },
       "locked": {
-        "dirtyRev": "fa1311e31e45577af3116e98dcb3a748e900c912-dirty",
-        "dirtyShortRev": "fa1311e-dirty",
         "lastModified": 1723582075,
-        "narHash": "sha256-QT6ScGb0wxk4fusF8mbwn1QCPVMiiqlRRoWBxFA6awo=",
-        "type": "git",
-        "url": "file:///home/cute/dev/flake"
+        "narHash": "sha256-ru8OK6QqWzlAW76ET419VRA0IGUtsZnpsmarnnIlKJ0=",
+        "owner": "shwewo",
+        "repo": "flake",
+        "rev": "fa1311e31e45577af3116e98dcb3a748e900c912",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/cute/dev/flake"
+        "owner": "shwewo",
+        "repo": "flake",
+        "type": "github"
       }
     },
     "spectrum": {
