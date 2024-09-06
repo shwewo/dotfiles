@@ -5,10 +5,14 @@
     inputs.microvm.nixosModules.host
   ];
   
-  microvm.vms.proxybox.config = import "${self}/virtual/proxybox.nix" { 
-    inherit pkgs lib inputs self config; 
-    nixpkgs.config.allowUnfree = true; 
-  } // { imports = [ inputs.impermanence.nixosModules.impermanence ]; };
+  microvm.vms.proxybox = {
+    autostart = false;
+
+    config = import "${self}/virtual/proxybox.nix" { 
+      inherit pkgs lib inputs self config; 
+      nixpkgs.config.allowUnfree = true; 
+    } // { imports = [ inputs.impermanence.nixosModules.impermanence ]; };
+  };
 
   systemd.services."microvm@proxybox" = {
     wantedBy = lib.mkForce [];

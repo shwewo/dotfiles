@@ -16,6 +16,10 @@
     agenix.url = "github:ryantm/agenix";
     impermanence.url = "github:nix-community/impermanence";
     nixos-shell.url = "github:Mic92/nixos-shell";
+    spicetify-nix = {
+      url = "github:Gerg-L/spicetify-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     #yuzu-nixpkgs.url = "github:nixos/nixpkgs?rev=8debf2f9a63d54ae4f28994290437ba54c681c7b";
 
     home-manager = {
