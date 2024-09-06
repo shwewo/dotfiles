@@ -10,7 +10,9 @@
     ./network.nix
     ./xserver.nix
     ./udev.nix
+    ./microvm.nix
     inputs.secrets.nixosModules.laptop
+    inputs.microvm.nixosModules.host
   ];
   
   system.stateVersion = "23.11";
@@ -57,7 +59,6 @@
 
   environment.systemPackages = with pkgs; [
     wl-clipboard
-    steamcmd
     virtiofsd # for qemu
     linuxPackages.usbip
     fuse-overlayfs

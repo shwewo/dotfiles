@@ -22,6 +22,7 @@ in {
     ungoogled-chromium
     shwewo.ruchrome
     shwewo.ephemeralbrowser
+    overrides.tor-browser
     # FilesLAND
     # overrides.dropbox
     # overrides.dropbox-cli
@@ -91,13 +92,13 @@ in {
     drawing
     flameshot
     gcolor3
-    overrides.pinegrow
     # Secrets
     overrides.keepassxc
     yubioath-flutter
     yubikey-manager-qt
     # Misc
     monero-gui
+    steamcmd
     # openjfx11
     # openjdk11
     zulu11 # java

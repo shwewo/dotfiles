@@ -210,6 +210,7 @@ in {
           show-indicator = false;
           wiggle-indicator = false;
           window-position = mkUint32 0;
+          link-previews = false;
         };
         
         "org/gnome/shell/extensions/pano/color-item" = {

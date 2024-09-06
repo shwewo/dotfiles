@@ -83,42 +83,36 @@
     ];
   };
 
-  pinegrow = let
-    bin = pkgs.writeScriptBin "pinegrow" ''
+  tor-browser = let
+    bin = pkgs.writeScriptBin "tor-browser" ''
       #!/usr/bin/env bash
-
-      file="$HOME/.config/pinegrow-date.txt"
-      mkdir $HOME/.config/pinegrow
-
-      if [ -f "$file" ]; then
-        current_date=$(cat "$file")
-        echo "Stored Date: $current_date"
-        firejail --private="$HOME/.config/pinegrow" --net=none --profile=chromium ${pkgs.libfaketime}/bin/faketime "$current_date" ${pkgs.pinegrow}/bin/pinegrow
-      else
-        current_date=$(date +"%Y-%m-%d %H:%M:%S")
-        echo "$current_date" > "$file"
-        echo "The file $file didn't exist. Created with the current date and time: $current_date, please register license" 
-        ${pkgs.libnotify}/bin/notify-send "Pinegrow" "The file $file didn't exist. Created with the current date and time: $current_date, please register license"
-        firejail --private="$HOME/.config/pinegrow" --profile=chromium ${pkgs.libfaketime}/bin/faketime "$current_date" ${pkgs.pinegrow}/bin/pinegrow
-      fi
+      ${pkgs.tor-browser}/bin/tor-browser --name tor-browser --class tor-browser $@
     '';
   in pkgs.stdenv.mkDerivation {
-    name = "pinegrow";
+    name = "tor-browser";
     nativeBuildInputs = [ pkgs.copyDesktopItems ];
     installPhase = ''
       mkdir -p $out/bin $out/share
-      cp ${bin}/bin/pinegrow $out/bin/pinegrow
+      cp ${bin}/bin/tor-browser $out/bin/
+      ln -s ${pkgs.tor-browser}/share/icons $out/share/icons
       copyDesktopItems
     '';
     phases = [ "installPhase" ];
     
     desktopItems = [
       (pkgs.makeDesktopItem {
-        name = "pinegrow";
-        desktopName = "Pinegrow";
-        icon = "${pkgs.pinegrow}/opt/pinegrow/icons/pinegrow.png";
-        exec = "pinegrow";
+        name = "tor-browser";
+        desktopName = "Tor Browser";
+        genericName = "Web Browser";
+        icon = "tor-browser";
+        exec = "tor-browser %U";
         type = "Application";
+        categories = [
+          "Network"
+          "WebBrowser"
+          "Security"
+        ];
+        comment = "Privacy-focused browser routing traffic through the Tor network";
       })
     ];
   };
