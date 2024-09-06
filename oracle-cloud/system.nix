@@ -113,7 +113,7 @@
       global = {
         server_name = "matrix.nekolit.eu.org";
         turn_uris = [ inputs.secrets.hosts.oracle-cloud.coturn ];
-        turn_secret = inputs.secrets.hosts.oracle-cloud.coturn-secret;
+        turn_secret = inputs.secrets.hosts.oracle-cloud.coturn_secret;
       };
     };
   };
