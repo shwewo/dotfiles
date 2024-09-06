@@ -24,10 +24,15 @@
     };
 
     shwewo = {
-      url = "github:shwewo/flake";
-      # url = "/home/cute/dev/flake";
+      # url = "github:shwewo/flake";
+      url = "/home/cute/dev/flake";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "stable";
+    };
+
+    microvm = {
+      url = "github:astro/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -59,6 +64,11 @@
       system = "x86_64-linux"; 
       specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 
       modules = [ ./virtual/graphics.nix ];
-    };
+    }; 
+    # nixosConfigurations.proxybox = nixpkgs.lib.nixosSystem {
+    #   system = "x86_64-linux"; 
+    #   specialArgs = specialArgs // { nixpkgs.config.allowUnfree = true; }; 
+    #   modules = [ ./virtual/proxybox.nix inputs.impermanence.nixosModules.impermanence ];
+    # };
   };
 }

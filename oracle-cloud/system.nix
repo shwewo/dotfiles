@@ -112,6 +112,8 @@
     settings = {
       global = {
         server_name = "***REMOVED***";
+        turn_uris = [ inputs.secrets.hosts.oracle-cloud.coturn ];
+        turn_secret = inputs.secrets.hosts.oracle-cloud.coturn-secret;
       };
     };
   };

@@ -1,6 +1,5 @@
 { pkgs, lib, inputs, stable, unstable, socksed, ... }:
 let
-  nixpkgs2305 = import inputs.nixpkgs2305 { system = "${pkgs.system}"; config = { allowUnfree = true; }; };
   socksBuilder = attrs:
     {
       inherit (attrs) name;
@@ -62,6 +61,21 @@ in {
       # To register, connect to a VPN
       # Then run: warp-cli set-custom-endpoint 162.159.193.1:2408
     };
+
+    # wireproxy = {
+    #   enable = true;
+    #   description = "wireproxy";
+    #   wantedBy = [ "multi-user.target" ];
+    #   after = [ "pre-network.target" ];
+
+    #   serviceConfig = {
+    #     Type = "simple";
+    #     Restart = "on-failure";
+    #     RestartSec = "15";
+    #     DynamicUser = "yes";
+    #     ExecStart = "${pkgs.wireproxy}/bin/wireproxy -c /etc/wireproxy.conf";
+    #   };
+    # };
 
     tor.wantedBy = lib.mkForce [];
     novpn.wants = map (s: "${s.name}.service") socksed;
