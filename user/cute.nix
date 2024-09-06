@@ -10,12 +10,14 @@ let
     inherit inputs pkgs lib config self stable unstable USER;
     dbpass = config.age.secrets.precise.path;
   };
+  spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
   shwewo = inputs.shwewo.packages.${pkgs.system};
 in {
   imports = [
     ./home.nix
     ./patchdesktop.nix
-  ];
+    inputs.spicetify-nix.nixosModules.default
+  ]; 
 
   users.users.${USER}.packages = (with pkgs; [
     # Browsers
@@ -74,7 +76,6 @@ in {
     #inputs.yuzu-nixpkgs.legacyPackages.${pkgs.system}.yuzu-mainline
     prismlauncher
     # Audio
-    shwewo.spotify
     stable.spotdl
     pavucontrol
     shwewo.audiorelay
@@ -109,9 +110,45 @@ in {
   ]);
 
   programs = {
-    wireshark = { enable = true; package = stable.wireshark; };
     gamemode.enable = true;
     gamescope.enable = true;
+    adb.enable = true;
+    firejail.enable = true;
+    noisetorch.enable = true;
+    spicetify = {
+      enable = true;
+      theme = spicePkgs.themes.spotifyNoPremium;
+
+      enabledExtensions = with spicePkgs.extensions; [
+        adblock
+        hidePodcasts
+      ];
+      
+      spotifyPackage = pkgs.spotify.overrideAttrs (
+        old: {
+          postInstall =
+            (old.postInstall or "")
+            + ''
+              sed -i "s|Exec=spotify %U|Exec=${pkgs.writeScriptBin "open" ''
+                if ! pgrep "spotify" > /dev/null; then
+                  spotify &
+
+                  while ! dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify \
+                    /org/mpris/MediaPlayer2 \
+                    org.mpris.MediaPlayer2.Player.Play > /dev/null 2>&1; do
+                    sleep 1
+                  done
+                fi
+
+                dbus-send --type=method_call --dest=org.mpris.MediaPlayer2.spotify \
+                  /org/mpris/MediaPlayer2 \
+                  org.mpris.MediaPlayer2.Player.OpenUri \
+                  string:"$1"
+              ''}/bin/open %U|" "$out/share/applications/spotify.desktop"
+            '';
+        }
+      );
+    };
     steam = {
       enable = true;
       package = pkgs.steam.override (old: {
@@ -121,8 +158,9 @@ in {
         ];
       });
     };
-    adb.enable = true;
-    firejail.enable = true;
-    noisetorch.enable = true;
+    wireshark = { 
+      enable = true;
+      package = stable.wireshark; 
+    };
   };
 }
