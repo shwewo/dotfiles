@@ -130,28 +130,9 @@ in {
     programs.ssh = {
       enable = true;
       matchBlocks = {
-        "debian" = {
-          hostname = "192.168.122.222"; 
-        };
         "oracle-cloud" = {
           hostname = inputs.secrets.hosts.oracle-cloud.network.ip;
           port = inputs.secrets.hosts.oracle-cloud.network.ssh.port;
-        };
-        "sn1" = {
-          hostname = inputs.secrets.hosts.sn1.network.ip;
-          port = inputs.secrets.hosts.sn1.network.ssh.port;
-        };
-        "canada" = {
-          hostname = inputs.secrets.hosts.canada.network.ip;
-          port = inputs.secrets.hosts.canada.network.ssh.port;
-        };
-        "finland" = {
-          hostname = inputs.secrets.hosts.finland.network.ip;
-          port = inputs.secrets.hosts.finland.network.ssh.port;
-        };
-        "france" = {
-          hostname = inputs.secrets.hosts.france.network.ip;
-          port = inputs.secrets.hosts.france.network.ssh.port;
         };
         "nyadesk" = {
           hostname = "192.168.50.150";
