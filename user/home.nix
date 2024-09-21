@@ -127,22 +127,22 @@ in {
       userEmail = "shwewo@gmail.com";
     };
 
-    programs.ssh = {
-      enable = true;
-      matchBlocks = {
-        "oracle-cloud" = {
-          hostname = inputs.secrets.hosts.oracle-cloud.network.ip;
-          port = inputs.secrets.hosts.oracle-cloud.network.ssh.port;
-        };
-        "nyadesk" = {
-          hostname = "192.168.50.150";
-        };
-        "nyalapt" = {
-          hostname = "192.168.50.219";
-          port = 55755;
-        };
-      };
-    };
+    # programs.ssh = {
+      # enable = true;
+      # matchBlocks = {
+      #   "oracle-cloud" = {
+      #     hostname = inputs.secrets.hosts.oracle-cloud.network.ip;
+      #     port = inputs.secrets.hosts.oracle-cloud.network.ssh.port;
+      #   };
+      #   "nyadesk" = {
+      #     hostname = "192.168.50.150";
+      #   };
+      #   "nyalapt" = {
+      #     hostname = "192.168.50.219";
+      #     port = 55755;
+      #   };
+      # };
+    # };
 
     programs.kitty = {
       enable = true;

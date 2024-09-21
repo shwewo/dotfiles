@@ -294,15 +294,6 @@ in {
     gnome-tweaks
     nautilus
     file-roller
-    # (mojave-gtk-theme.overrideAttrs (oldAttrs: {
-    #   version = "ef8fc2f281e4902aada7c322e490429ca60fc55f";
-    #   main_src = pkgs.fetchFromGitHub {
-    #     owner = "vinceliuice";
-    #     repo = "mojave-gtk-theme";
-    #     rev = "ef8fc2f281e4902aada7c322e490429ca60fc55f";
-    #     hash = "sha256-boS/GPjuJV5lZjyHW7tG74T6a3SASQVGnSz++5HkCuw=";
-    #   };
-    # }))
     gsound
     libgda6
     adw-gtk3

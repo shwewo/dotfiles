@@ -900,22 +900,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-spotify": {
-      "locked": {
-        "lastModified": 1714782413,
-        "narHash": "sha256-tbg0MEuKaPcUrnmGCu4xiY5F+7LW2+ECPKVAJd2HLwM=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "651b4702e27a388f0f18e1b970534162dec09aff",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "651b4702e27a388f0f18e1b970534162dec09aff",
-        "type": "github"
-      }
-    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1711460390,
@@ -1287,23 +1271,23 @@
         "nixpkgs": [
           "nixpkgs"
         ],
-        "nixpkgs-spotify": "nixpkgs-spotify",
         "nixpkgs-stable": [
           "stable"
         ],
         "tdesktop": "tdesktop"
       },
       "locked": {
-        "dirtyRev": "23faf804456cb59191f3331a56f833fa06c68bb2-dirty",
-        "dirtyShortRev": "23faf80-dirty",
-        "lastModified": 1725584521,
-        "narHash": "sha256-m2SwAwtoCIuHLrgFgB8uHNzPDIzdBgKbICZvuqTM9RM=",
-        "type": "git",
-        "url": "file:///home/cute/dev/flake"
+        "lastModified": 1725591951,
+        "narHash": "sha256-ekwqS4cWHOlwgGyWxFCKsKYLwILoVLiGpCRq1023paM=",
+        "owner": "shwewo",
+        "repo": "flake",
+        "rev": "6a3ed1e9a351f364e56c0c14bd727d5ecf496d0a",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/cute/dev/flake"
+        "owner": "shwewo",
+        "repo": "flake",
+        "type": "github"
       }
     },
     "spectrum": {
