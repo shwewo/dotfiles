@@ -11,33 +11,6 @@
       enable = true;
       allowedTCPPorts = [ 
         443
-        # mediamtx (hls, rtsp, webrtc, rtmp)
-        6969 # tarkov
-        8554 
-        8000 
-        8001 
-        1935 
-        8888 
-        8889
-        8890 
-      ];
-      allowedUDPPorts = [ 
-        6969 # tarkov
-        # mediamtx (hls, rtsp, webrtc, rtmp)
-        8554 
-        8000 
-        8001 
-        1935 
-        8888 
-        8889 
-        8890 
-        # ipsec
-        4500
-        500
-      ];
-      allowedUDPPortRanges = [ 
-        { from = 52000; to = 52100; } 
-        { from = 55000; to = 55100; } 
       ];
       extraCommands = ''
         iptables -A OUTPUT -m owner --gid-owner no-net -j REJECT
@@ -53,7 +26,16 @@
       ClientAliveCountMax 50
       LoginGraceTime 0 
     '';
-    settings.X11Forwarding = true;
+    settings = {
+      X11Forwarding = true;
+      Macs = [
+        "hmac-sha2-256"
+        "hmac-sha2-512"
+        "hmac-sha2-512-etm@openssh.com"
+        "hmac-sha2-256-etm@openssh.com"
+        "umac-128-etm@openssh.com" 
+      ];
+    };
     ports = [ 34812 ];
   };
 
