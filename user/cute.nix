@@ -36,6 +36,7 @@ in {
     misc.cloudsync
     misc.fitsync
     # Network
+    socat
     gost # gost -L redirect://:3333 -F socks5://192.168.150.2:3333 trans proxy (UDP doesn't work)
     wireproxy
     networkmanagerapplet

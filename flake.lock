@@ -1109,11 +1109,11 @@
     },
     "nixpkgs_9": {
       "locked": {
-        "lastModified": 1725432240,
-        "narHash": "sha256-+yj+xgsfZaErbfYM3T+QvEE2hU7UuE+Jf0fJCJ8uPS0=",
+        "lastModified": 1728018373,
+        "narHash": "sha256-NOiTvBbRLIOe5F6RbHaAh6++BNjsb149fGZd1T4+KBg=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "ad416d066ca1222956472ab7d0555a6946746a80",
+        "rev": "bc947f541ae55e999ffdb4013441347d83b00feb",
         "type": "github"
       },
       "original": {
@@ -1252,11 +1252,11 @@
         "nixpkgs": "nixpkgs_9"
       },
       "locked": {
-        "lastModified": 1725584408,
-        "narHash": "sha256-lwMbx0kxOyXtM4JZsFQyIXpILdNdG+xaMyvXa1bTURU=",
+        "lastModified": 1728219334,
+        "narHash": "sha256-GOxEgw8pf608il4N7YW2HqNPg0EH63/3V4Kh7YDGb1E=",
         "ref": "refs/heads/main",
-        "rev": "976ed854227e229b38ce0c6d5bc932939853d9a8",
-        "revCount": 19,
+        "rev": "315e9897f38f74f5f2818a20d0095b3f41bea9e8",
+        "revCount": 22,
         "type": "git",
         "url": "ssh://git@github.com/shwewo/secrets"
       },

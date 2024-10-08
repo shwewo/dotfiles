@@ -118,6 +118,9 @@ in {
             };
           };
         };
+        "terminal.integrated.localEchoEnabled" = "off";
+        "terminal.integrated.localEchoStyle" = "dim";
+        "remote.SSH.enableAgentForwarding" = false;
       };
     };
   

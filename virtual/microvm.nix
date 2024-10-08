@@ -23,7 +23,7 @@
   };
   
   systemd.services.gost-proxybox = {
-    enable = true;
+    enable = false;
     description = "gost";
     wantedBy = [ "multi-user.target" ];
     after = [ "pre-network.target" ];
