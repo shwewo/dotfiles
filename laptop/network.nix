@@ -7,12 +7,10 @@ in {
     (import "${self}/generics/proxy.nix" { 
       inherit pkgs lib inputs stable unstable;
       socksed = [
-        { name = "socks-v2ray-sweden";      script = "ss-local -c           ${config.age.secrets.socks_v2ray_sweden.path}";                           } # port 1080
-        { name = "socks-reality-sweden";    script = "sing-box run --config ${config.age.secrets.socks_reality_sweden.path}";                         } # port 2080
-        { name = "socks-reality-austria";   script = "sing-box run --config ${config.age.secrets.socks_reality_austria.path}";                        } # port 2081
+        { name = "socks-reality-sweden";    script = "sing-box run --config ${config.age.secrets.socks_reality_sweden.path}";                         } # port 2081
         { name = "socks-novpn";             script = "gost -L socks5://192.168.150.2:3535";                                                           } # port 3535
         { name = "socks-spoofdpi";          script = "${shwewo.spoofdpi}/bin/spoof-dpi -addr 192.168.150.2 -port 9999 -dns-addr 1.1.1.1 -debug true"; } # port 9999
-        # { name = "socks-warp";              script = "wireproxy -c /etc/wireproxy.conf";                                                              } # port 25344
+        { name = "socks-byedpi";            script = "${shwewo.byedpi}/bin/byedpi -p 10000  --disorder 1 --auto=torst --tlsrec 1+s";                                                          } # port 10000
       ];
     })
   ];
@@ -37,7 +35,7 @@ in {
   };
 
   services.tailscale.enable = true;
-  systemd.services.tailscaled.wants = [ "tailserve.service" ];
+  # systemd.services.tailscaled.wants = [ "tailserve.service" ];
   systemd.services.tailserve = {
     serviceConfig.Type = "oneshot";
     script = ''
@@ -61,6 +59,32 @@ in {
       done
     '';
     path = with pkgs; [ tailscale ];
+  };
+
+
+  systemd.services.yggdrasil.serviceConfig.NetworkNamespacePath = lib.mkForce "/run/netns/novpn_nsd";
+  services.yggdrasil = {
+    enable = false;
+    persistentKeys = true;
+      # The NixOS module will generate new keys and a new IPv6 address each time
+      # it is started if persistentKeys is not enabled.
+
+    settings = {
+      Peers = [
+        "tls://yggpeer.tilde.green:59454"
+        "tls://de-fsn-1.peer.v4.yggdrasil.chaz6.com:4444"
+        "tls://23.137.249.65:444"
+        "tcp://cowboy.supergay.network:9111"
+        # Yggdrasil will automatically connect and "peer" with other nodes it
+        # discovers via link-local multicast announcements. Unless this is the
+        # case (it probably isn't) a node needs peers within the existing
+        # network that it can tunnel to.
+        # "tcp://1.2.3.4:1024"
+        # "tcp://1.2.3.5:1024"
+        # Public peers can be found at
+        # https://github.com/yggdrasil-network/public-peers
+      ];
+    };
   };
 
   services.dnscrypt-proxy2 = {

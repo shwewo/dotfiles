@@ -10,7 +10,6 @@
     ./network.nix
     ./xserver.nix
     ./udev.nix
-    ./microvm.nix
     inputs.secrets.nixosModules.laptop
     inputs.microvm.nixosModules.host
   ];
