@@ -28,8 +28,8 @@
     };
 
     shwewo = {
-      #url = "github:shwewo/flake";
-      url = "/home/cute/dev/flake";
+      url = "github:shwewo/flake";
+      #url = "/home/cute/dev/flake";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "stable";
     };
@@ -53,6 +53,11 @@
       system = "x86_64-linux"; 
       specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 
       modules = [ ./laptop/system.nix ];
+    };
+    nixosConfigurations.twinkcentre = stable.lib.nixosSystem {
+      system = "x86_64-linux"; 
+      specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 
+      modules = [ ./twinkcentre/system.nix ];
     };
     nixosConfigurations.oracle-cloud = stable.lib.nixosSystem {
       system = "aarch64-linux"; 
