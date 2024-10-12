@@ -9,6 +9,16 @@
         server_name = inputs.secrets.hosts.twinkcentre.matrix;
         turn_uris = [ inputs.secrets.hosts.twinkcentre.coturn ];
         turn_secret = inputs.secrets.hosts.twinkcentre.coturn_secret;
+        proxy = {
+          by_domain = [{
+            url = "http://localhost:2080";
+            include = [ 
+              "catgirl.cloud" "*.catgirl.cloud" 
+              "matrix.org" "*.matrix.org" 
+            ];
+            exclude = [];
+          }];
+        };
       };
     };
   };

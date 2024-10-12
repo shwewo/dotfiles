@@ -6,10 +6,12 @@
     hostId = "5eaeb42b";
     useDHCP = lib.mkDefault true;
     iproute2.enable = true;
+    
     firewall = {
       enable = true;
       checkReversePath = "loose";
     };
+    
     networkmanager = {
       enable = true;
       settings = {
@@ -17,6 +19,25 @@
           "ipv4.dad-timeout" = 0; 
         }; 
       };
+    };
+
+    nftables = {
+      enable = true;
+      ruleset = ''
+        table inet yggdrasil-fw { 
+          chain input { 
+            type filter hook input priority 0; policy accept;
+            iifname "ygg0" jump ygg-chain 
+          } 
+          
+          chain ygg-chain { 
+            ct state established,related accept
+            icmp type echo-request accept
+            tcp dport 54921 accept
+            drop
+          }
+        }
+      '';
     };
   };
 
@@ -35,6 +56,23 @@
         "tls://srv.itrus.su:7992"
         # https://github.com/yggdrasil-network/public-peers
       ];
+      IfName = "ygg0";
+    };
+  };
+
+  systemd.services.sing-box = {
+    enable = true;
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = { 
+      Restart = "on-failure"; 
+      RestartSec = "15"; 
+      Type = "simple";
+      DynamicUser = "yes"; 
+      RuntimeMaxSec=3600;
+      ExecStart = "${pkgs.sing-box}/bin/sing-box run --config /etc/sing-box/config.json";
     };
   };
 
