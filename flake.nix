@@ -54,7 +54,7 @@
       specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 
       modules = [ ./laptop/system.nix ];
     };
-    nixosConfigurations.twinkcentre = stable.lib.nixosSystem {
+    nixosConfigurations.twinkcentre = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux"; 
       specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 
       modules = [ ./twinkcentre/system.nix ];
