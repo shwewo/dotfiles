@@ -173,7 +173,7 @@ in {
         --name yggdrasil_nsd \
         --fwmark 0x6e735432 \
         --table 28113 \
-        --program "gost -L socks5://192.168.150.2:3535"
+        --program "gost -L socks5://198.18.9.2:3535"
     '';
 
     path = with pkgs; [ gost ];
