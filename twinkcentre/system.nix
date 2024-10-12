@@ -4,6 +4,8 @@
   imports = [ 
     "${self}/generics/default.nix"
     ./hardware.nix
+    ./services.nix
+    ./network.nix
   ];
 
   time.timeZone = "Europe/Moscow";
@@ -28,7 +30,12 @@
     }
   ];
 
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    extraConfig = ''
+      LoginGraceTime 0
+    '';
+  };
 
   programs.nh = {
     enable = true;

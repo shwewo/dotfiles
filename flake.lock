@@ -1277,17 +1277,17 @@
         "tdesktop": "tdesktop"
       },
       "locked": {
-        "lastModified": 1728528262,
-        "narHash": "sha256-LSpzaSlkQd3n64ZceXk9yVa/5sJX9UbobJMfTWbMlZY=",
-        "ref": "refs/heads/main",
-        "rev": "b66bcbf26f3fc35f017329f9e894e8e93ffded38",
-        "revCount": 40,
-        "type": "git",
-        "url": "file:///home/cute/dev/flake"
+        "lastModified": 1728408724,
+        "narHash": "sha256-VCAZu/yMu5q4m8J8aWrGPkoyYm2JQF0KsA5vPxb8k4s=",
+        "owner": "shwewo",
+        "repo": "flake",
+        "rev": "3fb611058cd69bfbf703ac38a28b44bfe303c4f4",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/cute/dev/flake"
+        "owner": "shwewo",
+        "repo": "flake",
+        "type": "github"
       }
     },
     "spectrum": {
