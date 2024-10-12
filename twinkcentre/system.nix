@@ -4,8 +4,6 @@
   imports = [ 
     "${self}/generics/default.nix"
     ./hardware.nix
-    ./services.nix
-    ./network.nix
   ];
 
   time.timeZone = "Europe/Moscow";

@@ -1,7 +1,7 @@
 { pkgs, lib, inputs, config, self, USER, stable, unstable, ... }:
 
 {
-  networking = {
+  netowrking = {
     hostName = "twinkcentre";
     hostId = "5eaeb42b";
     useDHCP = lib.mkDefault true;
