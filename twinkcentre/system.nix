@@ -6,7 +6,9 @@
     ./hardware.nix
     ./services.nix
     ./network.nix
+    ./nginx.nix
     ./secureboot.nix
+    inputs.secrets.nixosModules.twinkcentre
   ];
 
   time.timeZone = "Europe/Moscow";
