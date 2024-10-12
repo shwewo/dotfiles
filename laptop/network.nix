@@ -15,19 +15,6 @@ in {
     })
   ];
 
-  # systemd.services.socks-usa = {
-  #   enable = true;
-  #   after = [ "tailscaled.service" ];
-  #   wants = [ "tailscaled.service" ];    
-  #   wantedBy = [ "multi-user.target" ];
-
-  #   script = ''
-  #     autossh -M 0 -N -o "ServerAliveInterval 10" -o "ServerAliveCountMax 3" -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -i /home/${USER}/.ssh/id_ed25519 -D 127.0.0.1:8888 cute@100.70.203.32
-  #   '';
-
-  #   path = with pkgs; [ autossh openssh ];
-  # };
-
   services.openssh = {
     enable = true;
     listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
@@ -64,24 +51,18 @@ in {
 
   systemd.services.yggdrasil.serviceConfig.NetworkNamespacePath = lib.mkForce "/run/netns/novpn_nsd";
   services.yggdrasil = {
-    enable = false;
+    enable = true;
     persistentKeys = true;
-      # The NixOS module will generate new keys and a new IPv6 address each time
-      # it is started if persistentKeys is not enabled.
-
     settings = {
       Peers = [
         "tls://yggpeer.tilde.green:59454"
         "tls://de-fsn-1.peer.v4.yggdrasil.chaz6.com:4444"
         "tls://23.137.249.65:444"
         "tcp://cowboy.supergay.network:9111"
-        # Yggdrasil will automatically connect and "peer" with other nodes it
-        # discovers via link-local multicast announcements. Unless this is the
-        # case (it probably isn't) a node needs peers within the existing
-        # network that it can tunnel to.
-        # "tcp://1.2.3.4:1024"
-        # "tcp://1.2.3.5:1024"
-        # Public peers can be found at
+        "quic://x-mow-0.sergeysedoy97.ru:65535"
+        "tcp://x-mow-0.sergeysedoy97.ru:65533"
+        "quic://srv.itrus.su:7993"
+        "tls://srv.itrus.su:7992"
         # https://github.com/yggdrasil-network/public-peers
       ];
     };

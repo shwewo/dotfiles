@@ -16,11 +16,12 @@
     agenix.url = "github:ryantm/agenix";
     impermanence.url = "github:nix-community/impermanence";
     nixos-shell.url = "github:Mic92/nixos-shell";
+    #yuzu-nixpkgs.url = "github:nixos/nixpkgs?rev=8debf2f9a63d54ae4f28994290437ba54c681c7b";
+
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    #yuzu-nixpkgs.url = "github:nixos/nixpkgs?rev=8debf2f9a63d54ae4f28994290437ba54c681c7b";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -36,6 +37,11 @@
 
     microvm = {
       url = "github:astro/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -74,10 +80,5 @@
       specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 
       modules = [ ./virtual/graphics.nix ];
     }; 
-    # nixosConfigurations.proxybox = nixpkgs.lib.nixosSystem {
-    #   system = "x86_64-linux"; 
-    #   specialArgs = specialArgs // { nixpkgs.config.allowUnfree = true; }; 
-    #   modules = [ ./virtual/proxybox.nix inputs.impermanence.nixosModules.impermanence ];
-    # };
   };
 }

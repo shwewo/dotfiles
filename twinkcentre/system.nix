@@ -1,4 +1,4 @@
-{ self, config, lib, pkgs, ... }:
+{ self, inputs, config, lib, pkgs, ... }:
 
 {
   imports = [ 
@@ -6,6 +6,7 @@
     ./hardware.nix
     ./services.nix
     ./network.nix
+    ./secureboot.nix
   ];
 
   time.timeZone = "Europe/Moscow";
@@ -30,12 +31,8 @@
     }
   ];
 
-  services.openssh = {
-    enable = true;
-    extraConfig = ''
-      LoginGraceTime 0
-    '';
-  };
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [];
 
   programs.nh = {
     enable = true;
