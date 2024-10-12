@@ -170,7 +170,7 @@ in {
       ${inputs.shwewo.packages.${pkgs.system}.namespaced}/bin/namespaced \
         --veth0-ip 198.18.9.1 \
         --veth1-ip 198.18.9.2 \
-        --name yggdrasil_nsd \
+        --name yggdrasil \
         --fwmark 0x6e735432 \
         --table 28113 \
         --program "gost -L socks5://198.18.9.2:3535"
