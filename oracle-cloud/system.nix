@@ -61,7 +61,7 @@
     package = inputs.conduwuit.packages.${pkgs.system}.default; 
     settings = {
       global = {
-        server_name = "matrix.nekolit.eu.org";
+        server_name = inputs.secrets.hosts.oracle-cloud.matrix;
         turn_uris = [ inputs.secrets.hosts.oracle-cloud.coturn ];
         turn_secret = inputs.secrets.hosts.oracle-cloud.coturn_secret;
       };

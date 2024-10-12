@@ -5,8 +5,8 @@
 ### Note: this configuration is shared "as is", and i highly discourage blindly copy-pasting from it
 
 ![laptop](https://github.com/shwewo/dotfiles/actions/workflows/laptop.yml/badge.svg)
+![twinkcentre](https://github.com/shwewo/dotfiles/actions/workflows/twinkcentre.yml/badge.svg)
 ![oracle-cloud](https://github.com/shwewo/dotfiles/actions/workflows/oracle-cloud.yml/badge.svg)
-
 ---
 
 ### General structure
