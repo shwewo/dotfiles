@@ -133,7 +133,7 @@ in {
   };
 
   systemd.services.yggdrasil.serviceConfig.NetworkNamespacePath = lib.mkForce "/run/netns/yggdrasil_nsd";
-  systemd.services.yggdrasil.bindsTo = lib.mkForce "yggdrasil-nsd.service";
+  systemd.services.yggdrasil.bindsTo = [ "yggdrasil-nsd.service" ];
   
   services.yggdrasil = {
     enable = true;
