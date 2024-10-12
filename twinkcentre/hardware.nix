@@ -31,12 +31,13 @@
         preLVM = true;
         allowDiscards = true;
       };
+      "cryptstorage" = {
+        device = "/dev/disk/by-uuid/1657901b-c168-4f5d-bf5c-70ed3f4b9a9e";
+        preLVM = true;
+        allowDiscards = true;
+      };
     };
   };
-
-  environment.etc.crypttab.text = ''
-    cryptstorage UUID=1657901b-c168-4f5d-bf5c-70ed3f4b9a9e /etc/luks-keys/samsung.key
-  '';
   
   fileSystems."/" =
     { device = "rpool/root";
@@ -51,6 +52,7 @@
   fileSystems."/home" =
     { device = "zpool/home";
       fsType = "zfs";
+      neededForBoot = true; # propagate agenix identities
     };
   
   fileSystems."/media" =
