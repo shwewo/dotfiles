@@ -1,6 +1,18 @@
 { pkgs, inputs, ... }:
 
 {
+  services.matrix-conduit = {
+    enable = true;
+    package = inputs.conduwuit.packages.${pkgs.system}.default; 
+    settings = {
+      global = {
+        server_name = inputs.secrets.hosts.twinkcentre.matrix;
+        turn_uris = [ inputs.secrets.hosts.twinkcentre.coturn ];
+        turn_secret = inputs.secrets.hosts.twinkcentre.coturn_secret;
+      };
+    };
+  };
+
   systemd.tmpfiles.rules = [
     "d /media/torrents 0775 qbit users"
   ];

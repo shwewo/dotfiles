@@ -47,5 +47,18 @@
     '';
   };
 
+  programs.mosh.enable = true;
+
+  services.cloudflared.enable = true;
+  services.cloudflared.tunnels = {
+    "unified" = {
+      default = "http_status:404";
+      credentialsFile = "${config.age.secrets.cloudflared.path}";
+    };
+  };
+  
+  systemd.services.cloudflared-tunnel-unified.serviceConfig.Restart = lib.mkForce "on-failure";
+  systemd.services.cloudflared-tunnel-unified.serviceConfig.RestartSec = lib.mkForce 60;
+
   systemd.services.NetworkManager-wait-online.enable = false;
 }
