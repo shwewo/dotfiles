@@ -189,7 +189,7 @@ in {
       Restart = "always";
       RestartSec = "15";
       Type = "simple";
-      ExecStart = "${pkgs.gost}/bin/gost -L=socks5://198.18.9.2:3535";
+      ExecStart = "${pkgs.gost}/bin/gost -L=socks5://192.168.84.2:3535";
       NetworkNamespacePath = "/run/netns/yggdrasil_nsd";
       DynamicUser = true;
     };
