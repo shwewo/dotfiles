@@ -191,7 +191,6 @@ in {
       Type = "simple";
       ExecStart = "${pkgs.gost}/bin/gost -L=socks5://198.18.9.2:3535";
       NetworkNamespacePath = "yggdrasil_nsd";
-      DynamicUser = true;
     };
   };
 }
