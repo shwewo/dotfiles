@@ -170,8 +170,8 @@ in {
 
     script = ''
       ${inputs.shwewo.packages.${pkgs.system}.namespaced}/bin/namespaced \
-        --veth0-ip 198.18.9.1 \
-        --veth1-ip 198.18.9.2 \
+        --veth0-ip 192.168.84.1 \
+        --veth1-ip 192.168.84.2 \
         --name yggdrasil \
         --fwmark 0x6e735432 \
         --table 28113
