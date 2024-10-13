@@ -53,6 +53,8 @@ in {
     };
   };
 
+  systemd.services.NetworkManager-wait-online.enable = false;
+
   services.openssh = {
     enable = true;
     listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
@@ -157,7 +159,7 @@ in {
     enable = true;
     description = "yggdrasil namespace";
     after = [ "network-online.target" ];
-    wants = [ "network-online.target" "yggdrasil.service" ];
+    wants = [ "network-online.target" "yggdrasil.service" "yggdrasil-forward.service" ];
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
@@ -172,12 +174,24 @@ in {
         --veth1-ip 198.18.9.2 \
         --name yggdrasil \
         --fwmark 0x6e735432 \
-        --table 28113 \
-        --program "gost -L socks5://198.18.9.2:3535"
+        --table 28113
     '';
-
-    path = with pkgs; [ gost ];
   };
-  
-  systemd.services.NetworkManager-wait-online.enable = false;
+
+  systemd.services.yggdrasil-forward = {
+    enable = true;
+    description = "yggdrasil forward";
+    after = [ "network-online.target" ];
+    wants = [ "yggdrasil-nsd.service" ];
+    bindsTo = [ "yggdrasil-nsd.service" ];
+
+    serviceConfig = {
+      Restart = "always";
+      RestartSec = "15";
+      Type = "simple";
+      ExecStart = "gost -L=socks5://198.18.9.2:3535";
+      NetworkNamespacePath = "yggdrasil_nsd";
+      DynamicUser = true;
+    };
+  };
 }
