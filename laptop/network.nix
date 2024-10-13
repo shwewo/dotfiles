@@ -181,8 +181,8 @@ in {
   systemd.services.yggdrasil-forward = {
     enable = true;
     description = "yggdrasil forward";
-    after = [ "network-online.target" ];
-    wants = [ "yggdrasil-nsd.service" ];
+    after = [ "yggdrasil-nsd.service" "network-online.target" ];
+    wants = [ "yggdrasil-nsd.service" "network-online.target" ];
     bindsTo = [ "yggdrasil-nsd.service" ];
 
     serviceConfig = {
