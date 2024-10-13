@@ -1471,11 +1471,11 @@
         "tdesktop": "tdesktop"
       },
       "locked": {
-        "lastModified": 1728778179,
-        "narHash": "sha256-Uol1+1nz2XRecZroroXsBUsnXXNyJ9Dn9DTwhVEXCdM=",
+        "lastModified": 1728781687,
+        "narHash": "sha256-/Jay8V/C3NszKQTBhm9KHpK+Dt9iANskk+OBGQE6Bqw=",
         "owner": "shwewo",
         "repo": "flake",
-        "rev": "fa843b28a8e6e10652b6ec9fa0fc78fba659df69",
+        "rev": "a4cd3666688622ca4bcf0354c172b14b756ada82",
         "type": "github"
       },
       "original": {
