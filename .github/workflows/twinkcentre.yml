@@ -10,5 +10,5 @@ jobs:
     - uses: cachix/install-nix-action@v25
     - uses: webfactory/ssh-agent@v0.9.0
       with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KE }}
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
     - run: nix build .#nixosConfigurations.twinkcentre.config.system.build.toplevel --dry-run
