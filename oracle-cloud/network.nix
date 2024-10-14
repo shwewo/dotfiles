@@ -6,7 +6,7 @@
     hostName = "oracle-cloud";
     nat.enable = true;
     nat.externalInterface = "enp0s3";
-    nameservers = [ "1.1.1.1" "1.1.0.1" ];
+    nameservers = [ "1.1.1.1" "1.0.0.1" ];
     firewall = {
       enable = true;
       allowedTCPPorts = [ 

@@ -6,8 +6,8 @@
     ./hardware.nix
     ./services.nix
     ./network.nix
-    ./nginx.nix
     ./secureboot.nix
+    ./nginx.nix
     inputs.secrets.nixosModules.twinkcentre
   ];
 
@@ -18,9 +18,13 @@
       enable = true;
       dockerCompat = true;
     };
+    libvirtd = {
+      enable = true;
+    };
     spiceUSBRedirection.enable = true;
-    libvirtd.enable = true;
   };
+
+  hardware.graphics.enable = true;
 
   programs.dconf.profiles.user.databases = [
     {
@@ -32,6 +36,8 @@
       };
     }
   ];
+
+  services.udev.packages = with pkgs; [ android-udev-rules ];
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [];

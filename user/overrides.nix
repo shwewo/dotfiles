@@ -7,9 +7,9 @@
     ];
   };
 
-  vesktop = unstable.vesktop.override { electron = pkgs.electron; withSystemVencord = false; };
+  vesktop = pkgs.vesktop.override { electron = pkgs.electron; withSystemVencord = false; };
   lnxrouter = unstable.linux-router.override { useHaveged = true; };
-  obsidian = unstable.obsidian.override { electron = stable.electron; };
+  obsidian = pkgs.obsidian.override { electron = stable.electron; };
   
   kitty_wrapped = pkgs.writeScriptBin "kitty_wrapped" ''
     #!/usr/bin/env bash

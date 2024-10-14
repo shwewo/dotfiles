@@ -5,8 +5,8 @@ let
       inherit (attrs) name;
       value = {
         enable = true;
-        after = [ "novpn.service" "network-online.target" ];
-        wants = [ "novpn.service" "network-online.target" ];
+        after = [ "novpn.service" "network-online.target" "run-netns-novpn_nsd.mount" ];
+        wants = [ "novpn.service" "network-online.target" "run-netns-novpn_nsd.mount" ];
         bindsTo = [ "novpn.service" ];
 
         serviceConfig = { 

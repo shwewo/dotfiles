@@ -135,6 +135,8 @@ in {
   };
 
   systemd.services.yggdrasil.serviceConfig.NetworkNamespacePath = lib.mkForce "/run/netns/yggdrasil_nsd";
+  systemd.services.yggdrasil.after = [ "yggdrasil-nsd.service" "run-netns-yggdrasil_nsd.mount" ];
+  systemd.services.yggdrasil.wants = [ "yggdrasil-nsd.service" "run-netns-yggdrasil_nsd.mount" ];
   systemd.services.yggdrasil.bindsTo = [ "yggdrasil-nsd.service" ];
   
   services.yggdrasil = {
@@ -181,8 +183,8 @@ in {
   systemd.services.yggdrasil-forward = {
     enable = true;
     description = "yggdrasil forward";
-    after = [ "yggdrasil-nsd.service" "network-online.target" ];
-    wants = [ "yggdrasil-nsd.service" "network-online.target" ];
+    after = [ "yggdrasil-nsd.service" "run-netns-yggdrasil_nsd.mount" ];
+    wants = [ "yggdrasil-nsd.service" "run-netns-yggdrasil_nsd.mount" ];
     bindsTo = [ "yggdrasil-nsd.service" ];
 
     serviceConfig = {

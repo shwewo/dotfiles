@@ -55,14 +55,20 @@
       neededForBoot = true; # propagate agenix identities
     };
   
-  fileSystems."/media" =
-    { device = "zpool/media";
+  fileSystems."/virt" =
+    { device = "zpool/virt";
       fsType = "zfs";
     };
 
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/9013-F29F";
       fsType = "vfat";
+    };
+
+  fileSystems."/media/toshiba" =
+    { device = "/dev/disk/by-uuid/855811ed-865d-4c94-b441-0acf9c594991";
+      fsType = "ext4";
+      options = [ "nofail"  ];
     };
 
   zramSwap.enable = true;
