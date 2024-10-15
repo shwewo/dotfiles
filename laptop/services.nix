@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, unstable, ... }:
 
 {
   systemd.tmpfiles.rules = [
@@ -16,29 +16,17 @@
     gid = 10000;
   }; 
 
-  system.activationScripts."qbitnoxwebui" = ''
-    if [ ! -d "/var/lib/qbit" ]; then
-      mkdir -p /var/lib/qbit
-      chown qbit:qbit /var/lib/qbit
-    fi
-
-    if [ ! -d "/var/lib/qbit/qbittorrent-webui-cjratliff.com" ]; then
-      ${pkgs.git}/bin/git clone https://github.com/Carve/qbittorrent-webui-cjratliff.com /var/lib/qbit/qbittorrent-webui-cjratliff.com
-    fi
-  '';
-
   systemd.services.qbitnox = {
     enable = true;
-    after = [ "novpn.service" "network-online.target" ];
-    wants = [ "novpn.service" "network-online.target" ];
-    bindsTo = [ "novpn.service" ];
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
       Restart = "always";
       RuntimeMaxSec = 86400;
       User = "qbit";
       Group = "qbit";
-      NetworkNamespacePath = "/run/netns/novpn_nsd";
       PrivateTmp = false;
       PrivateNetwork = false;
       RemoveIPC = true;
@@ -66,10 +54,8 @@
       SystemCallFilter = [ "@system-service" ];
     };
 
-    script = "${pkgs.qbittorrent-nox}/bin/qbittorrent-nox";
+    script = "${unstable.qbittorrent-nox}/bin/qbittorrent-nox";
   };
-
-  systemd.services.novpn.wants = [ "qbitnox.service" ];
 
   services.minidlna = {
     enable = true;

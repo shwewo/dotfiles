@@ -1446,11 +1446,11 @@
         "nixpkgs": "nixpkgs_9"
       },
       "locked": {
-        "lastModified": 1728939224,
-        "narHash": "sha256-u+UWCle4ky/qE7pVGP3sE32CfY9Zh0xDe7kKt0E/xGs=",
+        "lastModified": 1728990065,
+        "narHash": "sha256-E4RB64C3Ktc5chvkjOwfaSrR+bTv10rKz9F4NHYTjn0=",
         "ref": "refs/heads/main",
-        "rev": "1105d60daf8b9bd5c023776e53b10b09deb9a312",
-        "revCount": 27,
+        "rev": "9f9afd1f52dbf3a9d513f309a3c0194de6ae610a",
+        "revCount": 30,
         "type": "git",
         "url": "ssh://git@github.com/shwewo/secrets"
       },
@@ -1471,11 +1471,11 @@
         "tdesktop": "tdesktop"
       },
       "locked": {
-        "lastModified": 1728848913,
-        "narHash": "sha256-Qs0TsP904QL2pWznyEl+0lhi8S/bbztagMHg2lY4grk=",
+        "lastModified": 1728989326,
+        "narHash": "sha256-jNtB/+bJBdumsH1lgGDJLxGMRaMXSg6lFRmjy886eSw=",
         "owner": "shwewo",
         "repo": "flake",
-        "rev": "13edc6076d32861e53dea5897c84485c8a90d1a0",
+        "rev": "68fa3db15afdf9024bf3f83e2a0505d24174f8f5",
         "type": "github"
       },
       "original": {

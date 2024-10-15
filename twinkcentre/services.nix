@@ -119,12 +119,19 @@
     enable = true;
     globalConfig.scrape_interval = "10s"; # "1m"
 
-    scrapeConfigs = [{
-      job_name = "node";
-      static_configs = [{
-        targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ];
-      }];
-    }];
+    scrapeConfigs = [
+      {
+        job_name = "node";
+        static_configs = [{
+          targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ];
+        }];
+      } {
+        job_name = "zfs";
+        static_configs = [{
+          targets = [ "localhost:${toString config.services.prometheus.exporters.zfs.port}" ];
+        }];
+      }
+    ];
 
     exporters.node = {
       enable = true;
@@ -133,6 +140,11 @@
       enabledCollectors = [ "systemd" ];
       # /nix/store/zgsw0yx18v10xa58psanfabmg95nl2bb-node_exporter-1.8.1/bin/node_exporter  --help
       extraFlags = [ "--collector.ethtool" "--collector.softirqs" "--collector.tcpstat" ];
+    };
+    
+    exporters.zfs = {
+      enable = true;
+      port = 9001;
     };
   };
 
@@ -149,6 +161,21 @@
         # Grafana needs to know on which domain and URL it's running
         domain = "${inputs.secrets.hosts.twinkcentre.grafana}";
       };
+    };
+  };
+
+  systemd.services.grafana-to-ntfy = {
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = { 
+      Restart = "on-failure"; 
+      RestartSec = "15"; 
+      Type = "simple";
+      DynamicUser = "yes";
+      EnvironmentFile = "${config.age.secrets.grafana-to-ntfy.path}"; 
+      ExecStart = "${inputs.shwewo.packages.${pkgs.system}.grafana-to-ntfy}/bin/grafana-to-ntfy";
     };
   };
 }

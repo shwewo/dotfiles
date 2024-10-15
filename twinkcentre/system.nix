@@ -38,6 +38,9 @@
   ];
 
   services.udev.packages = with pkgs; [ android-udev-rules ];
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="input", ATTRS{name}=="PC Speaker", ENV{DEVNAME}!="", TAG+="uaccess"
+  '';
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [];

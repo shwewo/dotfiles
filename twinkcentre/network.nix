@@ -56,6 +56,44 @@
     };
   };
 
+  services.openssh = {
+    enable = true;
+    ports = [ 54921 ];
+    settings.PasswordAuthentication = false;
+    extraConfig = ''
+      LoginGraceTime 0
+    '';
+  };
+
+  programs.mosh.enable = true;
+
+  services.cloudflared.enable = true;
+  services.cloudflared.tunnels = {
+    "unified" = {
+      default = "http_status:404";
+      credentialsFile = "${config.age.secrets.cloudflared.path}";
+    };
+  };
+  
+  systemd.services.cloudflared-tunnel-unified.serviceConfig.Restart = lib.mkForce "on-failure";
+  systemd.services.cloudflared-tunnel-unified.serviceConfig.RestartSec = lib.mkForce 10;
+
+  systemd.services.NetworkManager-wait-online.enable = false;
+
+  systemd.services.wireproxy = {
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = { 
+      Restart = "on-failure"; 
+      RestartSec = "15"; 
+      Type = "simple";
+      DynamicUser = "yes"; 
+      ExecStart = "${pkgs.wireproxy}/bin/wireproxy -c /etc/wireguard/wg0.conf";
+    };
+  };
+
   services.yggdrasil = {
     enable = true;
     persistentKeys = true;
@@ -165,28 +203,4 @@
       ${pkgs.linux-router}/bin/lnxrouter -g 192.168.10.1 --country RU --ap wlp2s0 twcnt -p ${inputs.secrets.hosts.twinkcentre.network.lnxrouter.wifi_password} --wifi4 --wifi5 --freq-band 5 --no-virt --random-mac
     '';
   };
-
-  services.openssh = {
-    enable = true;
-    ports = [ 54921 ];
-    settings.PasswordAuthentication = false;
-    extraConfig = ''
-      LoginGraceTime 0
-    '';
-  };
-
-  programs.mosh.enable = true;
-
-  services.cloudflared.enable = true;
-  services.cloudflared.tunnels = {
-    "unified" = {
-      default = "http_status:404";
-      credentialsFile = "${config.age.secrets.cloudflared.path}";
-    };
-  };
-  
-  systemd.services.cloudflared-tunnel-unified.serviceConfig.Restart = lib.mkForce "on-failure";
-  systemd.services.cloudflared-tunnel-unified.serviceConfig.RestartSec = lib.mkForce 10;
-
-  systemd.services.NetworkManager-wait-online.enable = false;
 }
