@@ -178,4 +178,23 @@
       ExecStart = "${inputs.shwewo.packages.${pkgs.system}.grafana-to-ntfy}/bin/grafana-to-ntfy";
     };
   };
+
+  services.forgejo = {
+    enable = true;
+    database.type = "postgres";
+    lfs.enable = true;
+    settings = {
+      server = {
+        DOMAIN = "${inputs.secrets.hosts.twinkcentre.forgejo}";
+        ROOT_URL = "https://${inputs.secrets.hosts.twinkcentre.forgejo}/"; 
+        HTTP_PORT = 3050;
+      };
+      service.DISABLE_REGISTRATION = true; 
+      services.DISABLE_SSH = true;
+      actions = {
+        ENABLED = true;
+        DEFAULT_ACTIONS_URL = "github";
+      };
+    };
+  };
 }

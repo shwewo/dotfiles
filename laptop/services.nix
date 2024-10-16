@@ -18,8 +18,9 @@
 
   systemd.services.qbitnox = {
     enable = true;
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
+    after = [ "network-online.target" "novpn.service" ];
+    wants = [ "network-online.target" "novpn.service" ];
+    bindsTo = [ "novpn.service" ];
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
@@ -52,10 +53,13 @@
       SystemCallArchitectures = "native";
       CapabilityBoundingSet = "";
       SystemCallFilter = [ "@system-service" ];
+      NetworkNamespacePath = "/var/run/netns/novpn_nsd";
     };
 
     script = "${unstable.qbittorrent-nox}/bin/qbittorrent-nox";
   };
+
+  systemd.services.novpn.wants = [ "qbitnox.service" ];
 
   services.minidlna = {
     enable = true;
@@ -65,7 +69,6 @@
       media_dir = [
       "V,/media/torrents" #Videos files are located here
       ];
-      inotify = "yes";
       log_level = "error";
     };
   };
@@ -94,27 +97,4 @@
       done 
     '';
   };
-  
-  #services.ttyd.enable = false;
-  #services.ttyd.writeable = false;
-  # systemd.services.ttyd.script = lib.mkForce ''
-  #   ${pkgs.ttyd}/bin/ttyd \
-  #     --port 7681 \
-  #     --interface lo \
-  #     --client-option enableZmodem=true \
-  #     --client-option enableSixel=true \
-  #     --client-option 'theme={"background": "#171717", "black": "#3F3F3F", "red": "#705050", "green": "#60B48A", "yellow": "#DFAF8F", "blue": "#9AB8D7", "magenta": "#DC8CC3", "cyan": "#8CD0D3", "white": "#DCDCCC", "brightBlack": "#709080", "brightRed": "#DCA3A3", "brightGreen": "#72D5A3", "brightYellow": "#F0DFAF", "brightBlue": "#94BFF3", "brightMagenta": "#EC93D3", "brightCyan": "#93E0E3", "brightWhite": "#FFFFFF"}' \
-  #     ${pkgs.shadow}/bin/login
-  # '';
-
-  #services.cloudflared.enable = false;
-  #services.cloudflared.tunnels = {
-  #   "unified" = {
-  #     default = "http_status:404";
-  #     credentialsFile = "${config.age.secrets.cloudflared.path}";
-  #   };
-  # };
-  
-  # systemd.services.cloudflared-tunnel-unified.serviceConfig.Restart = lib.mkForce "on-failure";
-  # systemd.services.cloudflared-tunnel-unified.serviceConfig.RestartSec = lib.mkForce 60;
 }

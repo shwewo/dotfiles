@@ -86,7 +86,7 @@
   tor-browser = let
     bin = pkgs.writeScriptBin "tor-browser" ''
       #!/usr/bin/env bash
-      ${pkgs.tor-browser}/bin/tor-browser --name tor-browser --class tor-browser $@
+      ${unstable.tor-browser}/bin/tor-browser --name tor-browser --class tor-browser $@
     '';
   in pkgs.stdenv.mkDerivation {
     name = "tor-browser";
@@ -94,7 +94,7 @@
     installPhase = ''
       mkdir -p $out/bin $out/share
       cp ${bin}/bin/tor-browser $out/bin/
-      ln -s ${pkgs.tor-browser}/share/icons $out/share/icons
+      ln -s ${unstable.tor-browser}/share/icons $out/share/icons
       copyDesktopItems
     '';
     phases = [ "installPhase" ];

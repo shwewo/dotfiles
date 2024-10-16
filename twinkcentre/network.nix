@@ -65,6 +65,7 @@
     '';
   };
 
+  users.users.root.openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ9blPuLoJkCfTl88JKpqnSUmybCm7ci5EgWAUvfEmwb" ];
   programs.mosh.enable = true;
 
   services.cloudflared.enable = true;
@@ -139,7 +140,7 @@
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
-
+  
     serviceConfig = {
       Restart = "on-failure";
       RestartSec = "15";
@@ -154,12 +155,19 @@
         --veth0-ip 10.42.0.4 \
         --fwmark 0x6e706423 \
         --table 28105 \
-        --nokill
+        --nokill \
+        --dontcreate
+    '';
+
+    preStart = ''
+      ${pkgs.iproute2}/bin/ip netns add hotspot_nsd
     '';
 
     postStart = ''
-      while ! ${pkgs.iproute2}/bin/ip netns list | ${pkgs.gnugrep}/bin/grep -q "hotspot_nsd"; do ${pkgs.coreutils}/bin/sleep 1; done; ${pkgs.iw}/bin/iw phy phy0 set netns name hotspot_nsd
+      while [ ! -e /var/run/netns/hotspot_nsd ]; do sleep 1; done
+      ${pkgs.iw}/bin/iw phy phy0 set netns name hotspot_nsd
     '';
+
     preStop = ''
       ${pkgs.iproute2}/bin/ip netns exec hotspot_nsd ${pkgs.iw}/bin/iw phy phy0 set netns 1
     '';
@@ -172,6 +180,7 @@
     bindsTo = [ "lnxrouter-nsd.service" ];
     wantedBy = [ "lnxrouter-nsd.service" ];
 
+    unitConfig.ConditionPathExists = "/var/run/netns/hotspot_nsd";
     serviceConfig = {
       Restart = "on-failure"; 
       RestartSec = "15"; 

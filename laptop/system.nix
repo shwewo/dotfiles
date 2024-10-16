@@ -9,9 +9,7 @@
     ./persistent.nix
     ./network.nix
     ./xserver.nix
-    ./udev.nix
     inputs.secrets.nixosModules.laptop
-    inputs.microvm.nixosModules.host
   ];
   
   system.stateVersion = "23.11";
@@ -25,9 +23,6 @@
       enable = true;
       dockerCompat = true;
     };
-    # lxd = {
-    #   enable = true;
-    # };
     spiceUSBRedirection.enable = true;
     libvirtd.enable = true;
   };
@@ -57,12 +52,9 @@
   services.pcscd.enable = true; # yubikey
 
   environment.systemPackages = with pkgs; [
-    wl-clipboard
     virtiofsd # for qemu
     linuxPackages.usbip
     fuse-overlayfs
-    (unstable.linux-router.override { useHaveged = true; }) # sudo lnxrouter -g 10.0.0.1 -o enp3s0f3u1u4 --country RU --ap wlp1s0 <ssid> -p <password> --freq-band <band> 
-    inputs.shwewo.packages.${pkgs.system}.namespaced
   ];
 
   programs.nh = {
@@ -70,4 +62,16 @@
     clean.enable = true;
     clean.extraArgs = "--keep-since 4d --keep 3";
   };
+
+  services.udev.packages = with pkgs; [ yubikey-personalization android-udev-rules ];
+  services.udev.extraRules = ''
+    # USB-Blaster
+    SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6001", MODE="0666", GROUP="plugdev"
+    SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6002", MODE="0666", GROUP="plugdev"
+    SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6003", MODE="0666", GROUP="plugdev"
+
+    # USB-Blaster II
+    SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6010", MODE="0666", GROUP="plugdev"
+    SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6810", MODE="0666", GROUP="plugdev"
+  '';
 }
