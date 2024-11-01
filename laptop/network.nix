@@ -12,10 +12,10 @@ in {
     (import "${self}/generics/proxy.nix" { 
       inherit pkgs lib inputs stable unstable;
       socksed = [
-        { name = "socks-reality-sweden";    script = "sing-box run --config ${config.age.secrets.socks_reality_sweden.path}";     } # port 2081
-        { name = "socks-novpn";             script = "gost -L socks5://192.168.150.2:3535";                                       } # port 3535
-        { name = "socks-spoofdpi";          script = "spoof-dpi -addr 192.168.150.2 -port 9999 -dns-addr 1.1.1.1 -debug true";    } # port 9999
-        { name = "yggstack";                script = "yggstack -useconffile /etc/yggdrasil/yggdrasil.conf -socks 127.0.0.1:5050"; } # port 5050
+        { name = "socks-reality-sweden";    script = "sing-box run --config ${config.age.secrets.socks_reality_sweden.path}";                                                              } # port 2081
+        { name = "socks-novpn";             script = "gost -L socks5://192.168.150.2:3535";                                                                                                } # port 3535
+        { name = "socks-spoofdpi";          script = "spoof-dpi -addr 192.168.150.2 -port 9999 -dns-addr 1.1.1.1 -debug true";                                                             } # port 9999
+        { name = "yggstack";                script = "yggstack -useconffile /etc/yggdrasil/yggdrasil.conf -socks 127.0.0.1:5050 -local-tcp 127.0.0.1:3333:[324:71e:281a:9ed3::fa11]:1080"; } # port 5050, clearnet 3333
       ];
     })
   ];
@@ -39,8 +39,6 @@ in {
     firewall = {
       enable = true;
       allowedTCPPorts = [
-        # qbittorrent
-        4780 
         # audiorelay
         59100
         # localsend
@@ -123,6 +121,9 @@ in {
 
     preStart = ''
       ${pkgs.iproute2}/bin/ip netns add novpn_nsd
+    '';
+    postStop = ''
+      ${pkgs.iproute2}/bin/ip netns del novpn_nsd 
     '';
   };
 }

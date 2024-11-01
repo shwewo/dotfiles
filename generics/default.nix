@@ -96,6 +96,7 @@
     micro
     git
     lua5_4
+    python3
     # Fish shell
     stable.any-nix-shell
     fd

@@ -21,7 +21,7 @@
         "/var/lib/cups"
         "/etc/NetworkManager/system-connections"
         "/etc/ssh"
-        { directory = "/etc/yggdrasil"; user = "socks"; group = "socks"; mode = "u=rwx,g=rwx,o="; }
+        { directory = "/etc/yggdrasil"; user = "socks"; group = "socks"; mode = "0700"; }
         { directory = "/var/lib/colord"; user = "colord"; group = "colord"; mode = "u=rwx,g=rx,o="; }
       ];
       files = [

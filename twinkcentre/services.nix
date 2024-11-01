@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, unstable, config, ... }:
+{ pkgs, lib, inputs, stable, unstable, config, ... }:
 
 {
   services.matrix-conduit = {
@@ -25,6 +25,29 @@
 
   systemd.services.conduit.after = lib.mkForce [ "network-online.target" ];
   systemd.services.conduit.wants = lib.mkForce [ "network-online.target" ];
+
+  # services.matrix-appservice-irc = {
+  #   enable = true;
+  #   registrationUrl = "http://localhost:8009";
+  #   settings = {
+  #     homeserver = {
+  #       url = "http://localhost:6167";
+  #       domain = "localhost:6167";
+  #     };
+  #     ircService = {
+  #       servers = {
+  #         "irc.esper.net" = {
+  #           name = "espernet";
+  #           port = 6697;
+  #           ssl = true;
+  #           dynamicChannels.enabled = true;
+  #           dynamicChannels.aliasTemplate = "#irc_$CHANNEL";
+  #           ircClients.nickTemplate = "$DISPLAY";
+  #         };
+  #       };
+  #     };
+  #   };
+  # };
 
   users.users.qbit = {
     group = "qbit";
@@ -154,11 +177,8 @@
     enable = true;
     settings = {
       server = {
-        # Listening Address
         http_addr = "127.0.0.1";
-        # and Port
         http_port = 3000;
-        # Grafana needs to know on which domain and URL it's running
         domain = "${inputs.secrets.hosts.twinkcentre.grafana}";
       };
     };
@@ -197,4 +217,104 @@
       };
     };
   };
+
+  services.scrutiny = {
+    enable = true;
+    influxdb.enable = true;
+    settings = {
+      web = {
+        listen.host = "127.0.0.1";
+        listen.port = 3100;
+      };
+      notify = {
+        urls = [ "ntfy://ntfy.sh:443/${inputs.secrets.hosts.twinkcentre.ntfy_topic}" ];
+      };
+    };
+    collector = {
+      enable = true;
+    };
+  };
+
+  users.users.compress = {
+    group = "compress";
+    isSystemUser = true;
+    createHome = true;
+    home = "/data/compress";
+  };
+
+  users.groups.compress = {
+    gid = 10050;
+  };
+
+  systemd.services.compress = {
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = { 
+      Restart = "on-failure"; 
+      RestartSec = "15";
+      User = "compress";
+      Group = "compress";
+      Type = "simple";
+      Environment = "PORT=5100 UPLOADS_DIR=/data/compress/uploads FFMPEG_PATH=${pkgs.ffmpeg}/bin/ffmpeg FFPROBE_PATH=${pkgs.ffmpeg}/bin/ffprobe";
+      EnvironmentFile = "${config.age.secrets.compress.path}";
+      ExecStart = "${inputs.compress.packages.${pkgs.system}.default}/bin/compress";
+      PrivateTmp = true;
+      RemoveIPC = true;
+      NoNewPrivileges = true;
+      PrivateDevices = true;
+      PrivateUsers = true;
+      ProtectHome = "yes";
+      ProtectProc = "invisible";
+      ProcSubset = "pid";
+      ProtectSystem = "full";
+      ProtectClock = true;
+      ProtectHostname = true;
+      ProtectKernelLogs = true;
+      ProtectKernelModules = true;
+      ProtectKernelTunables = true;
+      ProtectControlGroups = true;
+      RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_NETLINK" ];
+      RestrictNamespaces = true;
+      RestrictRealtime = true;
+      RestrictSUIDSGID = true;
+      LockPersonality = true;
+      SystemCallArchitectures = "native";
+    };
+  };
+
+  # services.guacamole-server = {
+  #   enable = true;
+  #   package = inputs.nixpkgs2311.legacyPackages.${pkgs.system}.guacamole-server;
+  #   userMappingXml = pkgs.writeText "guacamoleusermappingxml" ''
+  #     <?xml version="1.0" encoding="UTF-8"?>
+  #     <user-mapping>
+  #         <authorize
+  #             username="guacamole"
+  #             password="${inputs.secrets.hosts.twinkcentre.guacamole-password}"
+  #             encoding="sha256">
+
+  #           <connection name="win10-ltsc">
+  #               <protocol>rdp</protocol>
+  #               <param name="hostname">192.168.122.100</param>
+  #               <param name="port">3389</param>
+  #               <param name="ignore-cert">true</param>
+  #               <param name="enable-drive">true</param>
+  #               <param name="drive-path">/var/private/guacamole</param>
+  #           </connection>
+  #         </authorize>
+  #     </user-mapping>
+  #   '';
+  # };
+
+  # services.guacamole-client = {
+  #   enable = true;
+  #   package = inputs.nixpkgs2311.legacyPackages.${pkgs.system}.guacamole-client;
+  #   enableWebserver = true;
+  #   settings = {
+  #     guacd-port = 4822;
+  #     guacd-hostname = "127.0.0.1";
+  #   };
+  # };
 }

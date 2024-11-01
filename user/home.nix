@@ -190,6 +190,7 @@ in {
         subs-with-matching-audio = "yes";
         save-position-on-quit = "yes";
         wayland-disable-vsync = "yes";
+        volume-max = "1000";
       };
       scripts = with pkgs; [ 
         mpvScripts.autoload

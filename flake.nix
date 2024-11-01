@@ -7,8 +7,6 @@
     stable.url = "github:nixos/nixpkgs/nixos-24.05";
     unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     staging.url = "github:nixos/nixpkgs/staging-next";
-    nixpkgs2105.url = "github:nixos/nixpkgs/nixos-21.05";
-    nixpkgs2305.url = "github:nixos/nixpkgs/nixos-23.05";
 
     conduwuit.url = "github:girlbossceo/conduwuit";
     tdesktop.url = "github:shwewo/telegram-desktop-patched";
@@ -16,6 +14,7 @@
     agenix.url = "github:ryantm/agenix";
     impermanence.url = "github:nix-community/impermanence";
     nixos-shell.url = "github:Mic92/nixos-shell";
+    compress.url = "github:shwewo/compress";
     #yuzu-nixpkgs.url = "github:nixos/nixpkgs?rev=8debf2f9a63d54ae4f28994290437ba54c681c7b";
 
     spicetify-nix = {
@@ -34,7 +33,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "stable";
     };
-    
+
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.4.1";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -8,8 +8,9 @@
   boot = {
     loader.efi.canTouchEfiVariables = true;
     loader.efi.efiSysMountPoint = "/boot";
+    kernelParams = [ ];
     initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
-    initrd.kernelModules = [ ];
+    initrd.kernelModules = [];
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
     tmp.cleanOnBoot = true;
@@ -57,6 +58,11 @@
   
   fileSystems."/virt" =
     { device = "zpool/virt";
+      fsType = "zfs";
+    };
+  
+  fileSystems."/data" =
+    { device = "zpool/data";
       fsType = "zfs";
     };
 
