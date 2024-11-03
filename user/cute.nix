@@ -105,7 +105,7 @@ in {
     # openjdk11
     zulu11 # java
     noto-fonts
-    noto-fonts-cjk
+    noto-fonts-cjk-sans
     noto-fonts-emoji
     jq # needed for kitty
   ]);

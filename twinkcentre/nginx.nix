@@ -3,6 +3,7 @@
 {
   systemd.tmpfiles.rules = [
     "d /var/www/internal 550 nginx nginx"
+    "d /var/www/private 740 cute nginx"
     "d /var/www/html 774 nginx users"
   ];
 
@@ -29,6 +30,16 @@
     '';
     locations."/".extraConfig = ''
       root /var/www/filebrowser;
+    '';
+  };
+
+  services.nginx.virtualHosts."private" = {
+    forceSSL = false;
+    listen = [{port = 8085;  addr="127.0.0.1"; ssl=false;}];
+    root = "/var/www/private";
+    locations."/".extraConfig = ''
+      try_files $uri $uri/ =404;
+      autoindex off;
     '';
   };
 

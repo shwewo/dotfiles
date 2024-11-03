@@ -284,6 +284,15 @@
     };
   };
 
+  services.immich = {
+    enable = true;
+    mediaLocation = "/data/immich";
+  };
+
+  systemd.tmpfiles.rules = [
+    "d /data/immich 770 immich immich"
+  ];
+
   # services.guacamole-server = {
   #   enable = true;
   #   package = inputs.nixpkgs2311.legacyPackages.${pkgs.system}.guacamole-server;

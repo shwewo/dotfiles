@@ -11,6 +11,16 @@
     inputs.secrets.nixosModules.twinkcentre
   ];
 
+  users.users.cute.packages = with pkgs; [
+    (weechat.override {
+      configure = {availablePlugins, ...}: {
+        plugins = with availablePlugins; [
+          (python.withPackages (ps: with ps; [ requests pysocks ]))
+        ];
+      };
+    })
+  ];
+
   users.users.guest = {
     isNormalUser = true;
     description = "guest";

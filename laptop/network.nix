@@ -104,7 +104,6 @@ in {
       Restart = "always";
       RestartSec = "15";
       Type = "exec";
-      RuntimeMaxSec = 86400;
     };
 
     script = ''

@@ -15,8 +15,6 @@ let
           Type = "simple"; 
           User = "socks"; 
           Group = "socks";
-          RuntimeMaxSec=3600;
-
         };
 
         script = attrs.script;

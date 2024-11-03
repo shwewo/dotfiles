@@ -11,13 +11,7 @@
   boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelModules = [ "usbip" "kvm-amd" "vfat" "nls_cp437" "nls_iso8859-1" "usbhid" "nvme" "xhci_pci" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ usbip.out ];
-  boot.kernelPackages =   
-  with builtins; with lib; let
-    latestCompatibleVersion = config.boot.zfs.package.latestCompatibleLinuxPackages.kernel.version;
-    xanPackages = filterAttrs (name: packages: hasSuffix "_xanmod" name && (tryEval packages).success) pkgs.linuxKernel.packages;
-    compatiblePackages = filter (packages: compareVersions packages.kernel.version latestCompatibleVersion <= 0) (attrValues xanPackages);
-    orderedCompatiblePackages = sort (x: y: compareVersions x.kernel.version y.kernel.version > 0) compatiblePackages;
-  in head orderedCompatiblePackages;
+  boot.kernelPackages = pkgs.linuxPackages_6_6;
 
   boot.initrd.luks = {
     yubikeySupport = true;
