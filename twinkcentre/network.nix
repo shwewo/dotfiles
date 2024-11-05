@@ -211,6 +211,8 @@
     '';
 
     preStart = ''
+      ${pkgs.iproute2}/bin/ip netns exec hotspot_nsd ${pkgs.iw}/bin/iw phy phy0 set netns 1 2&>/dev/null || true
+      ${pkgs.iproute2}/bin/ip netns del hotspot_nsd 2&>/dev/null || true
       ${pkgs.iproute2}/bin/ip netns add hotspot_nsd
     '';
 

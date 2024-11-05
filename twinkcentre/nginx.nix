@@ -3,7 +3,7 @@
 {
   systemd.tmpfiles.rules = [
     "d /var/www/internal 550 nginx nginx"
-    "d /var/www/private 740 cute nginx"
+    "d /var/www/private 750 cute nginx"
     "d /var/www/html 774 nginx users"
   ];
 
