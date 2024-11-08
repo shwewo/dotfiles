@@ -212,8 +212,8 @@
           gnused
           nodejs
           wget
-          nix
           sudo
+          nix
         ];
         labels = [
           "debian-latest:docker://node:22-bullseye"
