@@ -216,10 +216,13 @@
           nix
         ];
         labels = [
-          "debian-latest:docker://node:22-bullseye"
-          "ubuntu-latest:docker://node:22-bullseye"
+          "self-hosted:host"
           "native:host"
           "linux_amd64:host"
+          "ubuntu-latest:docker://catthehacker/ubuntu:act-latest"
+          "ubuntu-22.04:docker://catthehacker/ubuntu:act-22.04"
+          "ubuntu-20.04:docker://catthehacker/ubuntu:act-20.04"
+          "ubuntu-18.04:docker://catthehacker/ubuntu:act-20.04"
         ];
         settings = {
           container.options = "--device /dev/kvm";

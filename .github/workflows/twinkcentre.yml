@@ -7,7 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - run: if ! command -v sudo &> /dev/null; then apt-get update && apt-get install -y sudo; fi
     - uses: cachix/install-nix-action@v25
     - uses: shimataro/ssh-key-action@v2
       with:
