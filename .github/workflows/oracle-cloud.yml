@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - run: apt-get update && (command -v sudo || apt-get install -y sudo)
+    - run: if ! command -v sudo &> /dev/null; then apt-get update && apt-get install -y sudo; fi
     - uses: docker/setup-qemu-action@v1
     - uses: cachix/install-nix-action@v25
     - uses: webfactory/ssh-agent@v0.9.0
