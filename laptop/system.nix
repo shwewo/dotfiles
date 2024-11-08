@@ -38,14 +38,6 @@
     }
   ];
 
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-
-  hardware.pulseaudio.enable = false;
   services.flatpak.enable = true;
   services.printing.enable = true;
   services.printing.drivers = with pkgs; [ foo2zjs fxlinuxprint ];  

@@ -66,6 +66,7 @@
     enable = true;
     ports = [ 54921 ];
     settings.PasswordAuthentication = false;
+    settings.X11Forwarding = true;
     extraConfig = ''
       LoginGraceTime 0
     '';

@@ -84,7 +84,6 @@
     options cfg80211 ieee80211_regdom="RU"
   '';
 
-  hardware.graphics.enable = true;
   hardware.bluetooth.enable = true;
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";

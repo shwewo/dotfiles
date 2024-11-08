@@ -7,6 +7,7 @@
     ./services.nix
     ./network.nix
     ./secureboot.nix
+    ./xserver.nix
     ./nginx.nix
     inputs.secrets.nixosModules.twinkcentre
   ];
@@ -38,14 +39,14 @@
     podman = {
       enable = true;
       dockerCompat = true;
+      autoPrune.enable = true;
     };
     libvirtd = {
       enable = true;
     };
+    waydroid.enable = true;
     spiceUSBRedirection.enable = true;
   };
-
-  hardware.graphics.enable = true;
 
   programs.dconf.profiles.user.databases = [
     {
@@ -61,6 +62,31 @@
   services.smartd.enable = true;
   services.udev.packages = with pkgs; [ android-udev-rules ];
   environment.systemPackages = with pkgs; [ virtiofsd smartmontools ];
+  services.sanoid = {
+    enable = true;  
+  
+    datasets."rpool/root" = {
+      autosnap = true;
+      autoprune = true;
+      monthly = 5;
+    };
+
+    datasets."zpool/home" = {
+      autosnap = true;
+      autoprune = true;
+      hourly = 2;
+      daily = 2;
+      monthly = 5;
+    };
+
+    datasets."zpool/data" = {
+      autosnap = true;
+      autoprune = true;
+      daily = 2;
+      monthly = 5;
+    };
+  };
+
   # services.udev.extraRules = ''
   #   ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0924", ATTR{idProduct}=="3d69", RUN+="${pkgs.libvirt}/bin/virsh start win10-ltsc"
   #   ACTION=="remove", SUBSYSTEM=="usb", ENV{ID_VENDOR_FROM_DATABASE}=="Xerox", RUN+="${pkgs.libvirt}/bin/virsh shutdown win10-ltsc"

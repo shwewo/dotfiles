@@ -26,29 +26,6 @@
   systemd.services.conduit.after = lib.mkForce [ "network-online.target" ];
   systemd.services.conduit.wants = lib.mkForce [ "network-online.target" ];
 
-  # services.matrix-appservice-irc = {
-  #   enable = true;
-  #   registrationUrl = "http://localhost:8009";
-  #   settings = {
-  #     homeserver = {
-  #       url = "http://localhost:6167";
-  #       domain = "localhost:6167";
-  #     };
-  #     ircService = {
-  #       servers = {
-  #         "irc.esper.net" = {
-  #           name = "espernet";
-  #           port = 6697;
-  #           ssl = true;
-  #           dynamicChannels.enabled = true;
-  #           dynamicChannels.aliasTemplate = "#irc_$CHANNEL";
-  #           ircClients.nickTemplate = "$DISPLAY";
-  #         };
-  #       };
-  #     };
-  #   };
-  # };
-
   users.users.qbit = {
     group = "qbit";
     isSystemUser = true;
@@ -217,6 +194,55 @@
       };
     };
   };
+
+  services.gitea-actions-runner = {
+    package = pkgs.forgejo-runner;
+    instances = {
+      default = {
+        enable = true;
+        tokenFile = config.age.secrets.gitea-runner.path;
+        url = "https://${inputs.secrets.hosts.twinkcentre.forgejo}/";
+        name = "local";
+        hostPackages = with pkgs; [
+          bash
+          coreutils
+          curl
+          gawk
+          gitMinimal
+          gnused
+          nodejs
+          wget
+          nix
+          sudo
+        ];
+        labels = [
+          "debian-latest:docker://node:22-bullseye"
+          "ubuntu-latest:docker://node:22-bullseye"
+          "native:host"
+          "linux_amd64:host"
+        ];
+        settings = {
+          container.options = "--device /dev/kvm";
+          container.network = "host";
+        };
+      };
+    };
+  };
+  
+  # services.gitea-actions-runner = {
+  #   instances.default = {
+  #     enable = true;
+  #     name = "monolith";
+  #     url = "https://${inputs.secrets.hosts.twinkcentre.forgejo}/";
+  #     tokenFile = config.age.secrets.gitea-runner.path;
+  #     labels = [
+  #       "ubuntu-latest:docker://node:16-bullseye"
+  #       "ubuntu-22.04:docker://node:16-bullseye"
+  #       "ubuntu-20.04:docker://node:16-bullseye"
+  #       "ubuntu-18.04:docker://node:16-buster"     
+  #     ];
+  #   };
+  # };
 
   services.scrutiny = {
     enable = true;
