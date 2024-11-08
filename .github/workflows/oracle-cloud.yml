@@ -8,6 +8,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - run: if ! command -v sudo &> /dev/null; then apt-get update && apt-get install -y sudo; fi
+    - run: if ! command -v docker &> /dev/null; then curl -fsSL https://get.docker.com | sh; fi
     - uses: docker/setup-qemu-action@v1
     - uses: cachix/install-nix-action@v25
     - uses: shimataro/ssh-key-action@v2
