@@ -216,9 +216,6 @@
           nix
         ];
         labels = [
-          "self-hosted:host"
-          "native:host"
-          "linux_amd64:host"
           "ubuntu-latest:docker://catthehacker/ubuntu:act-latest"
           "ubuntu-22.04:docker://catthehacker/ubuntu:act-22.04"
           "ubuntu-20.04:docker://catthehacker/ubuntu:act-20.04"
