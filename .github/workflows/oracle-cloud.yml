@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - run: sudo apt-get update && sudo apt-get install -y qemu-user-static
     - uses: cachix/install-nix-action@v25
     - uses: shimataro/ssh-key-action@v2
       with:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         known_hosts: ${{ secrets.KNOWN_HOSTS }}
-    - run: sudo apt-get update && sudo apt-get install -y qemu-user-static
     - run: nix build .#nixosConfigurations.oracle-cloud.config.system.build.toplevel --dry-run --option system aarch64-linux --extra-platforms aarch64-linux
