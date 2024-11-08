@@ -12,4 +12,8 @@ jobs:
     - uses: webfactory/ssh-agent@v0.9.0
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        host-keys: 
+          - GitHub
+          - GitLab
+          - BitBucket
     - run: nix build .#nixosConfigurations.twinkcentre.config.system.build.toplevel --dry-run
