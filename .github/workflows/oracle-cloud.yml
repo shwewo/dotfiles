@@ -8,6 +8,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: docker/setup-qemu-action@v1
+    - run: sudo apt update && sudo apt install -y udev
     - uses: cachix/install-nix-action@v25
     - uses: shimataro/ssh-key-action@v2
       with:

@@ -225,8 +225,10 @@
           "ubuntu-18.04:docker://catthehacker/ubuntu:act-20.04"
         ];
         settings = {
-          container.options = "--device /dev/kvm";
-          container.network = "host";
+          container = {
+            options = "--device /dev/kvm --add-host=twinkcentre:127.0.0.1";
+            network = "host";
+          };
         };
       };
     };
