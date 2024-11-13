@@ -113,10 +113,10 @@
 
   systemd.services.NetworkManager-wait-online.enable = false;
 
-  systemd.services.wireproxy = {
+  systemd.services.wireproxy-cru = {
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
-    # wantedBy = [ "multi-user.target" ];
+    wantedBy = [ "multi-user.target" ];
 
     serviceConfig = { 
       Restart = "on-failure"; 
@@ -198,13 +198,17 @@
       RestartSec = "15";
       Type = "exec";
       RuntimeMaxSec = 86400;
+      ExecStop = ''
+        ${pkgs.iproute2}/bin/ip netns exec hotspot_nsd ${pkgs.iw}/bin/iw phy phy0 set netns 1 2&>/dev/null || true
+        ${pkgs.iproute2}/bin/ip netns del hotspot_nsd 2&>/dev/null || true
+      '';
     };
 
     script = ''
       ${inputs.shwewo.packages.${pkgs.system}.namespaced}/bin/namespaced \
         --name "hotspot" \
         --veth0-ip 10.42.0.3 \
-        --veth0-ip 10.42.0.4 \
+        --veth1-ip 10.42.0.4 \
         --fwmark 0x6e706423 \
         --table 28105 \
         --nokill \
@@ -220,10 +224,6 @@
     postStart = ''
       while [ ! -e /var/run/netns/hotspot_nsd ]; do sleep 1; done
       ${pkgs.iw}/bin/iw phy phy0 set netns name hotspot_nsd
-    '';
-
-    preStop = ''
-      ${pkgs.iproute2}/bin/ip netns exec hotspot_nsd ${pkgs.iw}/bin/iw phy phy0 set netns 1
     '';
   };
 
@@ -263,7 +263,7 @@
 
     script = ''
       ${pkgs.util-linux}/bin/rfkill unblock all
-      ${pkgs.linux-router}/bin/lnxrouter -g 192.168.10.1 --country RU --ap wlp2s0 twcnt -p ${inputs.secrets.hosts.twinkcentre.network.lnxrouter.wifi_password} --wifi4 --wifi5 --freq-band 5 --no-virt --random-mac
+      ${pkgs.linux-router}/bin/lnxrouter -g 192.168.10.1 --country RU --ap wlp2s0 twcnt -p ${inputs.secrets.hosts.twinkcentre.network.lnxrouter.wifi_password} --wifi4 --wifi5 --freq-band 5 --no-virt --random-mac --ban-priv
     '';
   };
 }

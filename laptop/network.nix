@@ -5,7 +5,10 @@ let
     after = [ "novpn.service" ];
     wants = [ "novpn.service" ];
     bindsTo = [ "novpn.service" ];
-    serviceConfig.NetworkNamespacePath = "/var/run/netns/novpn_nsd";
+    serviceConfig = {
+      NetworkNamespacePath = "/var/run/netns/novpn_nsd";
+      InaccessiblePaths= "/var/run/nscd/socket";
+    };
   };
 in {
   imports = [
@@ -75,8 +78,9 @@ in {
     enable = true;
     settings = {
       ipv6_servers = true;
+      ignore_system_dns = true;
       require_dnssec = true;
-      server_names = [ "cloudflare" ];
+      server_names = [ "switch" "cloudflare" ];
       listen_addresses = [ "127.0.0.1:53" "192.168.150.2:53"];
     };
   };
@@ -90,6 +94,7 @@ in {
     serviceConfig = {
       StateDirectory = "dnscrypt-proxy";
       NetworkNamespacePath = "/run/netns/novpn_nsd";
+      InaccessiblePaths= "/var/run/nscd/socket";
     };
   };
 
@@ -104,6 +109,7 @@ in {
       Restart = "always";
       RestartSec = "15";
       Type = "exec";
+      ExecStop = ''${pkgs.iproute2}/bin/ip netns del novpn_nsd 2&>/dev/null || true'';
     };
 
     script = ''
@@ -119,10 +125,8 @@ in {
     '';
 
     preStart = ''
+      ${pkgs.iproute2}/bin/ip netns del novpn_nsd 2&>/dev/null || true
       ${pkgs.iproute2}/bin/ip netns add novpn_nsd
-    '';
-    postStop = ''
-      ${pkgs.iproute2}/bin/ip netns del novpn_nsd 
     '';
   };
 }

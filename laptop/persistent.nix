@@ -37,4 +37,6 @@
       ];
     };
   };
+
+  systemd.services.systemd-machine-id-commit = lib.mkForce {};
 }

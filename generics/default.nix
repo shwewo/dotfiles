@@ -3,7 +3,7 @@
   users.users.${USER} = {
     isNormalUser = true;
     description = USER;
-    extraGroups = [ "networkmanager" "wheel" "audio" "libvirtd" "wireshark" "dialout" "plugdev" "adbusers" "lxd" "docker" ];
+    extraGroups = [ "networkmanager" "wheel" "audio" "libvirtd" "wireshark" "dialout" "plugdev" "adbusers" "lxd" "docker" "files" ];
     openssh.authorizedKeys.keys = [ 
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ9blPuLoJkCfTl88JKpqnSUmybCm7ci5EgWAUvfEmwb" 
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAZX2ByyBbuOfs6ndbzn/hbLaCAFiMXFsqbjplmx9GfVTx2T1aaDKFRNFtQU1rv6y3jyQCrEbjgvIjdCM4ptDf8=" # ipod
@@ -111,8 +111,6 @@
     fishPlugins.sponge
     (nerdfonts.override { fonts = [ "Iosevka" ]; })  
     # Misc
-    (pkgs.writeScriptBin "haste" "HASTE_SERVER=https://haste.eww.workers.dev ${pkgs.haste-client}/bin/haste $@")
-    (pkgs.writeScriptBin "rollback" "")
     (pkgs.writeScriptBin "shell" ''
       #!/usr/bin/env bash
       packages=""
@@ -144,6 +142,7 @@
         [""]
         oldAttrs.postInstall);
     }))
+    (pkgs.writeScriptBin "haste" "HASTE_SERVER=https://haste.eww.workers.dev ${pkgs.haste-client}/bin/haste $@")
   ];
 
   security.wrappers = {

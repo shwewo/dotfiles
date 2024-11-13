@@ -3,23 +3,22 @@
 {
   services.xserver = {
     enable = true;
-    desktopManager = {
-      xterm.enable = false;
-      xfce.enable = true;
-    };
-    displayManager.defaultSession = "xfce";
+    desktopManager.gnome.enable = true;
+    desktopManager.xterm.enable = false;
+    displayManager.gdm.enable = true;
+    displayManager.gdm.autoSuspend = false;
   };
 
   services.xrdp = {
     enable = true;
-    defaultWindowManager = "xfce4-session";
+    defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
     openFirewall = true;
     audio.enable = true;
-    extraConfDirCommands = ''
-      substituteInPlace $out/sesman.ini \
-        --replace-warn "KillDisconnected=false" "KillDisconnected=true" \
-        --replace-warn "DisconnectedTimeLimit=0" "DisconnectedTimeLimit=30"
-    '';
+    # extraConfDirCommands = ''
+    #   substituteInPlace $out/sesman.ini \
+    #     --replace-warn "KillDisconnected=false" "KillDisconnected=true" \
+    #     --replace-warn "DisconnectedTimeLimit=0" "DisconnectedTimeLimit=30"
+    # '';
   };
 
   services.pipewire.audio.enable = lib.mkForce false;
@@ -34,6 +33,7 @@
   systemd.targets.hybrid-sleep.enable = false;
 
   environment.systemPackages = with pkgs; [
+    firefox
     cage
     sway
     foot

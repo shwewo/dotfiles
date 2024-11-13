@@ -187,11 +187,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1730443891,
-        "narHash": "sha256-T939KtaxM/XewEchsJa2EII3qLCpHdIoNtDQMi2XiVc=",
+        "lastModified": 1731444470,
+        "narHash": "sha256-wSh4D3I3WVXUJZrV8hkyNnPErBPQvxznzLfAAmlgRRw=",
         "owner": "shwewo",
         "repo": "compress",
-        "rev": "a58132f9eb7fa2f6602dd52d38787f5a30e926cc",
+        "rev": "2977699b989f50cf720fecdd3071e5c0f032138e",
         "type": "github"
       },
       "original": {

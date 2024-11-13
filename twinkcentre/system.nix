@@ -12,16 +12,6 @@
     inputs.secrets.nixosModules.twinkcentre
   ];
 
-  users.users.cute.packages = with pkgs; [
-    (weechat.override {
-      configure = {availablePlugins, ...}: {
-        plugins = with availablePlugins; [
-          (python.withPackages (ps: with ps; [ requests pysocks ]))
-        ];
-      };
-    })
-  ];
-
   users.users.guest = {
     isNormalUser = true;
     description = "guest";
@@ -68,22 +58,22 @@
     datasets."rpool/root" = {
       autosnap = true;
       autoprune = true;
-      monthly = 5;
+      monthly = 4;
     };
 
     datasets."zpool/home" = {
       autosnap = true;
       autoprune = true;
-      hourly = 2;
-      daily = 2;
-      monthly = 5;
+      hourly = 1;
+      daily = 1;
+      monthly = 4;
     };
 
     datasets."zpool/data" = {
       autosnap = true;
       autoprune = true;
-      daily = 2;
-      monthly = 5;
+      daily = 1;
+      monthly = 4;
     };
   };
 

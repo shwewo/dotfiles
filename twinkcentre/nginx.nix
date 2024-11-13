@@ -1,9 +1,13 @@
 { pkgs, ... }:
 
 {
+  users.groups.files = {
+    gid = 10055;
+  };
+
   systemd.tmpfiles.rules = [
     "d /var/www/internal 550 nginx nginx"
-    "d /var/www/private 750 cute nginx"
+    "d /var/www/private 770 nginx files"
     "d /var/www/html 774 nginx users"
   ];
 
