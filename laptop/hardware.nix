@@ -35,6 +35,7 @@
 
   boot.supportedFilesystems = [ "zfs" ];
   boot.initrd.postDeviceCommands = lib.mkAfter ''
+    zpool import zpool
     zfs rollback -r zpool/root@blank
   '';
 

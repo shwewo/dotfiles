@@ -22,6 +22,7 @@
         "/etc/NetworkManager/system-connections"
         "/etc/ssh"
         { directory = "/etc/yggdrasil"; user = "socks"; group = "socks"; mode = "0700"; }
+        { directory = "/etc/sing-box"; user = "socks"; group = "socks"; mode = "0770"; }
         { directory = "/var/lib/colord"; user = "colord"; group = "colord"; mode = "u=rwx,g=rx,o="; }
       ];
       files = [
@@ -38,5 +39,5 @@
     };
   };
 
-  systemd.services.systemd-machine-id-commit = lib.mkForce {};
+  systemd.services.systemd-machine-id-commit.enable = lib.mkForce false;
 }

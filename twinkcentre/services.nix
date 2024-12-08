@@ -1,38 +1,38 @@
 { pkgs, lib, inputs, stable, unstable, config, ... }:
 
 {
-  users.users.weechat = {
-    isNormalUser = true;
-    description = "weechat";
-    packages = with pkgs; [
-      tmux
-      (weechat.override {
-        configure = {availablePlugins, ...}: {
-          plugins = with availablePlugins; [
-            (python.withPackages (ps: with ps; [ requests pysocks ]))
-          ];
-        };
-      })
-    ];
-  };
+  # users.users.weechat = {
+  #   isNormalUser = true;
+  #   description = "weechat";
+  #   packages = with pkgs; [
+  #     tmux
+  #     (weechat.override {
+  #       configure = {availablePlugins, ...}: {
+  #         plugins = with availablePlugins; [
+  #           (python.withPackages (ps: with ps; [ requests pysocks ]))
+  #         ];
+  #       };
+  #     })
+  #   ];
+  # };
 
-  systemd.services.weechat = {
-    enable = true;
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
-    path = [ pkgs.kitty.terminfo ];
+  # systemd.services.weechat = {
+  #   enable = true;
+  #   after = [ "network-online.target" ];
+  #   wants = [ "network-online.target" ];
+  #   wantedBy = [ "multi-user.target" ];
+  #   path = [ pkgs.kitty.terminfo ];
 
-    serviceConfig = {
-      Restart = "always";
-      RestartSec = "30";
-      User = "weechat";
-      Group = "users";
-      Type = "forking";
-      ExecStart = "${pkgs.tmux}/bin/tmux -2 -S /tmp/tmux_weechat new-session -s weechat -d weechat";
-      ExecStop = "${pkgs.tmux}/bin/tmux -S /tmp/tmux_weechat kill-session -t weechat";
-    };
-  };
+  #   serviceConfig = {
+  #     Restart = "always";
+  #     RestartSec = "30";
+  #     User = "weechat";
+  #     Group = "users";
+  #     Type = "forking";
+  #     ExecStart = "${pkgs.tmux}/bin/tmux -2 -S /tmp/tmux_weechat new-session -s weechat -d weechat";
+  #     ExecStop = "${pkgs.tmux}/bin/tmux -S /tmp/tmux_weechat kill-session -t weechat";
+  #   };
+  # };
 
   services.matrix-conduit = {
     enable = true;
@@ -47,7 +47,8 @@
             url = "http://localhost:2080";
             include = [ 
               "catgirl.cloud" "*.catgirl.cloud" 
-              "matrix.org" "*.matrix.org" 
+              "matrix.org" "*.matrix.org"
+              "ntfy.sh" "*.ntfy.sh"
             ];
             exclude = [];
           }];
@@ -354,12 +355,18 @@
     "d /data/immich 770 immich immich"
   ];
 
-  services.murmur = {
-    enable = true;
-    openFirewall = true;
-  };
+  # services.plex = {
+  #   enable = true;
+  #   openFirewall = true;
+  #   dataDir = "/data/plex";
+  # };
 
-  systemd.services.murmur.wantedBy = lib.mkForce [];
+  # services.murmur = {
+  #   enable = true;
+  #   openFirewall = true;
+  # };
+
+  # systemd.services.murmur.wantedBy = lib.mkForce [];
 
   # services.guacamole-server = {
   #   enable = true;

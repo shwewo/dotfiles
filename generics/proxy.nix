@@ -15,6 +15,7 @@ let
           Type = "simple"; 
           User = "socks"; 
           Group = "socks";
+          AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_PTRACE";
         };
 
         script = attrs.script;
@@ -22,7 +23,7 @@ let
           iproute2 
           shadowsocks-libev 
           shadowsocks-v2ray-plugin 
-          sing-box 
+          sing-box
           stable.wireproxy
           gost
           unstable.yggstack

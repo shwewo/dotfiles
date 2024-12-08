@@ -187,11 +187,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1731444470,
-        "narHash": "sha256-wSh4D3I3WVXUJZrV8hkyNnPErBPQvxznzLfAAmlgRRw=",
+        "lastModified": 1732920333,
+        "narHash": "sha256-RRjPwllMn9Sz7gKdxPKBLqfK4ucwNCeZYzWCgoS/zcQ=",
         "owner": "shwewo",
         "repo": "compress",
-        "rev": "2977699b989f50cf720fecdd3071e5c0f032138e",
+        "rev": "65eb9a02ca5aa0f0ca20701cfd4f41f7f9da25bc",
         "type": "github"
       },
       "original": {
@@ -1613,11 +1613,11 @@
         "nixpkgs": "nixpkgs_10"
       },
       "locked": {
-        "lastModified": 1730996849,
-        "narHash": "sha256-v2rdaNbCexLyOlSGCrcGUxL0fF68190uYbne5xQ2pP4=",
+        "lastModified": 1732122785,
+        "narHash": "sha256-Ax9F10gpOLDhqDRKpneLy66y7C5XUrWQppKv8P1Bw2U=",
         "ref": "refs/heads/main",
-        "rev": "004bc1b34a95a60da1fcd4b5bb2c11e85a370cef",
-        "revCount": 39,
+        "rev": "9462141b9e46ea972b90c6ffc7f05f1598603a02",
+        "revCount": 41,
         "type": "git",
         "url": "ssh://git@github.com/shwewo/secrets"
       },
@@ -1638,11 +1638,11 @@
         "tdesktop": "tdesktop"
       },
       "locked": {
-        "lastModified": 1730500700,
-        "narHash": "sha256-lYguYAzx6ToRVqGRKyFjNcfealG+5yHz7q+eWSGe8xQ=",
+        "lastModified": 1733061207,
+        "narHash": "sha256-4prI3XIaxGMG9/eClS3XoeAQJOjC7rx/wUcQCly3RsU=",
         "owner": "shwewo",
         "repo": "flake",
-        "rev": "7dbdc63403b1a6b1e387b44c56fa5be878f63892",
+        "rev": "7d6133c1567b20fa7d34ccf9d7c022e0adc240f6",
         "type": "github"
       },
       "original": {

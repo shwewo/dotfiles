@@ -21,6 +21,8 @@
         33880
         # win10-ltsc rdp
         33890
+        # win11 rdp
+        33895
       ];
       allowedUDPPorts = [
         # Qbittorrent 
@@ -87,7 +89,7 @@
     };
 
     script = ''
-      ${pkgs.gost}/bin/gost -L=tcp://:33880/192.168.122.50:3389 -L=tcp://:33890/192.168.122.100:3389
+      ${pkgs.gost}/bin/gost -L=tcp://:33880/192.168.122.50:3389 -L=tcp://:33890/192.168.122.100:3389 -L=tcp://:33895/192.168.122.105:3389
     '';
   };
 
@@ -197,14 +199,11 @@
       Restart = "on-failure";
       RestartSec = "15";
       Type = "exec";
-      RuntimeMaxSec = 86400;
-      ExecStop = ''
-        ${pkgs.iproute2}/bin/ip netns exec hotspot_nsd ${pkgs.iw}/bin/iw phy phy0 set netns 1 2&>/dev/null || true
-        ${pkgs.iproute2}/bin/ip netns del hotspot_nsd 2&>/dev/null || true
-      '';
     };
 
     script = ''
+      ${pkgs.iproute2}/bin/ip netns add hotspot_nsd &> /dev/null || true
+      
       ${inputs.shwewo.packages.${pkgs.system}.namespaced}/bin/namespaced \
         --name "hotspot" \
         --veth0-ip 10.42.0.3 \
@@ -215,10 +214,8 @@
         --dontcreate
     '';
 
-    preStart = ''
-      ${pkgs.iproute2}/bin/ip netns exec hotspot_nsd ${pkgs.iw}/bin/iw phy phy0 set netns 1 2&>/dev/null || true
-      ${pkgs.iproute2}/bin/ip netns del hotspot_nsd 2&>/dev/null || true
-      ${pkgs.iproute2}/bin/ip netns add hotspot_nsd
+    preStop = ''
+      ${pkgs.iproute2}/bin/ip netns exec hotspot_nsd ${pkgs.iw}/bin/iw phy phy0 set netns 1
     '';
 
     postStart = ''
@@ -234,7 +231,6 @@
     bindsTo = [ "lnxrouter-nsd.service" ];
     wantedBy = [ "lnxrouter-nsd.service" ];
 
-    unitConfig.ConditionPathExists = "/var/run/netns/hotspot_nsd";
     serviceConfig = {
       Restart = "on-failure"; 
       RestartSec = "15"; 

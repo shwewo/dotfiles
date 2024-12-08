@@ -33,6 +33,19 @@
     };
     libvirtd = {
       enable = true;
+      qemu = {
+        package = pkgs.qemu_kvm;
+        runAsRoot = true;
+        swtpm.enable = true;
+        ovmf = {
+          enable = true;
+          packages = [(pkgs.OVMF.override {
+            secureBoot = true;
+            tpmSupport = true;
+          }).fd];
+        };
+        vhostUserPackages = with pkgs; [ virtiofsd ];
+      };
     };
     waydroid.enable = true;
     spiceUSBRedirection.enable = true;
@@ -51,7 +64,12 @@
 
   services.smartd.enable = true;
   services.udev.packages = with pkgs; [ android-udev-rules ];
-  environment.systemPackages = with pkgs; [ virtiofsd smartmontools ];
+  environment.systemPackages = with pkgs; [ 
+    virtiofsd 
+    swtpm
+    smartmontools 
+  ];
+
   services.sanoid = {
     enable = true;  
   

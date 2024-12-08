@@ -36,6 +36,7 @@ in {
     misc.cloudsync
     misc.fitsync
     # Network
+    nekoray
     socat
     gost # gost -L redirect://:3333 -F socks5://192.168.150.2:3333 trans proxy (UDP doesn't work)
     wireproxy
@@ -109,6 +110,14 @@ in {
     noto-fonts-emoji
     jq # needed for kitty
   ]);
+
+  # security.wrappers.nekoray_core = {
+  #   source = "${pkgs.nekoray}/bin/nekoray_core";
+  #   owner = "root";
+  #   group = "root";
+  #   capabilities = "cap_net_admin,cap_net_raw=ep";
+  #   permissions = "u+rx,g+x";
+  # };
 
   programs = {
     gamemode.enable = true;

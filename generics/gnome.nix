@@ -9,16 +9,16 @@ let
       cp ${../wallpaper.png} $out/share/backgrounds/wallpaper.png
     '';
   };
-  gtk30 = pkgs.writeText "gtk-3.0.css" ''
-    /* UNITE windowDecorations */
-    @import url('/run/current-system/sw/share/gnome-shell/extensions/unite@hardpixel.eu/styles/gtk3/buttons-right/maximized.css');
-    /* windowDecorations UNITE */
-  '';
-  gtk40 = pkgs.writeText "gtk-4.0.css" ''
-    /* UNITE windowDecorations */
-    @import url('/run/current-system/sw/share/gnome-shell/extensions/unite@hardpixel.eu/styles/gtk3/buttons-right/maximized.css');
-    /* windowDecorations UNITE */
-  '';
+  # gtk30 = pkgs.writeText "gtk-3.0.css" ''
+  #   /* UNITE windowDecorations */
+  #   @import url('/run/current-system/sw/share/gnome-shell/extensions/unite@hardpixel.eu/styles/gtk3/buttons-right/maximized.css');
+  #   /* windowDecorations UNITE */
+  # '';
+  # gtk40 = pkgs.writeText "gtk-4.0.css" ''
+  #   /* UNITE windowDecorations */
+  #   @import url('/run/current-system/sw/share/gnome-shell/extensions/unite@hardpixel.eu/styles/gtk3/buttons-right/maximized.css');
+  #   /* windowDecorations UNITE */
+  # '';
 in {
   imports = [
     inputs.home-manager.nixosModules.home-manager
@@ -31,24 +31,24 @@ in {
 
   services.gnome.gnome-remote-desktop.enable = true;
  
-   # its lazy ik
+  #  # its lazy ik
 
-  system.activationScripts."unite_overrides" = ''
-    HOME=/home/${USER}/
+  # system.activationScripts."unite_overrides" = ''
+  #   HOME=/home/${USER}/
     
-    mkdir $HOME/.config/gtk-3.0 &> /dev/null || true
-    mkdir $HOME/.config/gtk-4.0 &> /dev/null || true
-    chown ${USER}:users $HOME/.config/gtk-3.0
-    chown ${USER}:users $HOME/.config/gtk-4.0
+  #   mkdir $HOME/.config/gtk-3.0 &> /dev/null || true
+  #   mkdir $HOME/.config/gtk-4.0 &> /dev/null || true
+  #   chown ${USER}:users $HOME/.config/gtk-3.0 || true
+  #   chown ${USER}:users $HOME/.config/gtk-4.0 || true
 
-    rm -f $HOME/.config/gtk-3.0/gtk.css
-    rm -f $HOME/.config/gtk-4.0/gtk.css
-    rm -f $HOME/.config/gtk-3.0/settings.ini
-    rm -f $HOME/.config/gtk-4.0/settings.ini
+  #   rm -f $HOME/.config/gtk-3.0/gtk.css || true
+  #   rm -f $HOME/.config/gtk-4.0/gtk.css || true
+  #   rm -f $HOME/.config/gtk-3.0/settings.ini || true
+  #   rm -f $HOME/.config/gtk-4.0/settings.ini || true
 
-    ln -s ${gtk30} $HOME/.config/gtk-3.0/gtk.css
-    ln -s ${gtk40} $HOME/.config/gtk-4.0/gtk.css
-  '';
+  #   ln -s ${gtk30} $HOME/.config/gtk-3.0/gtk.css || true
+  #   ln -s ${gtk40} $HOME/.config/gtk-4.0/gtk.css || true
+  # '';
 
   nixpkgs.overlays = [
     # GNOME 46: triple-buffering-v4-46

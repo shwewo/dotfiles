@@ -1,7 +1,7 @@
 { pkgs, lib, inputs, config, self, USER, stable, unstable, ... }:
 
 let
-  novpnSocksConfig = {
+  novpnConfig = {
     after = [ "novpn.service" ];
     wants = [ "novpn.service" ];
     bindsTo = [ "novpn.service" ];
@@ -15,17 +15,15 @@ in {
     (import "${self}/generics/proxy.nix" { 
       inherit pkgs lib inputs stable unstable;
       socksed = [
-        { name = "socks-reality-sweden";    script = "sing-box run --config ${config.age.secrets.socks_reality_sweden.path}";                                                              } # port 2081
+        { name = "socks-reality-sweden";    script = "sing-box run --config ${config.age.secrets.socks_reality_sweden.path}";                                                              } # port 2080
         { name = "socks-novpn";             script = "gost -L socks5://192.168.150.2:3535";                                                                                                } # port 3535
-        { name = "socks-spoofdpi";          script = "spoof-dpi -addr 192.168.150.2 -port 9999 -dns-addr 1.1.1.1 -debug true";                                                             } # port 9999
         { name = "yggstack";                script = "yggstack -useconffile /etc/yggdrasil/yggdrasil.conf -socks 127.0.0.1:5050 -local-tcp 127.0.0.1:3333:[324:71e:281a:9ed3::fa11]:1080"; } # port 5050, clearnet 3333
       ];
     })
   ];
 
-  systemd.services.socks-novpn = novpnSocksConfig;
-  systemd.services.socks-reality-sweden = novpnSocksConfig;
-  systemd.services.socks-spoofdpi = novpnSocksConfig;
+  systemd.services.socks-reality-sweden = novpnConfig;
+  systemd.services.socks-novpn = novpnConfig;
 
   networking = {
     networkmanager = { 
@@ -41,7 +39,10 @@ in {
     iproute2.enable = true;
     firewall = {
       enable = true;
+      trustedInterfaces = [ "novpn_nsd0" "ap0" ];
       allowedTCPPorts = [
+        # wifi sharing
+        53 67
         # audiorelay
         59100
         # localsend
@@ -50,6 +51,8 @@ in {
         21080
       ];
       allowedUDPPorts = [
+        # wifi sharing
+        53 67
         # audiorelay
         59100
         59200
@@ -102,17 +105,18 @@ in {
     enable = true;
     description = "novpn namespace";
     after = [ "network-online.target" ];
-    wants = [ "network-online.target" "dnscrypt-proxy2.service" "socks-novpn.service" "socks-reality-sweden.service" "socks-spoofdpi.service" ];
+    wants = [ "network-online.target" "dnscrypt-proxy2.service" "socks-novpn.service" "socks-reality-sweden.service" ];
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
       Restart = "always";
       RestartSec = "15";
       Type = "exec";
-      ExecStop = ''${pkgs.iproute2}/bin/ip netns del novpn_nsd 2&>/dev/null || true'';
     };
 
     script = ''
+      ${pkgs.iproute2}/bin/ip netns add novpn_nsd &> /dev/null || true
+ 
       ${inputs.shwewo.packages.${pkgs.system}.namespaced}/bin/namespaced \
         --veth0-ip 192.168.150.1 \
         --veth1-ip 192.168.150.2 \
@@ -121,12 +125,22 @@ in {
         --fwmark 0x6e736431 \
         --table 28107 \
         --nokill \
-        --dontcreate
+        --dontcreate 
     '';
+  };
 
-    preStart = ''
-      ${pkgs.iproute2}/bin/ip netns del novpn_nsd 2&>/dev/null || true
-      ${pkgs.iproute2}/bin/ip netns add novpn_nsd
-    '';
+  systemd.services.sing-box-tun = {
+    enable = true;
+    description = "vpn";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = {
+      Restart = "always";
+      RestartSec = "15";
+      Type = "simple";
+      ExecStart = "${pkgs.sing-box}/bin/sing-box run --config /etc/sing-box/config-tun.json";
+    };
   };
 }
