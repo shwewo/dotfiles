@@ -6,15 +6,7 @@
 
 ![laptop](https://github.com/shwewo/dotfiles/actions/workflows/laptop.yml/badge.svg)
 ![twinkcentre](https://github.com/shwewo/dotfiles/actions/workflows/twinkcentre.yml/badge.svg)
-![oracle-cloud](https://github.com/shwewo/dotfiles/actions/workflows/oracle-cloud.yml/badge.svg)
 ---
-
-### General structure
-- `generics` — generics that usually are hardware-independent and user-independent
-- `laptop` — my daily driver laptop
-- `oracle-cloud` — VPS
-- `virtual` — virtual machine
-- `user` — generics, but for my user (for use in laptops/desktops)
 
 Note: i'm paranoid, so agenix and some other secrets are outside from this repo in a private one. sorry :3
 
