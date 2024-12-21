@@ -6,6 +6,7 @@
 
 ![laptop](https://github.com/shwewo/dotfiles/actions/workflows/laptop.yml/badge.svg)
 ![twinkcentre](https://github.com/shwewo/dotfiles/actions/workflows/twinkcentre.yml/badge.svg)
+![ampere-24g](https://github.com/shwewo/dotfiles/actions/workflows/ampere-24g.yml/badge.svg)
 ---
 
 Note: i'm paranoid, so agenix and some other secrets are outside from this repo in a private one. sorry :3
