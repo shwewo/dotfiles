@@ -31,7 +31,7 @@ in {
         DisableFirefoxScreenshots = true;
         DisplayBookmarksToolbar = "never";
         DNSOverHTTPS = {
-          Enabled = false;
+          Enabled = true;
           ProviderURL = "https://mozilla.cloudflare-dns.com/dns-query";
           Locked = false;
         };

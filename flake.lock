@@ -1613,11 +1613,11 @@
         "nixpkgs": "nixpkgs_10"
       },
       "locked": {
-        "lastModified": 1732122785,
-        "narHash": "sha256-Ax9F10gpOLDhqDRKpneLy66y7C5XUrWQppKv8P1Bw2U=",
+        "lastModified": 1734793043,
+        "narHash": "sha256-bNnriNa42Q6vCMdRneQEMFReBU6eLE5/EFhLAVur29Y=",
         "ref": "refs/heads/main",
-        "rev": "9462141b9e46ea972b90c6ffc7f05f1598603a02",
-        "revCount": 41,
+        "rev": "a5eb01d9e43e4a8416beb6d8ac449d048edf0cad",
+        "revCount": 48,
         "type": "git",
         "url": "ssh://git@github.com/shwewo/secrets"
       },

@@ -10,7 +10,7 @@
   boot.initrd.availableKernelModules = [ "kvm-amd" "vfat" "nls_cp437" "nls_iso8859-1" "usbhid" "nvme" "xhci_pci" ];
   boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelModules = [ "usbip" "kvm-amd" "vfat" "nls_cp437" "nls_iso8859-1" "usbhid" "nvme" "xhci_pci" ];
-  boot.extraModulePackages = with config.boot.kernelPackages; [ usbip.out ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ usbip.out v4l2loopback ];
   boot.kernelPackages = pkgs.linuxPackages_6_6;
 
   boot.initrd.luks = {

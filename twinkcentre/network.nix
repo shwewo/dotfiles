@@ -40,7 +40,7 @@
       settings = {
         "connection-dad-default" = {
           "ipv4.dad-timeout" = 0; 
-        }; 
+        };
       };
     };
 
@@ -73,9 +73,7 @@
       LoginGraceTime 0
     '';
   };
-
-  programs.mosh.enable = true;
-
+  
   systemd.services.port-forward = {
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
@@ -235,11 +233,8 @@
       Restart = "on-failure"; 
       RestartSec = "15"; 
       Type = "simple";
-      DynamicUser = "yes"; 
-      ExecStart = "${inputs.shwewo.packages.${pkgs.system}.sing-box}/bin/sing-box run --config /etc/sing-box/config-tun.json";
+      ExecStart = "${pkgs.sing-box}/bin/sing-box run --config /etc/sing-box/config-tun.json";
       NetworkNamespacePath = "/var/run/netns/hotspot_nsd";
-      CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_PTRACE";
-      AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_PTRACE";
     };
   };
 

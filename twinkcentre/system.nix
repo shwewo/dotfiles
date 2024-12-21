@@ -93,6 +93,13 @@
       daily = 1;
       monthly = 4;
     };
+    
+    datasets."zpool/nextcloud" = {
+      autosnap = true;
+      autoprune = true;
+      weekly = 1;
+      monthly = 2;
+    };
   };
 
   # services.udev.extraRules = ''

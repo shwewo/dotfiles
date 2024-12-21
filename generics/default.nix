@@ -63,6 +63,8 @@
     dnsutils
     inetutils
     iw
+    iperf3
+    mtr
     wirelesstools
     wireguard-tools
     nmap
@@ -71,6 +73,7 @@
     vnstat
     tshark
     tcpdump
+    dig
     # Administration
     usbutils
     pciutils

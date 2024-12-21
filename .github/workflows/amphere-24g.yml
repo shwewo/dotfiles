@@ -1,4 +1,4 @@
-name: "oracle-cloud"
+name: "ampere-24g"
 on:
   pull_request:
   push:
@@ -13,4 +13,4 @@ jobs:
       with:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         known_hosts: ${{ secrets.KNOWN_HOSTS }}
-    - run: nix build .#nixosConfigurations.oracle-cloud.config.system.build.toplevel --dry-run --option system aarch64-linux --extra-platforms aarch64-linux
+    - run: nix build .#nixosConfigurations.ampere-24g.config.system.build.toplevel --dry-run --option system aarch64-linux --extra-platforms aarch64-linux

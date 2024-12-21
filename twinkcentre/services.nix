@@ -44,7 +44,7 @@
         turn_secret = inputs.secrets.hosts.twinkcentre.coturn_secret;
         proxy = {
           by_domain = [{
-            url = "http://localhost:2080";
+            url = "http://localhost:2081";
             include = [ 
               "catgirl.cloud" "*.catgirl.cloud" 
               "matrix.org" "*.matrix.org"
@@ -354,6 +354,30 @@
   systemd.tmpfiles.rules = [
     "d /data/immich 770 immich immich"
   ];
+
+  services.nextcloud = {
+    enable = true;
+    package = pkgs.nextcloud30;
+    hostName = inputs.secrets.hosts.twinkcentre.nextcloud;
+    configureRedis = true;
+    config.adminpassFile = "${config.age.secrets.nextcloud-admin.path}";
+    extraAppsEnable = true;
+    extraApps = {
+      inherit (config.services.nextcloud.package.packages.apps) contacts calendar tasks notes;
+    };
+    settings = {
+      overwriteprotocol = "https";
+    };
+  };
+
+  services.ntfy-sh = {
+    enable = true;
+    settings = {
+      listen-http = ":8999";
+      base-url = "https://${inputs.secrets.hosts.twinkcentre.ntfy}";
+    };
+  };
+
 
   # services.plex = {
   #   enable = true;

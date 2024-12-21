@@ -61,10 +61,10 @@
       specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 
       modules = [ ./twinkcentre/system.nix ];
     };
-    nixosConfigurations.oracle-cloud = stable.lib.nixosSystem {
+    nixosConfigurations.ampere-24g = stable.lib.nixosSystem {
       system = "aarch64-linux"; 
       specialArgs = specialArgs // { stable = stable_aarch64; unstable = unstable_aarch64; }; 
-      modules = [ ./oracle-cloud/system.nix ];
+      modules = [ ./ampere-24g/system.nix ];
     };
     nixosConfigurations.virtserial = stable.lib.nixosSystem {
       system = "x86_64-linux"; 

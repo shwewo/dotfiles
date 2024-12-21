@@ -42,6 +42,7 @@ in {
     wireproxy
     networkmanagerapplet
     trayscale
+    cloudflared
     iodine
     ptunnel
     remmina
@@ -61,7 +62,7 @@ in {
     inputs.agenix.packages.${pkgs.system}.default
     misc.virt
     appimage-run
-    scrcpy
+    unstable.scrcpy
     tldr
     zenity
     distrobox

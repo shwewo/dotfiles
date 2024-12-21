@@ -31,7 +31,7 @@ in {
       dns = "none";
       wifi.macAddress = "stable";
     };
-    nameservers = [ "192.168.150.2" ];
+    nameservers = [ "1.1.1.1" "1.0.0.1" ];
     hostName = "laptop";
     hostId = "df3549ee";
     useDHCP = lib.mkDefault true;
@@ -83,7 +83,7 @@ in {
       ipv6_servers = true;
       ignore_system_dns = true;
       require_dnssec = true;
-      server_names = [ "switch" "cloudflare" ];
+      server_names = [ "cloudflare" ];
       listen_addresses = [ "127.0.0.1:53" "192.168.150.2:53"];
     };
   };
@@ -142,5 +142,15 @@ in {
       Type = "simple";
       ExecStart = "${pkgs.sing-box}/bin/sing-box run --config /etc/sing-box/config-tun.json";
     };
+
+    preStart = ''
+      cp /etc/resolv.conf /etc/sing-box/resolv.conf
+      echo "nameserver 127.0.0.1" > /etc/resolv.conf
+    '';
+
+    postStop = ''
+      cat /etc/sing-box/resolv.conf > /etc/resolv.conf
+      rm /etc/sing-box/resolv.conf
+    '';
   };
 }
