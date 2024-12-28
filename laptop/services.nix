@@ -18,9 +18,8 @@
 
   systemd.services.qbitnox = {
     enable = true;
-    after = [ "network-online.target" "novpn.service" ];
-    wants = [ "network-online.target" "novpn.service" ];
-    bindsTo = [ "novpn.service" ];
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
@@ -57,8 +56,6 @@
 
     script = "${unstable.qbittorrent-nox}/bin/qbittorrent-nox";
   };
-
-  systemd.services.novpn.wants = [ "qbitnox.service" ];
 
   services.minidlna = {
     enable = true;

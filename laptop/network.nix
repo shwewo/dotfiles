@@ -25,6 +25,8 @@
         53317
         # Temp port
         21080
+        # qbittorrent
+        51150
       ];
       allowedUDPPorts = [
         # wifi sharing
@@ -36,6 +38,8 @@
         53317
         # Temp port
         21080
+        # qbittorrent
+        51150
       ];
       allowedTCPPortRanges = [ { from = 1714; to = 1764; } ]; # kde connect
       allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
