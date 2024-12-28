@@ -66,15 +66,5 @@
       specialArgs = specialArgs // { stable = stable_aarch64; unstable = unstable_aarch64; }; 
       modules = [ ./ampere-24g/system.nix ];
     };
-    nixosConfigurations.virtserial = stable.lib.nixosSystem {
-      system = "x86_64-linux"; 
-      specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 
-      modules = [ ./virtual/default.nix ];
-    };
-    nixosConfigurations.virtgraphics = stable.lib.nixosSystem {
-      system = "x86_64-linux"; 
-      specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 
-      modules = [ ./virtual/graphics.nix ];
-    }; 
   };
 }

@@ -1,4 +1,4 @@
-{ pkgs, inputs, stable, unstable, USER, ... }:
+{ pkgs, stable, USER, ... }:
 {
   users.users.${USER} = {
     isNormalUser = true;
@@ -112,7 +112,7 @@
     fishPlugins.z
     fishPlugins.fzf-fish
     fishPlugins.sponge
-    (nerdfonts.override { fonts = [ "Iosevka" ]; })  
+    iosevka
     # Misc
     (pkgs.writeScriptBin "shell" ''
       #!/usr/bin/env bash

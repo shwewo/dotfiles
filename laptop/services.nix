@@ -1,4 +1,4 @@
-{ pkgs, inputs, unstable, ... }:
+{ pkgs, unstable, ... }:
 
 {
   systemd.tmpfiles.rules = [
@@ -53,7 +53,6 @@
       SystemCallArchitectures = "native";
       CapabilityBoundingSet = "";
       SystemCallFilter = [ "@system-service" ];
-      NetworkNamespacePath = "/var/run/netns/novpn_nsd";
     };
 
     script = "${unstable.qbittorrent-nox}/bin/qbittorrent-nox";

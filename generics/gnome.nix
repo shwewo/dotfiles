@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, stable, unstable, USER, ... }: with lib.gvariant;
+{ pkgs, lib, inputs, unstable, USER, ... }: with lib.gvariant;
 
 let
   wallpaper = pkgs.stdenv.mkDerivation {
@@ -9,16 +9,6 @@ let
       cp ${../wallpaper.png} $out/share/backgrounds/wallpaper.png
     '';
   };
-  # gtk30 = pkgs.writeText "gtk-3.0.css" ''
-  #   /* UNITE windowDecorations */
-  #   @import url('/run/current-system/sw/share/gnome-shell/extensions/unite@hardpixel.eu/styles/gtk3/buttons-right/maximized.css');
-  #   /* windowDecorations UNITE */
-  # '';
-  # gtk40 = pkgs.writeText "gtk-4.0.css" ''
-  #   /* UNITE windowDecorations */
-  #   @import url('/run/current-system/sw/share/gnome-shell/extensions/unite@hardpixel.eu/styles/gtk3/buttons-right/maximized.css');
-  #   /* windowDecorations UNITE */
-  # '';
 in {
   imports = [
     inputs.home-manager.nixosModules.home-manager
@@ -30,25 +20,6 @@ in {
   };
 
   services.gnome.gnome-remote-desktop.enable = true;
- 
-  #  # its lazy ik
-
-  # system.activationScripts."unite_overrides" = ''
-  #   HOME=/home/${USER}/
-    
-  #   mkdir $HOME/.config/gtk-3.0 &> /dev/null || true
-  #   mkdir $HOME/.config/gtk-4.0 &> /dev/null || true
-  #   chown ${USER}:users $HOME/.config/gtk-3.0 || true
-  #   chown ${USER}:users $HOME/.config/gtk-4.0 || true
-
-  #   rm -f $HOME/.config/gtk-3.0/gtk.css || true
-  #   rm -f $HOME/.config/gtk-4.0/gtk.css || true
-  #   rm -f $HOME/.config/gtk-3.0/settings.ini || true
-  #   rm -f $HOME/.config/gtk-4.0/settings.ini || true
-
-  #   ln -s ${gtk30} $HOME/.config/gtk-3.0/gtk.css || true
-  #   ln -s ${gtk40} $HOME/.config/gtk-4.0/gtk.css || true
-  # '';
 
   nixpkgs.overlays = [
     # GNOME 46: triple-buffering-v4-46
@@ -65,7 +36,6 @@ in {
     })
   ];
 
-
   # https://discourse.nixos.org/t/need-help-for-nixos-gnome-scaling-settings/24590/12 
   programs.dconf.enable = true;
   programs.dconf.profiles.gdm.databases = [
@@ -81,10 +51,6 @@ in {
   programs.dconf.profiles.user.databases = [
     { 
       settings = {
-        # "org/gnome/mutter" = {
-        #   experimental-features = [ "scale-monitor-framebuffer" ];
-        # };
-
         "org/gnome/settings-daemon/plugins/media-keys" = {
           custom-keybindings = [
             "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
@@ -113,7 +79,6 @@ in {
         };
 
         "org/gnome/desktop/wm/keybindings" = {
-          # close = mkEmptyAy (type.string);
           switch-input-source = [ "<Shift>Alt_L" ];
           switch-input-source-backward = [ "<Alt>Shift_L" ];
         };
@@ -136,10 +101,7 @@ in {
           disable-user-extensions = false;
           enabled-extensions = [
             "activate-window-by-title@lucaswerkmeister.de" 
-            #"appindicatorsupport@rgcjonas.gmail.com" 
-            #"clipboard-indicator@tudmotu.com" 
             "gsconnect@andyholmes.github.io"
-            "tailscale@joaophi.github.com"
             "unite@hardpixel.eu" 
             "user-theme@gnome-shell-extensions.gcampax.github.com"
             "pip-on-top@rafostar.github.com"
@@ -269,9 +231,7 @@ in {
         hash = "sha256-OyxNibjQn7VBEdAPUaGd0MEgzCzpaFqViMKhF52haUI=";
       };
     }))
-    gnomeExtensions.tailscale-qs
     gnomeExtensions.gsconnect
-    gnomeExtensions.cloudflare-warp-toggle
     gnomeExtensions.hide-keyboard-layout
     gnomeExtensions.always-indicator
     gnomeExtensions.overview-background

@@ -1,10 +1,11 @@
-{ pkgs, lib, inputs, config, self, ... }:
+{ lib, inputs, self, ... }:
 
 {
   imports = [
     "${self}/generics/default.nix"
     ./hardware.nix
     ./network.nix
+    ./services.nix
     inputs.secrets.nixosModules.ampere-24g
   ];
 
@@ -30,4 +31,5 @@
       };
     };
   };
+
 }

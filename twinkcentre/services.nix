@@ -1,47 +1,14 @@
-{ pkgs, lib, inputs, stable, unstable, config, ... }:
+{ pkgs, lib, inputs, unstable, config, ... }:
 
 {
-  # users.users.weechat = {
-  #   isNormalUser = true;
-  #   description = "weechat";
-  #   packages = with pkgs; [
-  #     tmux
-  #     (weechat.override {
-  #       configure = {availablePlugins, ...}: {
-  #         plugins = with availablePlugins; [
-  #           (python.withPackages (ps: with ps; [ requests pysocks ]))
-  #         ];
-  #       };
-  #     })
-  #   ];
-  # };
-
-  # systemd.services.weechat = {
-  #   enable = true;
-  #   after = [ "network-online.target" ];
-  #   wants = [ "network-online.target" ];
-  #   wantedBy = [ "multi-user.target" ];
-  #   path = [ pkgs.kitty.terminfo ];
-
-  #   serviceConfig = {
-  #     Restart = "always";
-  #     RestartSec = "30";
-  #     User = "weechat";
-  #     Group = "users";
-  #     Type = "forking";
-  #     ExecStart = "${pkgs.tmux}/bin/tmux -2 -S /tmp/tmux_weechat new-session -s weechat -d weechat";
-  #     ExecStop = "${pkgs.tmux}/bin/tmux -S /tmp/tmux_weechat kill-session -t weechat";
-  #   };
-  # };
-
   services.matrix-conduit = {
-    enable = true;
+    enable = false;
     package = inputs.conduwuit.packages.${pkgs.system}.default; 
     settings = {
       global = {
-        server_name = inputs.secrets.hosts.twinkcentre.matrix;
-        turn_uris = [ inputs.secrets.hosts.twinkcentre.coturn ];
-        turn_secret = inputs.secrets.hosts.twinkcentre.coturn_secret;
+        server_name = "matrix.${inputs.secrets.misc.domain}";
+        turn_uris = [ "turn:coturn.${inputs.secrets.misc.domain}?transport=udp" ];
+        turn_secret = inputs.secrets.misc.coturn_secret;
         proxy = {
           by_domain = [{
             url = "http://localhost:2081";
@@ -49,6 +16,7 @@
               "catgirl.cloud" "*.catgirl.cloud" 
               "matrix.org" "*.matrix.org"
               "ntfy.sh" "*.ntfy.sh"
+              "${inputs.secrets.hosts.twinkcentre.matrix_proxy.clk}" "*.${inputs.secrets.hosts.twinkcentre.matrix_proxy.clk}"
             ];
             exclude = [];
           }];
@@ -190,7 +158,7 @@
       server = {
         http_addr = "127.0.0.1";
         http_port = 3000;
-        domain = "${inputs.secrets.hosts.twinkcentre.grafana}";
+        domain = "grafana.${inputs.secrets.misc.domain}";
       };
     };
   };
@@ -216,8 +184,8 @@
     lfs.enable = true;
     settings = {
       server = {
-        DOMAIN = "${inputs.secrets.hosts.twinkcentre.forgejo}";
-        ROOT_URL = "https://${inputs.secrets.hosts.twinkcentre.forgejo}/"; 
+        DOMAIN = "forgejo.${inputs.secrets.misc.domain}";
+        ROOT_URL = "https://forgejo.${inputs.secrets.misc.domain}/"; 
         HTTP_PORT = 3050;
       };
       service.DISABLE_REGISTRATION = true; 
@@ -235,7 +203,7 @@
       default = {
         enable = true;
         tokenFile = config.age.secrets.gitea-runner.path;
-        url = "https://${inputs.secrets.hosts.twinkcentre.forgejo}/";
+        url = "https://forgejo.${inputs.secrets.misc.domain}/";
         name = "local";
         hostPackages = with pkgs; [
           bash
@@ -265,21 +233,6 @@
     };
   };
   
-  # services.gitea-actions-runner = {
-  #   instances.default = {
-  #     enable = true;
-  #     name = "monolith";
-  #     url = "https://${inputs.secrets.hosts.twinkcentre.forgejo}/";
-  #     tokenFile = config.age.secrets.gitea-runner.path;
-  #     labels = [
-  #       "ubuntu-latest:docker://node:16-bullseye"
-  #       "ubuntu-22.04:docker://node:16-bullseye"
-  #       "ubuntu-20.04:docker://node:16-bullseye"
-  #       "ubuntu-18.04:docker://node:16-buster"     
-  #     ];
-  #   };
-  # };
-
   services.scrutiny = {
     enable = true;
     influxdb.enable = true;
@@ -358,7 +311,7 @@
   services.nextcloud = {
     enable = true;
     package = pkgs.nextcloud30;
-    hostName = inputs.secrets.hosts.twinkcentre.nextcloud;
+    hostName = "nextcloud.${inputs.secrets.misc.domain}";
     configureRedis = true;
     config.adminpassFile = "${config.age.secrets.nextcloud-admin.path}";
     extraAppsEnable = true;
@@ -374,7 +327,7 @@
     enable = true;
     settings = {
       listen-http = ":8999";
-      base-url = "https://${inputs.secrets.hosts.twinkcentre.ntfy}";
+      base-url = "https://ntfy.${inputs.secrets.misc.domain}";
     };
   };
 

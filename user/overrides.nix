@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, stable, unstable, dbpass, USER, ... }:
+{ pkgs, stable, unstable, dbpass, ... }:
 
 {
   obs = pkgs.wrapOBS {

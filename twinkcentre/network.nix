@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, config, self, USER, stable, unstable, ... }:
+{ pkgs, lib, inputs, unstable, ... }:
 
 {
   networking = {

@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, USER, ... }:
+{ lib, inputs, ... }:
 
 {
   imports = [
@@ -13,16 +13,14 @@
         "/var/lib/bluetooth"
         "/var/lib/nixos"
         "/var/lib/systemd/coredump"
-        "/var/lib/tailscale"
-        "/var/lib/cloudflare-warp"
         "/var/lib/vnstat"
         "/var/lib/qbit"
         "/var/lib/alsa"
         "/var/lib/cups"
         "/etc/NetworkManager/system-connections"
         "/etc/ssh"
-        { directory = "/etc/yggdrasil"; user = "socks"; group = "socks"; mode = "0700"; }
-        { directory = "/etc/sing-box"; user = "socks"; group = "socks"; mode = "0770"; }
+        { directory = "/etc/yggdrasil"; user = "yggdrasil"; group = "yggdrasil"; mode = "0700"; }
+        { directory = "/etc/sing-box"; user = "root"; group = "root"; mode = "0770"; }
         { directory = "/var/lib/colord"; user = "colord"; group = "colord"; mode = "u=rwx,g=rx,o="; }
       ];
       files = [

@@ -1,4 +1,4 @@
-{ inputs, pkgs, config, ... }:
+{ config, ... }:
 
 {
   networking = {
@@ -15,6 +15,7 @@
     enable = true;
     ports = [ 34812 ];
     openFirewall = false;
+    settings.X11Forwarding = true;
   };
 
   # {"AccountTag":"","TunnelID":"","TunnelSecret":""}

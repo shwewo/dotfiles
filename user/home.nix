@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, stable, unstable, USER, ... }:
+{ pkgs, inputs, unstable, USER, ... }:
 let
   lock-false = {
     Value = false;
@@ -122,6 +122,9 @@ in {
         "terminal.integrated.localEchoEnabled" = "off";
         "terminal.integrated.localEchoStyle" = "dim";
         "remote.SSH.enableAgentForwarding" = false;
+        "[json]" = {
+          "editor.defaultFormatter" =  "esbenp.prettier-vscode";
+        };
       };
     };
   
@@ -130,23 +133,6 @@ in {
       userName  = "shwewo";
       userEmail = "shwewo@gmail.com";
     };
-
-    # programs.ssh = {
-      # enable = true;
-      # matchBlocks = {
-      #   "oracle-cloud" = {
-      #     hostname = inputs.secrets.hosts.oracle-cloud.network.ip;
-      #     port = inputs.secrets.hosts.oracle-cloud.network.ssh.port;
-      #   };
-      #   "nyadesk" = {
-      #     hostname = "192.168.50.150";
-      #   };
-      #   "nyalapt" = {
-      #     hostname = "192.168.50.219";
-      #     port = 55755;
-      #   };
-      # };
-    # };
 
     programs.kitty = {
       enable = true;

@@ -20,7 +20,6 @@
     initrd.systemd = {
       enable = true;
       tpm2.enable = true;
-      # additionalUpstreamUnits = [ "systemd-tpm2-setup-early.service" ];
       storePaths = [
         "${config.boot.initrd.systemd.package}/lib/systemd/systemd-tpm2-setup"
         "${config.boot.initrd.systemd.package}/lib/systemd/system-generators/systemd-tpm2-generator"

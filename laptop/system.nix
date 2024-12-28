@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, unstable, self, config, USER, ... }:
+{ pkgs, lib, inputs, self, config, USER, ... }:
 
 {
   imports = [
@@ -14,6 +14,12 @@
   
   system.stateVersion = "23.11";
   time.timeZone = "Europe/Moscow";
+  i18n.defaultLocale = lib.mkForce "fr_FR.UTF-8";
+  i18n.supportedLocales = lib.mkForce [
+    "en_GB.UTF-8/UTF-8"
+    "en_US.UTF-8/UTF-8"
+    "fr_FR.UTF-8/UTF-8"
+  ];
   security.sudo.wheelNeedsPassword = false;
   users.users.${USER} = { hashedPasswordFile = config.age.secrets.login.path; initialHashedPassword = lib.mkForce null; };
   users.users.root.hashedPasswordFile = config.age.secrets.login.path;
@@ -56,14 +62,4 @@
   };
 
   services.udev.packages = with pkgs; [ yubikey-personalization android-udev-rules ];
-  services.udev.extraRules = ''
-    # USB-Blaster
-    SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6001", MODE="0666", GROUP="plugdev"
-    SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6002", MODE="0666", GROUP="plugdev"
-    SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6003", MODE="0666", GROUP="plugdev"
-
-    # USB-Blaster II
-    SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6010", MODE="0666", GROUP="plugdev"
-    SUBSYSTEM=="usb", ATTR{idVendor}=="09fb", ATTR{idProduct}=="6810", MODE="0666", GROUP="plugdev"
-  '';
 }
