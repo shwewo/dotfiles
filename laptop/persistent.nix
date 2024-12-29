@@ -21,6 +21,7 @@
         "/etc/ssh"
         { directory = "/etc/yggdrasil"; user = "yggdrasil"; group = "yggdrasil"; mode = "0700"; }
         { directory = "/etc/sing-box"; user = "root"; group = "root"; mode = "0770"; }
+        { directory = "/etc/wireguard"; user = "wireguard"; group = "wireguard"; mode = "0700"; }
         { directory = "/var/lib/colord"; user = "colord"; group = "colord"; mode = "u=rwx,g=rx,o="; }
       ];
       files = [

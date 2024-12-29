@@ -4,8 +4,8 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     stable.url = "github:nixos/nixpkgs/nixos-24.05";
-    unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-
+    unstable.url = "github:nixos/nixpkgs?rev=d70bd19e0a38ad4790d3913bf08fcbfc9eeca507";
+  
     tdesktop.url = "github:shwewo/telegram-desktop-patched";
     secrets.url = "git+ssh://git@github.com/shwewo/secrets";
     agenix.url = "github:ryantm/agenix";
@@ -61,7 +61,7 @@
       specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; }; 
       modules = [ ./twinkcentre/system.nix ];
     };
-    nixosConfigurations.ampere-24g = stable.lib.nixosSystem {
+    nixosConfigurations.ampere-24g = unstable.lib.nixosSystem {
       system = "aarch64-linux"; 
       specialArgs = specialArgs // { stable = stable_aarch64; unstable = unstable_aarch64; }; 
       modules = [ ./ampere-24g/system.nix ];

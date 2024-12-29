@@ -1,4 +1,4 @@
-{ lib, inputs, self, ... }:
+{ pkgs, config, inputs, self, ... }:
 
 {
   imports = [
@@ -27,6 +27,22 @@
         extraOptions = [
           "--privileged"
           "--network=host"
+        ];
+      };
+      neko-chromium = {
+        ports = [
+          "127.0.0.1:8080:8080"
+          "10.0.0.187:52000-52100:52000-52100/udp"
+        ];
+        image = "ghcr.io/m1k1o/neko/arm-chromium:latest";
+        environment = {
+          NEKO_SCREEN = "1920x1080@30";
+          NEKO_EPR = "52000-52100";
+          NEKO_ICELITE = "true";
+          NEKO_CONTROL_PROTECTION = "true";
+        };
+        environmentFiles = [
+          "${config.age.secrets.neko_chromium.path}"
         ];
       };
     };
