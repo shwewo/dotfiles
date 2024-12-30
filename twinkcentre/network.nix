@@ -183,8 +183,6 @@
       Restart = "on-failure"; 
       RestartSec = "15"; 
       Type = "simple";
-      DynamicUser = "yes"; 
-      RuntimeMaxSec=3600;
       ExecStart = "${pkgs.sing-box}/bin/sing-box run --config /etc/sing-box/config.json";
     };
   };
@@ -256,7 +254,7 @@
 
     script = ''
       ${pkgs.util-linux}/bin/rfkill unblock all
-      ${pkgs.linux-router}/bin/lnxrouter -g 192.168.10.1 --country RU --ap wlp2s0 twcnt -p ${inputs.secrets.hosts.twinkcentre.network.lnxrouter.wifi_password} --wifi4 --wifi5 --freq-band 5 --no-virt --random-mac --ban-priv
+      ${pkgs.linux-router}/bin/lnxrouter -g 192.168.10.1 --country RU --ap wlp2s0 twcnt -p ${inputs.secrets.hosts.twinkcentre.network.lnxrouter.wifi_password} --wifi4 --wifi5 --freq-band 5 --no-virt --random-mac --ban-priv --dns 127.0.0.1
     '';
   };
 }

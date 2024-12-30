@@ -15,7 +15,7 @@
     iproute2.enable = true;
     firewall = {
       enable = true;
-      trustedInterfaces = [ "ap0" ];
+      trustedInterfaces = [ "sb0" "virbr0" "virbr2" ];
       allowedTCPPorts = [
         # wifi sharing
         53 67
@@ -116,6 +116,7 @@
       RestartSec = "15";
       Type = "simple";
       ExecStart = "${inputs.shwewo.packages.${pkgs.system}.gogost}/bin/gost -L 'socks5://:2200?interface=warp0&udp=true'";
+      DynamicUser = "yes";
     };
   };
 
