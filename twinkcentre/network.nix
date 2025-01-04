@@ -111,7 +111,7 @@
       ExecStart = "${unstable.cloudflared}/bin/cloudflared tunnel --config=${pkgs.writeText "cloudflared.yml" ''{"credentials-file":"/run/agenix/cloudflared","ingress":[{"service":"http_status:404"}],"tunnel":"thinkcentre"}''} --no-autoupdate --post-quantum --compression-quality 3 run thinkcentre";
       DynamicUser = "yes";
       Restart = "on-failure";
-      RestartSec = 10;su
+      RestartSec = 10;
     };
   };
 
