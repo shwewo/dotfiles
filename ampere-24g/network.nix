@@ -13,7 +13,7 @@
     firewall = {
       enable = true;
       checkReversePath = "loose";
-      interfaces.enp1s0.allowedTCPPorts = [ 443 ];
+      allowedTCPPorts = [ 443 8443 ];
     };
     interfaces.enp0s6 = {
       proxyARP = true;

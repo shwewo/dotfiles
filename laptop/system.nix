@@ -61,5 +61,7 @@
     clean.extraArgs = "--keep-since 4d --keep 3";
   };
 
+  programs.nix-ld.enable = true;
+
   services.udev.packages = with pkgs; [ yubikey-personalization android-udev-rules ];
 }

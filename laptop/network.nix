@@ -1,6 +1,8 @@
 { inputs, pkgs, lib, unstable, ... }:
 
 {
+  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
+
   networking = {
     networkmanager = { 
       enable = true;
@@ -15,7 +17,7 @@
     iproute2.enable = true;
     firewall = {
       enable = true;
-      trustedInterfaces = [ "sb0" "virbr0" "virbr2" ];
+      trustedInterfaces = [ "sb0" "sb-veth0" "virbr0" "virbr2" ];
       allowedTCPPorts = [
         # wifi sharing
         53 67
@@ -55,6 +57,8 @@
     ports = [ 34812 ]; 
   };
 
+  # For tun mode, remember setting to networking.firewall.checkReversePath = "loose";
+
   systemd.services.sing-box-tun = {
     enable = true;
     description = "vpn";
@@ -70,14 +74,35 @@
     };
 
     preStart = ''
+      ip netns add sb
+      ip link add sb-veth0 type veth peer name sb-veth1
+      ip link set sb-veth1 netns sb
+      ip addr add 10.24.0.1/24 dev sb-veth0
+      ip link set sb-veth0 up
+      ip netns exec sb ip addr add 10.24.0.2/24 dev sb-veth1
+      ip netns exec sb ip link set sb-veth1 up
+      ip netns exec sb ip link set lo up
+      ip netns exec sb ip route add default via 10.24.0.1
+      iptables -t nat -A POSTROUTING -s 10.24.0.0/24 ! -o sb-veth0 -j MASQUERADE
+      mkdir -p /etc/netns/sb
+      echo "nameserver 10.24.0.1" > /etc/netns/sb/resolv.conf
+
       cp /etc/resolv.conf /etc/sing-box/resolv.conf
       echo "nameserver 127.0.0.1" > /etc/resolv.conf
     '';
 
     postStop = ''
+      ip link del sb-veth0
+      ip netns del sb
+      iptables -t nat -D POSTROUTING -s 10.24.0.0/24 ! -o sb-veth0 -j MASQUERADE
+      rm /etc/netns/sb/resolv.conf
+      rmdir /etc/netns/sb
+      rmdir /etc/netns
+
       cat /etc/sing-box/resolv.conf > /etc/resolv.conf
-      rm /etc/sing-box/resolv.conf
     '';
+
+    path = with pkgs; [ iptables iproute2 ];
   };
 
   users.groups.wireguard = {};
@@ -99,7 +124,8 @@
       ExecStart = "${unstable.amneziawg-tools}/bin/awg-quick up /etc/wireguard/warp0.conf ";
       ExecStop = "${unstable.amneziawg-tools}/bin/awg-quick down /etc/wireguard/warp0.conf";
     };
-
+    
+    preStart = "while ! ${pkgs.dig}/bin/nslookup engage.cloudflareclient.com > /dev/null 2>&1; do sleep 5; done"; 
     path = [ unstable.amneziawg-go ];
   };
 

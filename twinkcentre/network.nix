@@ -1,6 +1,8 @@
 { pkgs, lib, inputs, unstable, ... }:
 
 {
+  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
+
   networking = {
     hostName = "twinkcentre";
     hostId = "5eaeb42b";
@@ -109,7 +111,7 @@
       ExecStart = "${unstable.cloudflared}/bin/cloudflared tunnel --config=${pkgs.writeText "cloudflared.yml" ''{"credentials-file":"/run/agenix/cloudflared","ingress":[{"service":"http_status:404"}],"tunnel":"thinkcentre"}''} --no-autoupdate --post-quantum --compression-quality 3 run thinkcentre";
       DynamicUser = "yes";
       Restart = "on-failure";
-      RestartSec = 10;
+      RestartSec = 10;su
     };
   };
 
