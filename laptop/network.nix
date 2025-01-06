@@ -59,21 +59,25 @@
 
   # For tun mode, remember setting to networking.firewall.checkReversePath = "loose";
 
-  systemd.services.sing-box-tun = {
-    enable = true;
-    description = "vpn";
+  users.groups.sing-box = {};
+  users.users.sing-box = {
+    group = "sing-box";
+    isSystemUser = true;
+    home = "/etc/sing-box";
+  };
+
+  systemd.services.sing-box-pre = {
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
+    requires = [ "sing-box.service" ];
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
-      Restart = "always";
-      RestartSec = "15";
-      Type = "simple";
-      ExecStart = "${unstable.sing-box}/bin/sing-box run --config /etc/sing-box/config-tun.json";
+      Type = "oneshot";
+      RemainAfterExit = "yes";
     };
 
-    preStart = ''
+    script = ''
       ip netns add sb
       ip link add sb-veth0 type veth peer name sb-veth1
       ip link set sb-veth1 netns sb
@@ -91,7 +95,7 @@
       echo "nameserver 127.0.0.1" > /etc/resolv.conf
     '';
 
-    postStop = ''
+    preStop = ''
       ip link del sb-veth0
       ip netns del sb
       iptables -t nat -D POSTROUTING -s 10.24.0.0/24 ! -o sb-veth0 -j MASQUERADE
@@ -102,13 +106,27 @@
       cat /etc/sing-box/resolv.conf > /etc/resolv.conf
     '';
 
-    path = with pkgs; [ iptables iproute2 ];
+    path = with pkgs; [ iptables iproute2 iw ];
   };
 
-  users.groups.wireguard = {};
-  users.users.wireguard = {
-    group = "wireguard";
-    isSystemUser = true;
+  systemd.services.sing-box = {
+    enable = true;
+    after = [ "sing-box-pre.service" ];
+    wants = [ "sing-box-pre.service" ];
+    bindsTo = [ "sing-box-pre.service" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = {
+      Restart = "always";
+      RestartSec = "15";
+      Type = "simple";
+      ExecStart = "${unstable.sing-box}/bin/sing-box run --config /etc/sing-box/config-tun.json";
+      User = "sing-box";
+      Group = "sing-box";
+      WorkingDirectory = "/etc/sing-box";
+      CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_PTRACE CAP_DAC_READ_SEARCH";
+      AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_PTRACE CAP_DAC_READ_SEARCH";
+    };
   };
 
   systemd.services.warp = {

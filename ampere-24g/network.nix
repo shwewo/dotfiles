@@ -23,6 +23,12 @@
           prefixLength = 24;
         }
       ];
+      ipv6.addresses = [
+        {
+          address = inputs.secrets.hosts.ampere-24g.network.ipv6addr;
+          prefixLength = 128;
+        }
+      ];
     };
     interfaces.enp1s0 = {
       proxyARP = true;
@@ -39,6 +45,10 @@
     };
     defaultGateway = {
       address = "10.0.0.1";
+      interface = "enp0s6";
+    };
+    defaultGateway6 = {
+      address = "fe80::200:17ff:fece:6c78";
       interface = "enp0s6";
     };
   };

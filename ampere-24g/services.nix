@@ -1,4 +1,4 @@
-{ inputs, config, pkgs, ... }:
+{ inputs, unstable, config, pkgs, ... }:
 
 {
   services.matrix-conduit = {
@@ -13,17 +13,30 @@
     };
   };
 
+  users.groups.sing-box = {};
+  users.users.sing-box = {
+    group = "sing-box";
+    isSystemUser = true;
+    home = "/etc/sing-box";
+  };
+
   systemd.services.sing-box = {
     enable = true;
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
+    bindsTo = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
 
-    serviceConfig = { 
-      Restart = "on-failure"; 
-      RestartSec = "15"; 
+    serviceConfig = {
+      Restart = "always";
+      RestartSec = "15";
       Type = "simple";
-      ExecStart = "${pkgs.sing-box}/bin/sing-box run --config /etc/sing-box/proxy.json";
+      ExecStart = "${unstable.sing-box}/bin/sing-box run --config /etc/sing-box/proxy.json";
+      User = "sing-box";
+      Group = "sing-box";
+      WorkingDirectory = "/etc/sing-box";
+      CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_PTRACE CAP_DAC_READ_SEARCH";
+      AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_PTRACE CAP_DAC_READ_SEARCH";
     };
   };
 
@@ -65,9 +78,9 @@
   # security.acme.defaults.email = "abuse@cloudflare.com";
   # security.acme.acceptTerms = true;
 
-  system.activationScripts.create-s-ui-pod = ''
-    ${pkgs.podman}/bin/podman pod exists s-ui || ${pkgs.podman}/bin/podman pod create -n s-ui -p '127.0.0.1:2095:2095' -p '127.0.0.1:2096:2096'
-  '';
+  # system.activationScripts.create-s-ui-pod = ''
+  #   ${pkgs.podman}/bin/podman pod exists s-ui || ${pkgs.podman}/bin/podman pod create -n s-ui -p '127.0.0.1:2095:2095' -p '127.0.0.1:2096:2096'
+  # '';
 
   virtualisation.oci-containers.containers = {
     # marzban = {
@@ -104,25 +117,24 @@
       ];
     };
     s-ui = {
+      ports = [
+        "127.0.0.1:2095:2095"
+        "127.0.0.1:2096:2096"
+      ];
       image = "docker.io/alireza7/s-ui:latest";
       volumes = [
-        "s-ui-singbox:/app/bin"
-        "s-ui-db:/app/db"
-        "s-ui-cert:/app/cert"
+        "suidb:/usr/local/s-ui/db/"
+        "suicert:/root/cert/"
       ];
-      dependsOn = [ 
-        "s-ui-singbox"
-      ];
-      extraOptions = [ "--pod=s-ui" ];
     };
-    s-ui-singbox = {
-      image = "docker.io/alireza7/s-ui-singbox:latest";
-      volumes = [
-        "s-ui-singbox:/app"
-        "s-ui-cert:/cert"
-      ];
-      extraOptions = [ "--pod=s-ui" ];
-    };
+    # s-ui-singbox = {
+    #   image = "docker.io/alireza7/s-ui-singbox:latest";
+    #   volumes = [
+    #     "singbox:/app/"
+    #     "suicert:/cert"
+    #   ];
+    #   extraOptions = [ "--pod=s-ui" ];
+    # };
     neko-chromium = {
       image = "ghcr.io/m1k1o/neko/arm-chromium:latest";
       ports = [

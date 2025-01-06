@@ -13,6 +13,7 @@
     firewall = {
       enable = true;
       checkReversePath = "loose";
+      trustedInterfaces = [ "sb0" "sb-veth0" "virbr0" "virbr1" ];
       allowedTCPPorts = [
         # Compress
         5100
@@ -47,25 +48,6 @@
         };
       };
     };
-
-    # nftables = {
-    #   enable = true;
-    #   ruleset = ''
-    #     table inet yggdrasil-fw { 
-    #       chain input { 
-    #         type filter hook input priority 0; policy accept;
-    #         iifname "ygg0" jump ygg-chain 
-    #       } 
-          
-    #       chain ygg-chain { 
-    #         ct state established,related accept
-    #         icmp type echo-request accept
-    #         tcp dport 54921 accept
-    #         drop
-    #       }
-    #     }
-    #   '';
-    # };
   };
 
   services.openssh = {
@@ -108,7 +90,7 @@
     wants = [ "network.target" "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
-      ExecStart = "${unstable.cloudflared}/bin/cloudflared tunnel --config=${pkgs.writeText "cloudflared.yml" ''{"credentials-file":"/run/agenix/cloudflared","ingress":[{"service":"http_status:404"}],"tunnel":"thinkcentre"}''} --no-autoupdate --post-quantum --compression-quality 3 run thinkcentre";
+      ExecStart = "${unstable.cloudflared}/bin/cloudflared tunnel --config=${pkgs.writeText "cloudflared.yml" ''{"credentials-file":"/run/agenix/cloudflared","ingress":[{"service":"http_status:404"}],"tunnel":"thinkcentre"}''} --no-autoupdate --protocol http2 --compression-quality 3 run thinkcentre";
       DynamicUser = "yes";
       Restart = "on-failure";
       RestartSec = 10;
@@ -116,20 +98,6 @@
   };
 
   systemd.services.NetworkManager-wait-online.enable = false;
-
-  systemd.services.wireproxy-cru = {
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
-
-    serviceConfig = { 
-      Restart = "on-failure"; 
-      RestartSec = "15"; 
-      Type = "simple";
-      DynamicUser = "yes"; 
-      ExecStart = "${pkgs.wireproxy}/bin/wireproxy -c /etc/wireguard/wg0.conf";
-    };
-  };
   
   users.groups.yggdrasil = {};
   users.users.yggdrasil = {
@@ -152,111 +120,98 @@
     };
   };
 
-  # services.yggdrasil = {
-  #   enable = true;
-  #   persistentKeys = true;
-  #   settings = {
-  #     Peers = [
-  #       "tls://yggpeer.tilde.green:59454"
-  #       "tls://de-fsn-1.peer.v4.yggdrasil.chaz6.com:4444"
-  #       "tls://23.137.249.65:444"
-  #       "tcp://cowboy.supergay.network:9111"
-  #       "quic://x-mow-0.sergeysedoy97.ru:65535"
-  #       "tcp://x-mow-0.sergeysedoy97.ru:65533"
-  #       "quic://srv.itrus.su:7993"
-  #       "tls://srv.itrus.su:7992"
-  #       # https://github.com/yggdrasil-network/public-peers
-  #     ];
-  #     IfName = "ygg0";
-  #   };
-  # };
-  
-  # systemd.services.yggdrasil.after = [ "nftables.service" ];
-  # systemd.services.yggdrasil.wants = [ "nftables.service" ];
-  # systemd.services.yggdrasil.bindsTo = [ "nftables.service" ];
 
-  systemd.services.sing-box = {
-    enable = true;
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
-
-    serviceConfig = { 
-      Restart = "on-failure"; 
-      RestartSec = "15"; 
-      Type = "simple";
-      ExecStart = "${pkgs.sing-box}/bin/sing-box run --config /etc/sing-box/config.json";
-    };
+  users.groups.sing-box = {};
+  users.users.sing-box = {
+    group = "sing-box";
+    isSystemUser = true;
+    home = "/etc/sing-box";
   };
 
-  systemd.services.lnxrouter-nsd = {
-    enable = true;
+  systemd.services.sing-box-pre = {
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
+    requires = [ "sing-box.service" ];
     wantedBy = [ "multi-user.target" ];
-  
+
     serviceConfig = {
-      Restart = "on-failure";
-      RestartSec = "15";
-      Type = "exec";
+      Type = "oneshot";
+      RemainAfterExit = "yes";
     };
 
     script = ''
-      ${pkgs.iproute2}/bin/ip netns add hotspot_nsd &> /dev/null || true
-      
-      ${inputs.shwewo.packages.${pkgs.system}.namespaced}/bin/namespaced \
-        --name "hotspot" \
-        --veth0-ip 10.42.0.3 \
-        --veth1-ip 10.42.0.4 \
-        --fwmark 0x6e706423 \
-        --table 28105 \
-        --nokill \
-        --dontcreate
+      ip netns add sb
+      ip link add sb-veth0 type veth peer name sb-veth1
+      ip link set sb-veth1 netns sb
+      ip addr add 10.24.0.1/24 dev sb-veth0
+      ip link set sb-veth0 up
+      ip netns exec sb ip addr add 10.24.0.2/24 dev sb-veth1
+      ip netns exec sb ip link set sb-veth1 up
+      ip netns exec sb ip link set lo up
+      ip netns exec sb ip route add default via 10.24.0.1
+      iptables -t nat -A POSTROUTING -s 10.24.0.0/24 ! -o sb-veth0 -j MASQUERADE
+      mkdir -p /etc/netns/sb
+      echo "nameserver 10.24.0.1" > /etc/netns/sb/resolv.conf
+
+      cp /etc/resolv.conf /etc/sing-box/resolv.conf
+      echo "nameserver 127.0.0.1" > /etc/resolv.conf
+
+      iw phy phy0 set netns name sb # WIFI ADAPTER MOVING TO MAIN NAMESPACE
     '';
 
     preStop = ''
-      ${pkgs.iproute2}/bin/ip netns exec hotspot_nsd ${pkgs.iw}/bin/iw phy phy0 set netns 1
+      ip netns exec sb iw phy phy0 set netns 1 # WIFI ADAPTER MOVING TO SB NAMESPACE
+
+      ip link del sb-veth0
+      ip netns del sb
+      iptables -t nat -D POSTROUTING -s 10.24.0.0/24 ! -o sb-veth0 -j MASQUERADE
+      rm /etc/netns/sb/resolv.conf
+      rmdir /etc/netns/sb
+      rmdir /etc/netns
+
+      cat /etc/sing-box/resolv.conf > /etc/resolv.conf
     '';
 
-    postStart = ''
-      while [ ! -e /var/run/netns/hotspot_nsd ]; do sleep 1; done
-      ${pkgs.iw}/bin/iw phy phy0 set netns name hotspot_nsd
-    '';
+    path = with pkgs; [ iptables iproute2 iw ];
   };
 
-  systemd.services.lnxrouter-sing-box = {
+  systemd.services.sing-box = {
     enable = true;
-    after = [ "lnxrouter-nsd.service" ];
-    wants = [ "lnxrouter-nsd.service" ];
-    bindsTo = [ "lnxrouter-nsd.service" ];
-    wantedBy = [ "lnxrouter-nsd.service" ];
+    after = [ "sing-box-pre.service" ];
+    wants = [ "sing-box-pre.service" ];
+    bindsTo = [ "sing-box-pre.service" ];
+    wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
-      Restart = "on-failure"; 
-      RestartSec = "15"; 
+      Restart = "always";
+      RestartSec = "15";
       Type = "simple";
-      ExecStart = "${pkgs.sing-box}/bin/sing-box run --config /etc/sing-box/config-tun.json";
-      NetworkNamespacePath = "/var/run/netns/hotspot_nsd";
+      ExecStart = "${unstable.sing-box}/bin/sing-box run --config /etc/sing-box/config-tun.json";
+      User = "sing-box";
+      Group = "sing-box";
+      WorkingDirectory = "/etc/sing-box";
+      CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_PTRACE CAP_DAC_READ_SEARCH";
+      AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_PTRACE CAP_DAC_READ_SEARCH";
     };
   };
 
   systemd.services.lnxrouter = {
     enable = true;
-    after = [ "lnxrouter-sing-box.service" ];
-    wants = [ "lnxrouter-sing-box.service" ];
-    bindsTo = [ "lnxrouter-sing-box.service" ];
-    wantedBy = [ "lnxrouter-sing-box.service" ];
+    after = [ "network-online.target" "sing-box.service" ];
+    wants = [ "network-online.target" "sing-box.service" ];
+    bindsTo = [ "sing-box.service" ];
+    wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
       Restart = "on-failure";
       RestartSec = "15";
       Type = "exec";
-      NetworkNamespacePath = "/var/run/netns/hotspot_nsd";
+      NetworkNamespacePath = "/var/run/netns/sb";
     };
 
     script = ''
       ${pkgs.util-linux}/bin/rfkill unblock all
-      ${pkgs.linux-router}/bin/lnxrouter -g 192.168.10.1 --country RU --ap wlp2s0 twcnt -p ${inputs.secrets.hosts.twinkcentre.network.lnxrouter.wifi_password} --wifi4 --wifi5 --freq-band 5 --no-virt --random-mac --ban-priv --dns 127.0.0.1
+      ${pkgs.linux-router}/bin/lnxrouter -g 192.168.10.1 --country RU --ap wlp2s0 twcnt -p ${inputs.secrets.hosts.twinkcentre.network.lnxrouter.wifi_password} --wifi4 --wifi5 --freq-band 5 --no-virt --random-mac --ban-priv --dns 10.24.0.1
     '';
   };
 }
