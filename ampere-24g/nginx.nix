@@ -2,7 +2,7 @@
 
 {
   systemd.tmpfiles.rules = [
-    "d /var/www/ebmcbackups 770 nginx nginx"
+    "d /var/www/ebmcbackups 770 nginx ebmc"
   ];
 
   services.nginx.enable = true;

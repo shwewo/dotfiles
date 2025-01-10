@@ -5,11 +5,15 @@
 
   networking.firewall.extraCommands = ''
     iptables -A OUTPUT -p tcp --sport 38409 -m owner --gid-owner 10065 -j ACCEPT
+    iptables -A OUTPUT -p tcp --dport 38409 -m owner --gid-owner 10065 -j ACCEPT
     iptables -A OUTPUT -p tcp --sport 25589 -m owner --gid-owner 10065 -j ACCEPT
+    iptables -A OUTPUT -p tcp --dport 25589 -m owner --gid-owner 10065 -j ACCEPT
 
     ip6tables -A OUTPUT -p tcp --sport 38409 -m owner --gid-owner 10065 -j ACCEPT
+    ip6tables -A OUTPUT -p tcp --dport 38409 -m owner --gid-owner 10065 -j ACCEPT
     ip6tables -A OUTPUT -p tcp --sport 25589 -m owner --gid-owner 10065 -j ACCEPT
-    
+    ip6tables -A OUTPUT -p tcp --dport 25589 -m owner --gid-owner 10065 -j ACCEPT
+
     iptables -A OUTPUT -m owner --gid-owner 10065 -j REJECT
     ip6tables -A OUTPUT -m owner --gid-owner 10065 -j REJECT
   '';
@@ -36,17 +40,14 @@
   };
 
   systemd.services."ebmcbackup" = {
-    wants = [ "ebmcns.service" ];
-
     serviceConfig = {
       Type = "oneshot";
-      User = "root";
-      Group = "root";
+      User = "ebmc";
       IgnoreSIGPIPE = "false";
     };
 
     script = ''
-      /root/ebmc-backup.sh -v -c -i /home/minecraft/ebmc/server/world/ -o /var/www/ebmcbackups/ -s localhost:25589:${inputs.secrets.hosts.ampere-24g.ebmc-rcon-pass} -w rcon
+      /home/minecraft/ebmc/ebmc-backup.sh -v -c -i /home/minecraft/ebmc/server/world/ -o /var/www/ebmcbackups/ -s localhost:25589:${inputs.secrets.hosts.ampere-24g.ebmc-rcon-pass} -w rcon
     '';
 
     path = with pkgs; [ bash unixtools.xxd gnutar gawk tmux coreutils gzip ];
@@ -54,8 +55,8 @@
 
   systemd.services.instance-eb-mc = {
     enable = true;
-    after = [ "network-online.target" "ebmcns.service" ];
-    wants = [ "network-online.target" "ebmcns.service" ];
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
