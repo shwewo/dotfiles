@@ -10,7 +10,7 @@
     loader.efi.efiSysMountPoint = "/boot";
     kernelParams = [ ];
     initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
-    initrd.kernelModules = [];
+    initrd.kernelModules = [ "i915" ];
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
     tmp.cleanOnBoot = true;
@@ -85,6 +85,7 @@
   zramSwap.enable = true;
   swapDevices = [ ];
   
+  hardware.enableRedistributableFirmware = true;
   hardware.bluetooth.enable = true;
   hardware.firmware = with pkgs; [ wireless-regdb ];
   boot.extraModprobeConfig = ''

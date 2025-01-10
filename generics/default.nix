@@ -18,13 +18,11 @@
       auto-optimise-store = true;
       substituters = [
         "https://shwewo.cachix.org"
-        "https://attic.kennel.juneis.dog/conduit"
         "https://microvm.cachix.org"
       ];
       trusted-public-keys = [
         "conduit:eEKoUwlQGDdYmAI/Q/0slVlegqh/QmAvQd7HBSm21Wk="
         "shwewo.cachix.org-1:84cIX7ETlqQwAWHBnd51cD4BeUVXCyGbFdtp+vLxKOo="
-        "microvm.cachix.org-1:oXnBc6hRE3eX5rSYdRyMYXnfzcCxC7yKPTbZXALsqys="
       ];
     };
   };

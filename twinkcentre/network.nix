@@ -178,7 +178,7 @@
   systemd.services.sing-box = {
     enable = true;
     after = [ "sing-box-pre.service" ];
-    wants = [ "sing-box-pre.service" ];
+    wants = [ "sing-box-pre.service" "sing-box.service" ];
     bindsTo = [ "sing-box-pre.service" ];
     wantedBy = [ "multi-user.target" ];
 

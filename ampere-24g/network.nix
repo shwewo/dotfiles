@@ -13,7 +13,7 @@
     firewall = {
       enable = true;
       checkReversePath = "loose";
-      allowedTCPPorts = [ 443 8443 ];
+      allowedTCPPorts = [ 443 ];
     };
     interfaces.enp0s6 = {
       proxyARP = true;
@@ -79,6 +79,7 @@
     ports = [ 34812 ];
     openFirewall = false;
     settings.X11Forwarding = true;
+    settings.PasswordAuthentication = false;
   };
 
   # {"AccountTag":"","TunnelID":"","TunnelSecret":""}

@@ -40,6 +40,7 @@
     };
   };
 
+  users.groups.bots = {};
   users.users.bots = {
     isNormalUser = true;
     description = "bots account";
@@ -55,7 +56,7 @@
       Restart = "always";
       RestartSec = "30";
       User = "bots";
-      Group = "users";
+      Group = "bots";
       Type = "simple";
       WorkingDirectory = "/home/bots/musicbot";
       ExecStart = "${pkgs.proxychains-ng}/bin/proxychains4 -f ${pkgs.writeText "proxychains.conf" ''
@@ -65,44 +66,10 @@
     };
   };
 
-  # services.nginx = {
-  #   enable = true;
-  #   virtualHosts."whoasked" = {
-  #     listen = [{port = 8080; addr="0.0.0.0"; ssl=true; }];
-  #     enableACME = true;
-  #     forceSSL = true;
-  #     root = "/var/www/whoasked";
-  #   };
-  # };
-  
-  # security.acme.defaults.email = "abuse@cloudflare.com";
-  # security.acme.acceptTerms = true;
-
-  # system.activationScripts.create-s-ui-pod = ''
-  #   ${pkgs.podman}/bin/podman pod exists s-ui || ${pkgs.podman}/bin/podman pod create -n s-ui -p '127.0.0.1:2095:2095' -p '127.0.0.1:2096:2096'
-  # '';
-
   virtualisation.oci-containers.containers = {
-    # marzban = {
-    #   image = "gozargah/marzban:latest";
-    #   ports = [
-    #     "10.0.0.12:443:443"
-    #     "10.0.0.120:443:443"
-    #   ];
-    #   volumes = [
-    #     "marzban:/var/lib/marzban"
-    #     "/tmp/.marzban-uds:/uds"
-    #   ];
-    #   environment = {
-    #     UVICORN_UDS = "/uds/marzban.socket";
-    #     SUDO_USERNAME = "";
-    #     SUDO_PASSWORD = "";
-    #   };
-    # };
     x-ui = {
       image = "ghcr.io/mhsanaei/3x-ui:latest";
       ports = [
-        "8443:8443"
         "127.0.0.1:2053:2053"
         "127.0.0.1:2054:2054"
         "10.0.0.12:443:443"
@@ -127,14 +94,6 @@
         "suicert:/root/cert/"
       ];
     };
-    # s-ui-singbox = {
-    #   image = "docker.io/alireza7/s-ui-singbox:latest";
-    #   volumes = [
-    #     "singbox:/app/"
-    #     "suicert:/cert"
-    #   ];
-    #   extraOptions = [ "--pod=s-ui" ];
-    # };
     neko-chromium = {
       image = "ghcr.io/m1k1o/neko/arm-chromium:latest";
       ports = [
@@ -152,4 +111,5 @@
       ];
     };
   };
+  
 }

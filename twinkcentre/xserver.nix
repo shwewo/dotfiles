@@ -4,9 +4,11 @@
   services.xserver = {
     enable = true;
     desktopManager.gnome.enable = true;
+    desktopManager.xfce.enable = true;
     desktopManager.xterm.enable = false;
     displayManager.gdm.enable = true;
     displayManager.gdm.autoSuspend = false;
+    videoDrivers = [ "modesetting" ];
   };
 
   services.xrdp = {
@@ -25,7 +27,6 @@
   services.pipewire.pulse.enable = lib.mkForce false;
   services.pipewire.alsa.enable = lib.mkForce false;
   hardware.pulseaudio.enable = true;
-  hardware.graphics.enable = true;
 
   systemd.targets.sleep.enable = false;
   systemd.targets.suspend.enable = false;
@@ -40,4 +41,14 @@
     waypipe
     papirus-icon-theme
   ];
+
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      vpl-gpu-rt
+      libvdpau-va-gl
+      intel-media-driver
+      intel-vaapi-driver
+    ];
+  };
 }

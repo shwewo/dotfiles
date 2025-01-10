@@ -10,7 +10,6 @@
     secrets.url = "git+ssh://git@github.com/shwewo/secrets";
     agenix.url = "github:ryantm/agenix";
     impermanence.url = "github:nix-community/impermanence";
-    nixos-shell.url = "github:Mic92/nixos-shell";
     compress.url = "github:shwewo/compress";
     #yuzu-nixpkgs.url = "github:nixos/nixpkgs?rev=8debf2f9a63d54ae4f28994290437ba54c681c7b";
 

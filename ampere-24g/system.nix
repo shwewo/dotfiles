@@ -6,6 +6,8 @@
     ./hardware.nix
     ./network.nix
     ./services.nix
+    ./nginx.nix
+    ./ebmc.nix
     inputs.secrets.nixosModules.ampere-24g
   ];
 
