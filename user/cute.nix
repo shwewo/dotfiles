@@ -1,13 +1,13 @@
-{ pkgs, lib, inputs, config, self, stable, unstable, USER, ... }:
+{ pkgs, lib, inputs, config, self, stable, unstable, rolling, USER, ... }:
 
 let
   misc = import ./misc.nix {
-    inherit inputs pkgs lib config self stable unstable USER;
+    inherit pkgs lib inputs config self stable unstable rolling USER;
     rclonepass = config.age.secrets.rclone.path;
     backuppass = config.age.secrets.backup.path;
   };
   overrides = import ./overrides.nix {
-    inherit inputs pkgs lib config self stable unstable USER;
+    inherit pkgs lib inputs config self stable unstable rolling USER;
     dbpass = config.age.secrets.precise.path;
   };
   spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
@@ -31,7 +31,7 @@ in {
     maestral
     maestral-gui
     gocryptfs
-    unstable.localsend
+    rolling.localsend
     inotify-tools
     misc.cloudsync
     misc.fitsync
@@ -62,7 +62,7 @@ in {
     inputs.agenix.packages.${pkgs.system}.default
     misc.virt
     appimage-run
-    unstable.scrcpy
+    rolling.scrcpy
     tldr
     zenity
     distrobox
@@ -83,7 +83,7 @@ in {
     pavucontrol
     shwewo.audiorelay
     # Video
-    unstable.yt-dlp
+    rolling.yt-dlp
     kooha
     celluloid
     overrides.obs

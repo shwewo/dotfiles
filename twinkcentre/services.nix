@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, unstable, config, ... }:
+{ pkgs, lib, inputs, rolling, config, ... }:
 
 {
   services.matrix-conduit = {
@@ -77,7 +77,7 @@
       SystemCallFilter = [ "@system-service" ];
     };
 
-    script = "${unstable.qbittorrent-nox}/bin/qbittorrent-nox";
+    script = "${rolling.qbittorrent-nox}/bin/qbittorrent-nox";
   };
 
   services.minidlna = {
@@ -242,7 +242,10 @@
         listen.port = 3100;
       };
       notify = {
-        urls = [ "ntfy://ntfy.sh:443/${inputs.secrets.hosts.twinkcentre.ntfy_topic}" ];
+        urls = [ 
+          "ntfy://ntfy.sh:443/${inputs.secrets.hosts.twinkcentre.ntfy_topic}"
+          "discord://${inputs.secrets.hosts.twinkcentre.discord_webhook_token}@${inputs.secrets.hosts.twinkcentre.discord_webhook_id}"
+        ];
       };
     };
     collector = {

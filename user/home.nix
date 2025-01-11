@@ -1,4 +1,4 @@
-{ pkgs, inputs, unstable, USER, ... }:
+{ pkgs, inputs, rolling, USER, ... }:
 let
   lock-false = {
     Value = false;
@@ -21,7 +21,7 @@ in {
    
     programs.firefox = {
       enable = true;
-      package = unstable.firefox;
+      package = rolling.firefox;
       policies = {
         DisableTelemetry = true;
         DisableFirefoxStudies = true;

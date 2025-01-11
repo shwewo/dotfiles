@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, unstable, ... }:
+{ pkgs, lib, inputs, rolling, ... }:
 
 {
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
@@ -90,9 +90,9 @@
     wants = [ "network.target" "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
-      ExecStart = "${unstable.cloudflared}/bin/cloudflared tunnel --config=${pkgs.writeText "cloudflared.yml" ''{"credentials-file":"/run/agenix/cloudflared","ingress":[{"service":"http_status:404"}],"tunnel":"thinkcentre"}''} --no-autoupdate --protocol http2 --compression-quality 3 run thinkcentre";
+      ExecStart = "${rolling.cloudflared}/bin/cloudflared tunnel --metrics 127.0.0.1:42001 --config=${pkgs.writeText "cloudflared.yml" ''{"credentials-file":"/run/agenix/cloudflared","ingress":[{"service":"http_status:404"}],"tunnel":"thinkcentre"}''} --no-autoupdate --protocol http2 --compression-quality 3 run thinkcentre";
       DynamicUser = "yes";
-      Restart = "on-failure";
+      Restart = "always";
       RestartSec = 10;
     };
   };
@@ -116,10 +116,9 @@
       Type = "simple";
       User = "yggdrasil";
       Group = "yggdrasil"; 
-      ExecStart = "${unstable.yggstack}/bin/yggstack -useconffile /etc/yggdrasil/yggdrasil.conf -socks 127.0.0.1:5050 -remote-tcp 54921:127.0.0.1:54921";
+      ExecStart = "${rolling.yggstack}/bin/yggstack -useconffile /etc/yggdrasil/yggdrasil.conf -socks 127.0.0.1:5050 -remote-tcp 54921:127.0.0.1:54921";
     };
   };
-
 
   users.groups.sing-box = {};
   users.users.sing-box = {
@@ -153,8 +152,8 @@
       mkdir -p /etc/netns/sb
       echo "nameserver 10.24.0.1" > /etc/netns/sb/resolv.conf
 
-      cp /etc/resolv.conf /etc/sing-box/resolv.conf
-      echo "nameserver 127.0.0.1" > /etc/resolv.conf
+      # cp /etc/resolv.conf /etc/sing-box/resolv.conf
+      # echo "nameserver 127.0.0.1" > /etc/resolv.conf
 
       iw phy phy0 set netns name sb # WIFI ADAPTER MOVING TO MAIN NAMESPACE
     '';
@@ -169,7 +168,7 @@
       rmdir /etc/netns/sb
       rmdir /etc/netns
 
-      cat /etc/sing-box/resolv.conf > /etc/resolv.conf
+      # cat /etc/sing-box/resolv.conf > /etc/resolv.conf
     '';
 
     path = with pkgs; [ iptables iproute2 iw ];
@@ -178,15 +177,15 @@
   systemd.services.sing-box = {
     enable = true;
     after = [ "sing-box-pre.service" ];
-    wants = [ "sing-box-pre.service" "sing-box.service" ];
+    wants = [ "sing-box-pre.service" "lnxrouter.service" ];
     bindsTo = [ "sing-box-pre.service" ];
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = [ "multi-user.target" "sing-box-pre.service" ];
 
     serviceConfig = {
       Restart = "always";
       RestartSec = "15";
       Type = "simple";
-      ExecStart = "${unstable.sing-box}/bin/sing-box run --config /etc/sing-box/config-tun.json";
+      ExecStart = "${rolling.sing-box}/bin/sing-box run --config /etc/sing-box/config-tun.json";
       User = "sing-box";
       Group = "sing-box";
       WorkingDirectory = "/etc/sing-box";
@@ -200,7 +199,7 @@
     after = [ "network-online.target" "sing-box.service" ];
     wants = [ "network-online.target" "sing-box.service" ];
     bindsTo = [ "sing-box.service" ];
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = [ "multi-user.target" "sing-box.service" ];
 
     serviceConfig = {
       Restart = "on-failure";

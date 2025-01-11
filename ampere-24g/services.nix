@@ -1,4 +1,4 @@
-{ inputs, unstable, config, pkgs, ... }:
+{ inputs, rolling, config, pkgs, ... }:
 
 {
   services.matrix-conduit = {
@@ -31,7 +31,7 @@
       Restart = "always";
       RestartSec = "15";
       Type = "simple";
-      ExecStart = "${unstable.sing-box}/bin/sing-box run --config /etc/sing-box/proxy.json";
+      ExecStart = "${rolling.sing-box}/bin/sing-box run --config /etc/sing-box/proxy.json";
       User = "sing-box";
       Group = "sing-box";
       WorkingDirectory = "/etc/sing-box";

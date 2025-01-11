@@ -1,4 +1,4 @@
-{ pkgs, stable, unstable, dbpass, ... }:
+{ pkgs, rolling, dbpass, ... }:
 
 {
   obs = pkgs.wrapOBS {
@@ -9,8 +9,8 @@
   };
 
   vesktop = pkgs.vesktop.override { electron = pkgs.electron; withSystemVencord = false; };
-  lnxrouter = unstable.linux-router.override { useHaveged = true; };
-  obsidian = pkgs.obsidian.override { electron = stable.electron; };
+  lnxrouter = pkgs.linux-router.override { useHaveged = true; };
+  obsidian = pkgs.obsidian.override { electron = pkgs.electron; };
   
   kitty_wrapped = pkgs.writeScriptBin "kitty_wrapped" ''
     #!/usr/bin/env bash
@@ -87,7 +87,7 @@
   tor-browser = let
     bin = pkgs.writeScriptBin "tor-browser" ''
       #!/usr/bin/env bash
-      ${unstable.tor-browser}/bin/tor-browser --name tor-browser --class tor-browser $@
+      ${rolling.tor-browser}/bin/tor-browser --name tor-browser --class tor-browser $@
     '';
   in pkgs.stdenv.mkDerivation {
     name = "tor-browser";
@@ -95,7 +95,7 @@
     installPhase = ''
       mkdir -p $out/bin $out/share
       cp ${bin}/bin/tor-browser $out/bin/
-      ln -s ${unstable.tor-browser}/share/icons $out/share/icons
+      ln -s ${rolling.tor-browser}/share/icons $out/share/icons
       copyDesktopItems
     '';
     phases = [ "installPhase" ];

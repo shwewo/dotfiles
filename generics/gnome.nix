@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, unstable, USER, ... }: with lib.gvariant;
+{ pkgs, lib, inputs, rolling, USER, ... }: with lib.gvariant;
 
 let
   wallpaper = pkgs.stdenv.mkDerivation {
@@ -242,7 +242,7 @@ in {
     gsound
     libgda6
     adw-gtk3
-    unstable.papirus-icon-theme
+    rolling.papirus-icon-theme
     wallpaper
   ];
 }

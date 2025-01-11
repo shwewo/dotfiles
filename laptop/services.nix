@@ -1,4 +1,4 @@
-{ pkgs, unstable, ... }:
+{ pkgs, rolling, ... }:
 
 {
   systemd.tmpfiles.rules = [
@@ -54,7 +54,7 @@
       SystemCallFilter = [ "@system-service" ];
     };
 
-    script = "${unstable.qbittorrent-nox}/bin/qbittorrent-nox";
+    script = "${rolling.qbittorrent-nox}/bin/qbittorrent-nox";
   };
 
   services.minidlna = {

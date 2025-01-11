@@ -1,4 +1,4 @@
-{ inputs, pkgs, lib, unstable, ... }:
+{ inputs, pkgs, lib, rolling, ... }:
 
 {
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
@@ -120,7 +120,7 @@
       Restart = "always";
       RestartSec = "15";
       Type = "simple";
-      ExecStart = "${unstable.sing-box}/bin/sing-box run --config /etc/sing-box/config-tun.json";
+      ExecStart = "${rolling.sing-box}/bin/sing-box run --config /etc/sing-box/config-tun.json";
       User = "sing-box";
       Group = "sing-box";
       WorkingDirectory = "/etc/sing-box";
@@ -139,12 +139,12 @@
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = "yes";
-      ExecStart = "${unstable.amneziawg-tools}/bin/awg-quick up /etc/wireguard/warp0.conf ";
-      ExecStop = "${unstable.amneziawg-tools}/bin/awg-quick down /etc/wireguard/warp0.conf";
+      ExecStart = "${rolling.amneziawg-tools}/bin/awg-quick up /etc/wireguard/warp0.conf ";
+      ExecStop = "${rolling.amneziawg-tools}/bin/awg-quick down /etc/wireguard/warp0.conf";
     };
     
     preStart = "while ! ${pkgs.dig}/bin/nslookup engage.cloudflareclient.com > /dev/null 2>&1; do sleep 5; done"; 
-    path = [ unstable.amneziawg-go ];
+    path = [ rolling.amneziawg-go ];
   };
 
   systemd.services.warp-proxy = {
@@ -181,7 +181,7 @@
       Type = "simple";
       User = "yggdrasil";
       Group = "yggdrasil"; 
-      ExecStart = "${unstable.yggstack}/bin/yggstack -useconffile /etc/yggdrasil/yggdrasil.conf -socks 127.0.0.1:5050 -local-tcp 127.0.0.1:2500:[324:71e:281a:9ed3::fa11]:1080";
+      ExecStart = "${rolling.yggstack}/bin/yggstack -useconffile /etc/yggdrasil/yggdrasil.conf -socks 127.0.0.1:5050 -local-tcp 127.0.0.1:2500:[324:71e:281a:9ed3::fa11]:1080";
     };
   };
 }

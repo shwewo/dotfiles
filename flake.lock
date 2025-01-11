@@ -1514,6 +1514,22 @@
         "type": "github"
       }
     },
+    "rolling": {
+      "locked": {
+        "lastModified": 1736344531,
+        "narHash": "sha256-8YVQ9ZbSfuUk2bUf2KRj60NRraLPKPS0Q4QFTbc+c2c=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "bffc22eb12172e6db3c5dde9e3e5628f8e3e7912",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -1523,6 +1539,7 @@
         "impermanence": "impermanence",
         "lanzaboote": "lanzaboote",
         "nixpkgs": "nixpkgs_7",
+        "rolling": "rolling",
         "secrets": "secrets",
         "shwewo": "shwewo",
         "spicetify-nix": "spicetify-nix",
@@ -1579,11 +1596,11 @@
         "nixpkgs": "nixpkgs_9"
       },
       "locked": {
-        "lastModified": 1736399722,
-        "narHash": "sha256-7oBABTnnqRNAQGHL9PLnODEqfVarlil5gdPay5daQaU=",
+        "lastModified": 1736546373,
+        "narHash": "sha256-QLcGwHJVB3JXwBJXnxkzdopDeBL5IA9zgTI+n0ndYwQ=",
         "ref": "refs/heads/main",
-        "rev": "c6c5d07a27fd6aec0fca3bd62a46cfc6726e2efc",
-        "revCount": 65,
+        "rev": "ae669dd3fdfc86ccace1a91ccb15ae3c4c25e0ac",
+        "revCount": 67,
         "type": "git",
         "url": "ssh://git@github.com/shwewo/secrets"
       },
