@@ -1,15 +1,8 @@
 { pkgs, lib, inputs, config, self, stable, unstable, rolling, USER, ... }:
 
 let
-  misc = import ./misc.nix {
-    inherit pkgs lib inputs config self stable unstable rolling USER;
-    rclonepass = config.age.secrets.rclone.path;
-    backuppass = config.age.secrets.backup.path;
-  };
-  overrides = import ./overrides.nix {
-    inherit pkgs lib inputs config self stable unstable rolling USER;
-    dbpass = config.age.secrets.precise.path;
-  };
+  misc = import ./misc.nix { inherit inputs pkgs lib config self stable unstable rolling USER; };
+  overrides = import ./overrides.nix { inherit inputs pkgs lib config self stable unstable rolling USER; };
   spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
   shwewo = inputs.shwewo.packages.${pkgs.system};
 in {
@@ -54,7 +47,7 @@ in {
     overrides.vesktop
     # Administration
     mission-center
-    stable.libnotify
+    libnotify
     virt-manager
     virt-viewer
     misc.windows
@@ -171,7 +164,7 @@ in {
     };
     wireshark = { 
       enable = true;
-      package = stable.wireshark; 
+      package = pkgs.wireshark; 
     };
   };
 }

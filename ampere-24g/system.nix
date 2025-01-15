@@ -8,6 +8,7 @@
     ./services.nix
     ./nginx.nix
     ./ebmc.nix
+    ./proxy.nix
     inputs.secrets.nixosModules.ampere-24g
   ];
 

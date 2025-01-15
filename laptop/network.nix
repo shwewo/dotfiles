@@ -141,10 +141,19 @@
       RemainAfterExit = "yes";
       ExecStart = "${rolling.amneziawg-tools}/bin/awg-quick up /etc/wireguard/warp0.conf ";
       ExecStop = "${rolling.amneziawg-tools}/bin/awg-quick down /etc/wireguard/warp0.conf";
+      CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_PTRACE CAP_DAC_READ_SEARCH";
+      AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_PTRACE CAP_DAC_READ_SEARCH";
     };
     
     preStart = "while ! ${pkgs.dig}/bin/nslookup engage.cloudflareclient.com > /dev/null 2>&1; do sleep 5; done"; 
     path = [ rolling.amneziawg-go ];
+  };
+
+  users.groups.gogost = {};
+  users.users.gogost = {
+    group = "gogost";
+    uid = 10085;
+    isSystemUser = true;
   };
 
   systemd.services.warp-proxy = {
@@ -159,8 +168,27 @@
       Restart = "always";
       RestartSec = "15";
       Type = "simple";
-      ExecStart = "${inputs.shwewo.packages.${pkgs.system}.gogost}/bin/gost -L 'socks5://:2200?interface=warp0&udp=true'";
+      ExecStart = "${inputs.shwewo.packages.${pkgs.system}.gogost}/bin/gost -L 'socks5://127.0.0.1:2200?interface=warp0&udp=true'";
+      User = "gogost";
+      Group = "gogost";
+    };
+  };
+
+  systemd.services.direct-proxy = {
+    enable = true;
+    description = "direct";
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = {
+      Restart = "always";
+      RestartSec = "15";
+      Type = "simple";
+      ExecStart = "${inputs.shwewo.packages.${pkgs.system}.gogost}/bin/gost -L 'socks5://127.0.0.1:2600?interface=enp3s0f3u1u1u3,wlp1s0&udp=true'";
       DynamicUser = "yes";
+      User = "gogost";
+      Group = "gogost";
     };
   };
 

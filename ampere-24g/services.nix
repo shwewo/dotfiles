@@ -24,7 +24,6 @@
     enable = true;
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
-    bindsTo = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
@@ -66,50 +65,8 @@
     };
   };
 
-  virtualisation.oci-containers.containers = {
-    x-ui = {
-      image = "ghcr.io/mhsanaei/3x-ui:latest";
-      ports = [
-        "127.0.0.1:2053:2053"
-        "127.0.0.1:2054:2054"
-        "10.0.0.12:443:443"
-        "10.0.0.120:443:443"
-      ];
-      environment = {
-        XRAY_VMESS_AEAD_FORCED = "false";
-      };
-      volumes = [
-        "db:/etc/x-ui/"
-        "cert:/etc/x-ui-cert/"
-      ];
-    };
-    s-ui = {
-      ports = [
-        "127.0.0.1:2095:2095"
-        "127.0.0.1:2096:2096"
-      ];
-      image = "docker.io/alireza7/s-ui:latest";
-      volumes = [
-        "suidb:/usr/local/s-ui/db/"
-        "suicert:/root/cert/"
-      ];
-    };
-    neko-chromium = {
-      image = "ghcr.io/m1k1o/neko/arm-chromium:latest";
-      ports = [
-        "127.0.0.1:8080:8080"
-        "10.0.0.187:52000-52100:52000-52100/udp"
-      ];
-      environment = {
-        NEKO_SCREEN = "1920x1080@30";
-        NEKO_EPR = "52000-52100";
-        NEKO_ICELITE = "true";
-        NEKO_CONTROL_PROTECTION = "true";
-      };
-      environmentFiles = [
-        "${config.age.secrets.neko_chromium.path}"
-      ];
-    };
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "abuse@cloudflare.com";
   };
-  
 }

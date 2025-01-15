@@ -4,11 +4,15 @@
   networking.firewall.interfaces.enp0s6.allowedTCPPorts = [ 38409 ];
 
   networking.firewall.extraCommands = ''
+    iptables -A OUTPUT -p tcp --sport 8123 -m owner --gid-owner 10065 -j ACCEPT
+    iptables -A OUTPUT -p tcp --dport 8123 -m owner --gid-owner 10065 -j ACCEPT
     iptables -A OUTPUT -p tcp --sport 38409 -m owner --gid-owner 10065 -j ACCEPT
     iptables -A OUTPUT -p tcp --dport 38409 -m owner --gid-owner 10065 -j ACCEPT
     iptables -A OUTPUT -p tcp --sport 25589 -m owner --gid-owner 10065 -j ACCEPT
     iptables -A OUTPUT -p tcp --dport 25589 -m owner --gid-owner 10065 -j ACCEPT
 
+    ip6tables -A OUTPUT -p tcp --sport 8123 -m owner --gid-owner 10065 -j ACCEPT
+    ip6tables -A OUTPUT -p tcp --dport 8123 -m owner --gid-owner 10065 -j ACCEPT
     ip6tables -A OUTPUT -p tcp --sport 38409 -m owner --gid-owner 10065 -j ACCEPT
     ip6tables -A OUTPUT -p tcp --dport 38409 -m owner --gid-owner 10065 -j ACCEPT
     ip6tables -A OUTPUT -p tcp --sport 25589 -m owner --gid-owner 10065 -j ACCEPT
@@ -16,6 +20,25 @@
 
     iptables -A OUTPUT -m owner --gid-owner 10065 -j REJECT
     ip6tables -A OUTPUT -m owner --gid-owner 10065 -j REJECT
+  '';
+
+  networking.firewall.extraStopCommands = ''
+    iptables -D OUTPUT -p tcp --sport 8123 -m owner --gid-owner 10065 -j ACCEPT
+    iptables -D OUTPUT -p tcp --dport 8123 -m owner --gid-owner 10065 -j ACCEPT
+    iptables -D OUTPUT -p tcp --sport 38409 -m owner --gid-owner 10065 -j ACCEPT
+    iptables -D OUTPUT -p tcp --dport 38409 -m owner --gid-owner 10065 -j ACCEPT
+    iptables -D OUTPUT -p tcp --sport 25589 -m owner --gid-owner 10065 -j ACCEPT
+    iptables -D OUTPUT -p tcp --dport 25589 -m owner --gid-owner 10065 -j ACCEPT
+
+    ip6tables -D OUTPUT -p tcp --sport 8123 -m owner --gid-owner 10065 -j ACCEPT
+    ip6tables -D OUTPUT -p tcp --dport 8123 -m owner --gid-owner 10065 -j ACCEPT
+    ip6tables -D OUTPUT -p tcp --sport 38409 -m owner --gid-owner 10065 -j ACCEPT
+    ip6tables -D OUTPUT -p tcp --dport 38409 -m owner --gid-owner 10065 -j ACCEPT
+    ip6tables -D OUTPUT -p tcp --sport 25589 -m owner --gid-owner 10065 -j ACCEPT
+    ip6tables -D OUTPUT -p tcp --dport 25589 -m owner --gid-owner 10065 -j ACCEPT
+
+    iptables -D OUTPUT -m owner --gid-owner 10065 -j REJECT
+    ip6tables -D OUTPUT -m owner --gid-owner 10065 -j REJECT
   '';
 
   users.groups.ebmc = {

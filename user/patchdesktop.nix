@@ -1,10 +1,7 @@
-{ pkgs, lib, inputs, config, self, stable, unstable, USER, ... }: 
+{ pkgs, lib, inputs, config, self, stable, unstable, rolling, USER, ... }: 
 
 let
-  overrides = import ./overrides.nix { 
-    inherit inputs pkgs lib config self stable unstable USER; 
-    dbpass = config.age.secrets.precise.path;
-  };
+  overrides = import ./overrides.nix { inherit inputs pkgs lib config self stable unstable rolling USER; };
   
   patchDesktop = pkg: appName: from: to:
   with pkgs; let

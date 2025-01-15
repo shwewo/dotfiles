@@ -1,12 +1,12 @@
-{ pkgs, rclonepass, backuppass, USER, ... }:
+{ pkgs, config, USER, ... }:
 
 {
   cloudsync = pkgs.writeScriptBin "cloudsync"  ''
     #!/usr/bin/env bash
     ${pkgs.libnotify}/bin/notify-send "Syncing" "Compressing sync folder" --icon=globe
-    ${pkgs.p7zip}/bin/7z a -mhe=on /tmp/Sync.7z ~/Dropbox/Sync -p$(cat ${backuppass})
+    ${pkgs.p7zip}/bin/7z a -mhe=on /tmp/Sync.7z ~/Dropbox/Sync -p$(cat ${config.age.secrets.backup.path})
 
-    rclone_pass=$(cat ${rclonepass});
+    rclone_pass=$(cat ${config.age.secrets.rclone.path});
     ${pkgs.libnotify}/bin/notify-send "Syncing" "Syncing koofr" --icon=globe;
     echo "Syncing koofr...";
     RCLONE_CONFIG_PASS="$rclone_pass" rclone -vvvv copy /tmp/Sync.7z koofr:
@@ -32,7 +32,7 @@
     fi
 
     sudo ${pkgs.fuse}/bin/fusermount -uz ~/.encryptedfit
-    ${pkgs.gocryptfs}/bin/gocryptfs -passfile=${backuppass} /run/media/${USER}/samsungfit/Encrypted ~/.encryptedfit && \
+    ${pkgs.gocryptfs}/bin/gocryptfs -passfile=${config.age.secrets.backup.path} /run/media/${USER}/samsungfit/Encrypted ~/.encryptedfit && \
     ${pkgs.rsync}/bin/rsync -r -t -v --progress -s ~/Dropbox --delete ~/.encryptedfit/ --exclude "Sync/" --exclude ".dropbox.cache" && \
     ${pkgs.rsync}/bin/rsync -r -t -v --progress -s ~/Dropbox/Sync --delete /run/media/${USER}/samsungfit && \
     sync && \

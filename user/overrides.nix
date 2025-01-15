@@ -1,4 +1,4 @@
-{ pkgs, rolling, dbpass, ... }:
+{ pkgs, config, rolling, ... }:
 
 {
   obs = pkgs.wrapOBS {
@@ -27,7 +27,7 @@
     bin = pkgs.writeScriptBin "keepassxc" ''
       #!/usr/bin/env bash
       QT_QPA_PLATFORM=wayland
-      cat ${dbpass} | ${pkgs.keepassxc}/bin/keepassxc --pw-stdin ~/Dropbox/Sync/passwords.kdbx &
+      cat ${config.age.secrets.precise.path} | ${pkgs.keepassxc}/bin/keepassxc --pw-stdin ~/Dropbox/Sync/passwords.kdbx &
       gdbus call --session --dest org.gnome.Shell --object-path /de/lucaswerkmeister/ActivateWindowByTitle --method de.lucaswerkmeister.ActivateWindowByTitle.activateByWmClass 'KeePassXC'
     '';
   in pkgs.stdenv.mkDerivation {
