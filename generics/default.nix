@@ -1,4 +1,4 @@
-{ pkgs, stable, USER, ... }:
+{ pkgs, inputs, USER, ... }:
 {
   users.users.${USER} = {
     isNormalUser = true;
@@ -99,7 +99,7 @@
     lua5_4
     python3
     # Fish shell
-    stable.any-nix-shell
+    inputs.nixpkgs2311.legacyPackages.${pkgs.system}.any-nix-shell
     fd
     sysz
     grc

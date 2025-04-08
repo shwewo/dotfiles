@@ -31,6 +31,17 @@ in {
         "Icon=discord"
       ]
     )
+
+    (patchDesktop rolling.ayugram-desktop "com.ayugram.desktop" 
+      [
+        "Name=AyuGram Desktop"
+        "Icon=ayugram"
+      ]
+      [
+        "Name=Telegram Desktop"
+        "Icon=telegram"
+      ]
+    )
     # (patchDesktop inputs.shwewo.packages.${pkgs.system}.tdesktop "org.telegram.desktop" 
     #   [
     #     "Exec=telegram-desktop -- %u"

@@ -6,8 +6,9 @@
     stable.url = "github:nixos/nixpkgs/nixos-24.11";
     unstable.url = "github:nixos/nixpkgs?rev=d70bd19e0a38ad4790d3913bf08fcbfc9eeca507";
     rolling.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs2311.url = "github:nixos/nixpkgs/nixos-23.11";
 
-    tdesktop.url = "github:shwewo/telegram-desktop-patched";
+    # tdesktop.url = "github:shwewo/telegram-desktop-patched";
     secrets.url = "git+ssh://git@github.com/shwewo/secrets";
     agenix.url = "github:ryantm/agenix";
     impermanence.url = "github:nix-community/impermanence";

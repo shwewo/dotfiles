@@ -23,7 +23,7 @@
     ];
   };
 
-  time.timeZone = "Europe/Moscow";
+  time.timeZone = "Europe/Paris";
 
   virtualisation = {
     podman = {

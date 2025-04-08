@@ -80,42 +80,42 @@
     script = "${rolling.qbittorrent-nox}/bin/qbittorrent-nox";
   };
 
-  services.minidlna = {
-    enable = true;
-    openFirewall = true;
-    settings = {
-      friendly_name = "twinkcentre";
-      media_dir = [
-      "V,/media/toshiba/torrents" #Videos files are located here
-      ];
-      inotify = "yes";
-      log_level = "error";
-    };
-  };
+  # services.minidlna = {
+  #   enable = true;
+  #   openFirewall = true;
+  #   settings = {
+  #     friendly_name = "twinkcentre";
+  #     media_dir = [
+  #     "V,/media/toshiba/torrents" #Videos files are located here
+  #     ];
+  #     inotify = "yes";
+  #     log_level = "error";
+  #   };
+  # };
 
-  systemd.services.minidlna-watch = {
-    enable = true;
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Restart = "always";
-      RestartSec = "5";
-    };
-    path = with pkgs; [ inotify-tools ];
-    script = ''
-      #!/bin/sh
+  # systemd.services.minidlna-watch = {
+  #   enable = true;
+  #   wantedBy = [ "multi-user.target" ];
+  #   serviceConfig = {
+  #     Restart = "always";
+  #     RestartSec = "5";
+  #   };
+  #   path = with pkgs; [ inotify-tools ];
+  #   script = ''
+  #     #!/bin/sh
 
-      WATCH_DIR="/media/toshiba/torrents"
+  #     WATCH_DIR="/media/toshiba/torrents"
 
-      inotifywait -m -r -e modify,create,delete "$WATCH_DIR" |
-      while read -r directory event file; do
-        echo "$directory$file $event, waiting..."
-        sleep 100
-        rm -rf /var/cache/minidlna/
-        systemctl restart minidlna.service
-        echo "cache clear complete" 
-      done 
-    '';
-  };
+  #     inotifywait -m -r -e modify,create,delete "$WATCH_DIR" |
+  #     while read -r directory event file; do
+  #       echo "$directory$file $event, waiting..."
+  #       sleep 100
+  #       rm -rf /var/cache/minidlna/
+  #       systemctl restart minidlna.service
+  #       echo "cache clear complete" 
+  #     done 
+  #   '';
+  # };
 
   services.prometheus = {
     enable = true;

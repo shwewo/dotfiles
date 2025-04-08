@@ -13,7 +13,7 @@
   ];
   
   system.stateVersion = "23.11";
-  time.timeZone = "Europe/Moscow";
+  time.timeZone = "Europe/Paris";
   i18n.defaultLocale = lib.mkForce "fr_FR.UTF-8";
   i18n.supportedLocales = lib.mkForce [
     "en_GB.UTF-8/UTF-8"

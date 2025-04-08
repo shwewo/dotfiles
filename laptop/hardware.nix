@@ -14,7 +14,7 @@
   boot.kernelPackages = pkgs.linuxPackages_6_6;
 
   boot.initrd.luks = {
-    yubikeySupport = true;
+    yubikeySupport = false;
     devices."cryptroot" = {
       device = "/dev/disk/by-uuid/b81f1605-968a-4db0-9a1d-4d32d749567b";
       preLVM = true;

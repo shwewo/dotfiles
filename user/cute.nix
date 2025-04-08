@@ -15,7 +15,7 @@ in {
   users.users.${USER}.packages = (with pkgs; [
     # Browsers
     ungoogled-chromium
-    shwewo.ruchrome
+    google-chrome
     shwewo.ephemeralbrowser
     overrides.tor-browser
     # FilesLAND
@@ -43,7 +43,7 @@ in {
     overrides.lnxrouter
     # Messengers
     element-desktop
-    shwewo.tdesktop
+    rolling.ayugram-desktop
     overrides.vesktop
     # Administration
     mission-center
@@ -92,7 +92,6 @@ in {
     # Secrets
     overrides.keepassxc
     yubioath-flutter
-    yubikey-manager-qt
     # Misc
     monero-gui
     steamcmd

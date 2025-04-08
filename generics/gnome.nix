@@ -93,7 +93,7 @@ in {
           favorite-apps = [
             "firefox.desktop" 
             "vesktop.desktop"
-            "org.telegram.desktop.desktop" 
+            "com.ayugram.desktop.desktop" 
             "spotify.desktop" 
             "kitty.desktop" 
             "org.gnome.Nautilus.desktop"
@@ -223,14 +223,8 @@ in {
   environment.systemPackages = with pkgs; [
     gnomeExtensions.appindicator
     gnomeExtensions.activate-window-by-title
-    (gnomeExtensions.unite.overrideAttrs (oldAttrs: {
-      src = pkgs.fetchFromGitHub {
-        owner = "hardpixel";
-        repo = "unite-shell";
-        rev = "master";
-        hash = "sha256-OyxNibjQn7VBEdAPUaGd0MEgzCzpaFqViMKhF52haUI=";
-      };
-    }))
+    gnomeExtensions.unite
+    gnomeExtensions.pano
     gnomeExtensions.gsconnect
     gnomeExtensions.hide-keyboard-layout
     gnomeExtensions.always-indicator

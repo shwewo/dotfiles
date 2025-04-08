@@ -16,6 +16,7 @@
       interfaces = {
         enp0s6 = {
           allowedTCPPorts = [ 80 ];
+          allowedUDPPorts = [ 51820 ];
         };
       };
     };
@@ -76,6 +77,31 @@
     };
 
     path = with pkgs; [ bash iproute2 ];
+  };
+
+  networking.wireguard.interfaces = {
+    wg0 = {
+      ips = [ "10.66.66.1/24" ];
+      listenPort = 51820;
+
+      postSetup = ''
+        ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s 10.66.66.0/24 -o enp3s0 -j MASQUERADE
+      '';
+
+      postShutdown = ''
+        ${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -s 10.66.66.0/24 -o enp3s0 -j MASQUERADE
+      '';
+
+      privateKeyFile = "/etc/wireguard/private.key";
+
+      peers = [
+        # twcnt
+        {
+          publicKey = "HcIgI63kFRhUvFtH5OJaDMM8vA1mp/JhpqutJySUgHU=";
+          allowedIPs = [ "10.66.66.0/24" ];
+        }
+      ];
+    };
   };
 
   services.openssh = {

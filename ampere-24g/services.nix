@@ -9,6 +9,17 @@
         server_name = "matrix.${inputs.secrets.misc.domain}";
         turn_uris = [ "turn:coturn.${inputs.secrets.misc.domain}?transport=udp" ];
         turn_secret = inputs.secrets.misc.coturn_secret;
+        proxy = {
+          by_domain = [{
+            url = "http://localhost:2080";
+            include = [ 
+              "matrix.org" "*.matrix.org"
+              "ntfy.sh" "*.ntfy.sh"
+              "${inputs.secrets.hosts.twinkcentre.matrix_proxy.clk}" "*.${inputs.secrets.hosts.twinkcentre.matrix_proxy.clk}"
+            ];
+            exclude = [];
+          }];
+        };
       };
     };
   };

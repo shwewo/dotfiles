@@ -65,7 +65,7 @@ in {
             (extension "darkreader" "addon@darkreader.org")
             (extension "firefox-color" "FirefoxColor@mozilla.com")
             (extension "multi-account-containers" "@testpilot-containers")
-            (extension "jkcs" "{6d9f4f04-2499-4fed-ae4a-02c5658c5d00}")
+            # (extension "jkcs" "{6d9f4f04-2499-4fed-ae4a-02c5658c5d00}")
             (extension "keepassxc-browser" "keepassxc-browser@keepassxc.org")
             (extension "new-window-without-toolbar" "new-window-without-toolbar@tkrkt.com")
             (extension "open-in-spotify-desktop" "{04a727ec-f366-4f19-84bc-14b41af73e4d}")
@@ -103,27 +103,31 @@ in {
     programs.vscode = {
       enable = true;
       package = pkgs.vscodium;
-      extensions = with pkgs.vscode-extensions; [
-        rust-lang.rust-analyzer
-        jnoortheen.nix-ide
-      ];
-      enableUpdateCheck = false;
-      userSettings = {
-        "window.titleBarStyle" = "custom";
-        "nix.enableLanguageServer"= true;
-        "nix.serverPath" = "${pkgs.nil}/bin/nil";
-        "nix.serverSettings" = {
-          nil = {
-            formatting = {
-              command = [ "${pkgs.nixfmt-classic}/bin/nixfmt" ];
+      profiles.default = {
+        enableUpdateCheck = false;
+        
+        extensions = with pkgs.vscode-extensions; [
+          rust-lang.rust-analyzer
+          jnoortheen.nix-ide
+        ];
+      
+        userSettings = {
+          "window.titleBarStyle" = "custom";
+          "nix.enableLanguageServer"= true;
+          "nix.serverPath" = "${pkgs.nil}/bin/nil";
+          "nix.serverSettings" = {
+            nil = {
+              formatting = {
+                command = [ "${pkgs.nixfmt-classic}/bin/nixfmt" ];
+              };
             };
           };
-        };
-        "terminal.integrated.localEchoEnabled" = "off";
-        "terminal.integrated.localEchoStyle" = "dim";
-        "remote.SSH.enableAgentForwarding" = false;
-        "[json]" = {
-          "editor.defaultFormatter" =  "esbenp.prettier-vscode";
+          "terminal.integrated.localEchoEnabled" = "off";
+          "terminal.integrated.localEchoStyle" = "dim";
+          "remote.SSH.enableAgentForwarding" = false;
+          "[json]" = {
+            "editor.defaultFormatter" =  "esbenp.prettier-vscode";
+          };
         };
       };
     };
