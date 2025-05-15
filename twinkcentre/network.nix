@@ -77,6 +77,19 @@
     '';
   };
 
+  systemd.services.wireproxy-eu-par1 = {
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = { 
+      Restart = "on-failure"; 
+      RestartSec = "15"; 
+      Type = "simple";
+      ExecStart = "${pkgs.wireproxy}/bin/wireproxy -c /etc/wireguard/eupar1.conf";
+    };
+  };
+
   users.users.root.openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ9blPuLoJkCfTl88JKpqnSUmybCm7ci5EgWAUvfEmwb" ];
 
   users.groups.cloudflared = {};
@@ -90,7 +103,7 @@
     wants = [ "network.target" "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
-      ExecStart = "${rolling.cloudflared}/bin/cloudflared tunnel --metrics 127.0.0.1:42001 --config=${pkgs.writeText "cloudflared.yml" ''{"credentials-file":"/run/agenix/cloudflared","ingress":[{"service":"http_status:404"}],"tunnel":"thinkcentre"}''} --no-autoupdate --post-quantum --compression-quality 3 run thinkcentre";
+      ExecStart = "${pkgs.cloudflared}/bin/cloudflared tunnel --metrics 127.0.0.1:42001 --config=${pkgs.writeText "cloudflared.yml" ''{"credentials-file":"/run/agenix/cloudflared","ingress":[{"service":"http_status:404"}],"tunnel":"thinkcentre"}''} --no-autoupdate --post-quantum --compression-quality 3 run thinkcentre";
       DynamicUser = "yes";
       Restart = "always";
       RestartSec = 10;

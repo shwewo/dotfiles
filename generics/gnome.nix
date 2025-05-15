@@ -229,6 +229,7 @@ in {
     gnomeExtensions.hide-keyboard-layout
     gnomeExtensions.always-indicator
     gnomeExtensions.overview-background
+    gnomeExtensions.cloudflare-warp-toggle
     gnome-sound-recorder
     gnome-tweaks
     nautilus

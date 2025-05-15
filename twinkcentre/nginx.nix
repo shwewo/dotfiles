@@ -1,6 +1,11 @@
 { pkgs, ... }:
 
 {
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "abuse@cloudflare.com";
+  };
+
   users.groups.files = {
     gid = 10055;
   };
@@ -54,6 +59,16 @@
     locations."/".extraConfig = ''
       try_files $uri $uri/ =404;
       autoindex on;
+    '';
+  };
+
+  services.nginx.virtualHosts."http" = {
+    forceSSL = false;
+    listen = [{port = 80;  addr="0.0.0.0"; ssl=false;}];
+    locations."/.well-known/acme-challenge/".extraConfig = ''
+      root /var/lib/acme/acme-challenge/;
+      try_files $uri $uri/ =404;
+      autoindex off;
     '';
   };
 }

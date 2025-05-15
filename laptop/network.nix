@@ -57,6 +57,8 @@
     ports = [ 34812 ]; 
   };
 
+  services.cloudflare-warp.enable = true;
+
   # For tun mode, remember setting to networking.firewall.checkReversePath = "loose";
 
   users.groups.sing-box = {};
