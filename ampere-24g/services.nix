@@ -41,13 +41,15 @@
       Restart = "always";
       RestartSec = "15";
       Type = "simple";
-      Environment."ENABLE_DEPRECATED_SPECIAL_OUTBOUNDS" = true;
       ExecStart = "${rolling.sing-box}/bin/sing-box run --config /etc/sing-box/proxy.json";
       User = "sing-box";
       Group = "sing-box";
       WorkingDirectory = "/etc/sing-box";
       CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_PTRACE CAP_DAC_READ_SEARCH";
       AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_PTRACE CAP_DAC_READ_SEARCH";
+      Environment = {
+        "ENABLE_DEPRECATED_SPECIAL_OUTBOUNDS" = true;
+      };
     };
   };
 
