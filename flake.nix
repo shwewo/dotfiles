@@ -16,21 +16,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    shwewo = {
-      url = "github:shwewo/flake";
-      #url = "/home/cute/dev/flake";
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-stable.follows = "stable";
     };
 
     lanzaboote = {
-      url = "github:nix-community/lanzaboote/v0.4.1";
-      inputs.nixpkgs.follows = "unstable";
+      url = "github:nix-community/lanzaboote";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        rust-overlay.follows = "rust-overlay";
+      };
     };
 
     tuwunel = {
       url = "github:matrix-construct/tuwunel";
-      inputs.nixpkgs.follows = "unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -47,12 +48,12 @@
 
     specialArgs = { inherit inputs self USER; };
   in {
-    nixosConfigurations.twinkcentre = unstable.lib.nixosSystem {
+    nixosConfigurations.twinkcentre = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux"; 
       specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; rolling = rolling_amd64; }; 
       modules = [ ./twinkcentre/system.nix ];
     };
-    nixosConfigurations.ampere-24g = unstable.lib.nixosSystem {
+    nixosConfigurations.ampere-24g = nixpkgs.lib.nixosSystem {
       system = "aarch64-linux"; 
       specialArgs = specialArgs // { stable = stable_aarch64; unstable = unstable_aarch64; rolling = rolling_aarch64; }; 
       modules = [ ./ampere-24g/system.nix ];
