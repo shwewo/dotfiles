@@ -52,7 +52,7 @@
   services.vnstat.enable = true;
   users.defaultUserShell = pkgs.fish;
 
-  environment.sessionVariables.FLAKE = "/home/${USER}/dev/dotfiles";
+  environment.sessionVariables.NH_OS_FLAKE = "/home/${USER}/dev/dotfiles";
   environment.systemPackages = with pkgs; [
     # Network
     dnsutils
