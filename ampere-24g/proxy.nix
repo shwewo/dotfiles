@@ -34,6 +34,11 @@
     wants = [ "network-online.target" "s-ui-mount-cert.service" ];
     wantedBy = [ "multi-user.target" ];
 
+    environment = {
+      ENABLE_DEPRECATED_SPECIAL_OUTBOUNDS = "true";
+      ENABLE_DEPRECATED_WIREGUARD_OUTBOUND = "true";
+    };
+
     serviceConfig = {
       Restart = "on-failure";
       RestartSec = "5";
