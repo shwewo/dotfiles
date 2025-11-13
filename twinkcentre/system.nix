@@ -56,7 +56,6 @@
   ];
 
   services.smartd.enable = true;
-  services.udev.packages = with pkgs; [ android-udev-rules ];
   environment.systemPackages = with pkgs; [ 
     virtiofsd 
     swtpm

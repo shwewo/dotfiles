@@ -63,5 +63,5 @@
 
   programs.nix-ld.enable = true;
 
-  services.udev.packages = with pkgs; [ yubikey-personalization android-udev-rules ];
+  services.udev.packages = with pkgs; [ yubikey-personalization ];
 }
