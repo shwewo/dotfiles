@@ -36,7 +36,7 @@
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
-    environment.ENABLE_DEPRECATED_SPECIAL_OUTBOUNDS = true;
+    environment.ENABLE_DEPRECATED_SPECIAL_OUTBOUNDS = "true";
 
 
     serviceConfig = {
