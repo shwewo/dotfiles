@@ -3,7 +3,7 @@
 {
   services.matrix-conduit = {
     enable = false;
-    package = inputs.conduwuit.packages.${pkgs.system}.default; 
+    package = inputs.tuwunel.packages.${pkgs.system}.default; 
     settings = {
       global = {
         server_name = "matrix.${inputs.secrets.misc.domain}";

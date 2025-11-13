@@ -3,22 +3,13 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    stable.url = "github:nixos/nixpkgs/nixos-24.11";
-    unstable.url = "github:nixos/nixpkgs?rev=d70bd19e0a38ad4790d3913bf08fcbfc9eeca507";
+    stable.url = "github:nixos/nixpkgs/nixos-25.05";
+    unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     rolling.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs2311.url = "github:nixos/nixpkgs/nixos-23.11";
 
-    # tdesktop.url = "github:shwewo/telegram-desktop-patched";
     secrets.url = "git+ssh://git@github.com/shwewo/secrets";
     agenix.url = "github:ryantm/agenix";
-    impermanence.url = "github:nix-community/impermanence";
     compress.url = "github:shwewo/compress";
-    #yuzu-nixpkgs.url = "github:nixos/nixpkgs?rev=8debf2f9a63d54ae4f28994290437ba54c681c7b";
-
-    spicetify-nix = {
-      url = "github:Gerg-L/spicetify-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -37,8 +28,8 @@
       inputs.nixpkgs.follows = "unstable";
     };
 
-    conduwuit = {
-      url = "github:girlbossceo/conduwuit";
+    tuwunel = {
+      url = "github:matrix-construct/tuwunel";
       inputs.nixpkgs.follows = "unstable";
     };
   };
@@ -56,11 +47,6 @@
 
     specialArgs = { inherit inputs self USER; };
   in {
-    nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux"; 
-      specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; rolling = rolling_amd64; }; 
-      modules = [ ./laptop/system.nix ];
-    };
     nixosConfigurations.twinkcentre = unstable.lib.nixosSystem {
       system = "x86_64-linux"; 
       specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; rolling = rolling_amd64; }; 
