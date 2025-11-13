@@ -1,7 +1,7 @@
 { inputs, rolling, config, pkgs, ... }:
 
 {
-  services.matrix-conduit = {
+  services.matrix-tuwunel = {
     enable = true;
     package = inputs.tuwunel.packages.${pkgs.system}.default; 
     settings = {
