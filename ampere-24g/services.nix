@@ -3,7 +3,6 @@
 {
   services.matrix-tuwunel = {
     enable = true;
-    package = inputs.tuwunel.packages.${pkgs.system}.default; 
     settings = {
       global = {
         server_name = "matrix.${inputs.secrets.misc.domain}";
@@ -36,7 +35,7 @@
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
-    
+
     environment = {
       ENABLE_DEPRECATED_SPECIAL_OUTBOUNDS = "true";
       ENABLE_DEPRECATED_WIREGUARD_OUTBOUND = "true";
