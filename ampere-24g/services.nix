@@ -36,12 +36,13 @@
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
+    environment.ENABLE_DEPRECATED_SPECIAL_OUTBOUNDS = true;
+
 
     serviceConfig = {
       Restart = "always";
       RestartSec = "15";
       Type = "simple";
-      Environment.ENABLE_DEPRECATED_SPECIAL_OUTBOUNDS = true;
       ExecStart = "${rolling.sing-box}/bin/sing-box run --config /etc/sing-box/proxy.json";
       User = "sing-box";
       Group = "sing-box";
