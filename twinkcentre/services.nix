@@ -317,7 +317,7 @@
     hostName = "nextcloud.${inputs.secrets.misc.domain}";
     configureRedis = true;
     config.adminpassFile = "${config.age.secrets.nextcloud-admin.path}";
-    config.dbtype = "pgsql";
+    config.dbtype = "sqlite";
     extraAppsEnable = true;
     extraApps = {
       inherit (config.services.nextcloud.package.packages.apps) contacts calendar tasks notes;
