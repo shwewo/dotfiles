@@ -7,7 +7,7 @@
     unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     rolling.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    immich_intermediate = "github:nixos/nixpkgs?rev=46224bfbaeaeea01782d54e3dda5bfb4af94309d";
+    immich_intermediate.url = "github:nixos/nixpkgs?rev=46224bfbaeaeea01782d54e3dda5bfb4af94309d";
 
     secrets.url = "git+ssh://git@github.com/shwewo/secrets";
     agenix.url = "github:ryantm/agenix";
