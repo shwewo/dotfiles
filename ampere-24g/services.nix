@@ -15,7 +15,7 @@
         #     include = [ 
         #       "matrix.org" "*.matrix.org"
         #       "ntfy.sh" "*.ntfy.sh"
-        #       "${inputs.secrets.hosts.twinkcentre.matrix_proxy.clk}" "*.${inputs.secrets.hosts.twinkcentre.matrix_proxy.clk}"
+        #       "$`œ{inputs.secrets.hosts.twinkcentre.matrix_proxy.clk}" "*.${inputs.secrets.hosts.twinkcentre.matrix_proxy.clk}"
         #     ];
         #     exclude = [];
         #   }];

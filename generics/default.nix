@@ -98,12 +98,12 @@
     sysz
     grc
     bat
-    fishPlugins.done
+    # fishPlugins.done
     fishPlugins.grc
     fishPlugins.autopair
-    fishPlugins.z
+    # fishPlugins.z
     fishPlugins.fzf-fish
-    fishPlugins.sponge
+    # fishPlugins.sponge
     iosevka
     # Misc
     (pkgs.writeScriptBin "shell" ''

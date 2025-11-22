@@ -304,7 +304,7 @@
 
   services.immich = {
     enable = true;
-    package = inputs.immich_intermediate.legacyPackages.${pkgs.system}.immich;
+    # package = inputs.immich_intermediate.legacyPackages.${pkgs.system}.immich;
     mediaLocation = "/data/immich";
   };
 
