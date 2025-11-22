@@ -136,7 +136,7 @@
   services.tailscale = {
     enable = true;
     openFirewall = true;
-    extraDaemonFlags = [
+    extraSetFlags = [
       "--accept-dns=false"
     ];
   };
