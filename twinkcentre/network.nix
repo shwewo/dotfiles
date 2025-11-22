@@ -133,6 +133,13 @@
     };
   };
 
+  services.tailscale = {
+    enable = true;
+    openFirewall = true;
+    extraDaemonFlags = [
+      "--accept-dns=false"
+    ];
+  };
   # users.groups.sing-box = {};
   # users.users.sing-box = {
   #   group = "sing-box";

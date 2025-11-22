@@ -40,10 +40,7 @@
   '';
   programs.fish.shellAliases = {
     ls = "${pkgs.lsd}/bin/lsd";
-    search = "nix-search -d -m 5 -p";
-    reboot = ''read -P "Do you REALLY want to reboot? (y/N) " answer; and string match -q -r '^[Yy]' $answer; and ${pkgs.systemd}/bin/reboot'';
     rebuild = ''nh os switch -- --option warn-dirty false'';
-    rollback = ''sudo nixos-rebuild switch --rollback --flake ~/dev/dotfiles/'';
     ssh = "TERM=xterm-256color /run/current-system/sw/bin/ssh";
   };
 
@@ -106,17 +103,6 @@
     # fishPlugins.sponge
     iosevka
     # Misc
-    (pkgs.writeScriptBin "shell" ''
-      #!/usr/bin/env bash
-      packages=""
-      for package in "$@"; do
-        packages+="nixpkgs#$package "
-      done
-      packages=$(echo "$packages" | xargs)
-
-      NIXPKGS_ALLOW_UNFREE=1 .any-nix-wrapper fish --impure $packages
-    '')
-    (pkgs.writeScriptBin "run" ''NIXPKGS_ALLOW_UNFREE=1 nix run --impure nixpkgs#"$1" -- "''${@:2}"'')
     (pkgs.fzf.overrideAttrs (oldAttrs: {
       postInstall = oldAttrs.postInstall + ''
         # Remove shell integrations
