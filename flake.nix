@@ -45,7 +45,6 @@
 
   outputs = inputs @ { self, nixpkgs, stable, unstable, rolling, ... }: 
   let
-    USER = "cute";
     stable_amd64 = import inputs.stable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
     unstable_amd64 = import inputs.unstable { system = "x86_64-linux"; config = { allowUnfree = true; }; };
     rolling_amd64 = import inputs.rolling { system = "x86_64-linux"; config = { allowUnfree = true; }; };
@@ -54,17 +53,24 @@
     unstable_aarch64 = import inputs.unstable { system = "aarch64-linux"; config = { allowUnfree = true; }; };
     rolling_aarch64 = import inputs.rolling { system = "aarch64-linux"; config = { allowUnfree = true; }; };
 
-    specialArgs = { inherit inputs self USER; };
+    specialArgs = { inherit inputs self; };
   in {
     nixosConfigurations.twinkcentre = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux"; 
-      specialArgs = specialArgs // { stable = stable_amd64; unstable = unstable_amd64; rolling = rolling_amd64; }; 
+      specialArgs = specialArgs // { user = "cute"; stable = stable_amd64; unstable = unstable_amd64; rolling = rolling_amd64; }; 
       modules = [ ./twinkcentre/system.nix ];
     };
+
     nixosConfigurations.ampere-24g = nixpkgs.lib.nixosSystem {
       system = "aarch64-linux"; 
-      specialArgs = specialArgs // { stable = stable_aarch64; unstable = unstable_aarch64; rolling = rolling_aarch64; }; 
+      specialArgs = specialArgs // { user = "cute"; stable = stable_aarch64; unstable = unstable_aarch64; rolling = rolling_aarch64; }; 
       modules = [ ./ampere-24g/system.nix ];
+    };
+
+    nixosConfigurations.layer7-x86-fra = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux"; 
+      specialArgs = specialArgs // { user = "cunt"; stable = stable_amd64; unstable = unstable_amd64; rolling = rolling_amd64; }; 
+      modules = [ ./layer7-x86-fra/system.nix ];
     };
   };
 }

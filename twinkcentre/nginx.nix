@@ -52,16 +52,6 @@
     '';
   };
 
-  services.nginx.virtualHosts."internal" = {
-    forceSSL = false;
-    listen = [{port = 35782;  addr="127.0.0.1"; ssl=false;}];
-    root = "/var/www/internal";
-    locations."/".extraConfig = ''
-      try_files $uri $uri/ =404;
-      autoindex on;
-    '';
-  };
-
   services.nginx.virtualHosts."http" = {
     forceSSL = false;
     listen = [{port = 80;  addr="0.0.0.0"; ssl=false;}];
