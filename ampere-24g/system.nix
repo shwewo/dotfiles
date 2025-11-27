@@ -14,16 +14,6 @@
 
   time.timeZone = "Europe/Stockholm";
 
-  # system.activationScripts.create-s-ui-pod = ''
-  #   ${pkgs.podman}/bin/podman pod exists s-ui || ${pkgs.podman}/bin/podman pod create -n s-ui -p '127.0.0.1:2095:2095' -p '127.0.0.1:2096:2096'
-  # '';
-
-  # systemd.services.create-marzban-tmp = {
-  #   serviceConfig.Type = "oneshot";
-  #   wantedBy = [ "podman-marzban.service" ];
-  #   script = "${pkgs.coreutils}/bin/mkdir /tmp/.marzban-uds/ || true";
-  # };
-
   virtualisation = {
     podman = {
       enable = true;

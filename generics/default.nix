@@ -46,6 +46,7 @@
         ssh = "TERM=xterm-256color /run/current-system/sw/bin/ssh";
       };
       promptInit = ''
+        nix-your-shell fish | source
         set TERM "xterm-256color"
         set fish_greeting
         set fish_color_command blue
@@ -104,6 +105,7 @@
     sysz
     grc
     bat
+    nix-your-shell
     # fishPlugins.done
     fishPlugins.grc
     fishPlugins.autopair

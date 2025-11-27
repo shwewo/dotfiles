@@ -312,22 +312,6 @@
     "d /data/immich 770 immich immich"
   ];
 
-  services.nextcloud = {
-    enable = true;
-    package = pkgs.nextcloud31;
-    hostName = "nextcloud.${inputs.secrets.misc.domain}";
-    configureRedis = true;
-    config.adminpassFile = "${config.age.secrets.nextcloud-admin.path}";
-    config.dbtype = "sqlite";
-    extraAppsEnable = true;
-    extraApps = {
-      inherit (config.services.nextcloud.package.packages.apps) contacts calendar tasks notes;
-    };
-    settings = {
-      overwriteprotocol = "https";
-    };
-  };
-
   services.ntfy-sh = {
     enable = true;
     settings = {
@@ -335,51 +319,4 @@
       base-url = "https://ntfy.${inputs.secrets.misc.domain}";
     };
   };
-
-  # services.plex = {
-  #   enable = true;
-  #   openFirewall = true;
-  #   dataDir = "/data/plex";
-  # };
-
-  # services.murmur = {
-  #   enable = true;
-  #   openFirewall = true;
-  # };
-
-  # systemd.services.murmur.wantedBy = lib.mkForce [];
-
-  # services.guacamole-server = {
-  #   enable = true;
-  #   package = inputs.nixpkgs2311.legacyPackages.${pkgs.system}.guacamole-server;
-  #   userMappingXml = pkgs.writeText "guacamoleusermappingxml" ''
-  #     <?xml version="1.0" encoding="UTF-8"?>
-  #     <user-mapping>
-  #         <authorize
-  #             username="guacamole"
-  #             password="${inputs.secrets.hosts.twinkcentre.guacamole-password}"
-  #             encoding="sha256">
-
-  #           <connection name="win10-ltsc">
-  #               <protocol>rdp</protocol>
-  #               <param name="hostname">192.168.122.100</param>
-  #               <param name="port">3389</param>
-  #               <param name="ignore-cert">true</param>
-  #               <param name="enable-drive">true</param>
-  #               <param name="drive-path">/var/private/guacamole</param>
-  #           </connection>
-  #         </authorize>
-  #     </user-mapping>
-  #   '';
-  # };
-
-  # services.guacamole-client = {
-  #   enable = true;
-  #   package = inputs.nixpkgs2311.legacyPackages.${pkgs.system}.guacamole-client;
-  #   enableWebserver = true;
-  #   settings = {
-  #     guacd-port = 4822;
-  #     guacd-hostname = "127.0.0.1";
-  #   };
-  # };
 }

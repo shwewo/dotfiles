@@ -60,11 +60,6 @@
       fsType = "zfs";
     };
 
-  fileSystems."/var/lib/nextcloud" = 
-    { device = "zpool/nextcloud";
-      fsType = "zfs";
-    };
-
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/9013-F29F";
       fsType = "vfat";

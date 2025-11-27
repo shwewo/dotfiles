@@ -15,28 +15,6 @@
       checkReversePath = "loose";
       trustedInterfaces = [ "sb0" "sb-veth0" "virbr0" "virbr1" "virbr2" ];
       # allowedTCPPorts = [
-      #   # Compress
-      #   5100
-      #   # Qbittorrent 
-      #   50000
-      #   4780
-      #   # win10 rdp
-      #   33880
-      #   # win10-ltsc rdp
-      #   33890
-      #   # win11 rdp
-      #   33895
-      #   # win11-d rdp
-      #   33900
-      # ];
-      # allowedUDPPorts = [
-      #   # Qbittorrent 
-      #   50000
-      # ];
-      # interfaces.virbr0.allowedTCPPorts = [ 53 ];
-      # interfaces.virbr0.allowedUDPPorts = [ 53 67 ];
-      # networking.firewall.interfaces.lxdbr0.allowedUDPPorts = [ 53 67 ];
-      # networking.firewall.interfaces.lxdbr0.allowedTCPPorts = [ 53 ];
     };
     
     networkmanager = {

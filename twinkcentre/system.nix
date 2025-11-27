@@ -85,19 +85,8 @@
       daily = 1;
       monthly = 4;
     };
-    
-    datasets."zpool/nextcloud" = {
-      autosnap = true;
-      autoprune = true;
-      weekly = 1;
-      monthly = 2;
-    };
   };
 
-  # services.udev.extraRules = ''
-  #   ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0924", ATTR{idProduct}=="3d69", RUN+="${pkgs.libvirt}/bin/virsh start win10-ltsc"
-  #   ACTION=="remove", SUBSYSTEM=="usb", ENV{ID_VENDOR_FROM_DATABASE}=="Xerox", RUN+="${pkgs.libvirt}/bin/virsh shutdown win10-ltsc"
-  # '';
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [ nil cargo rustup ];
@@ -106,13 +95,6 @@
     enable = true;
     clean.enable = true;
     clean.extraArgs = "--keep-since 4d --keep 3";
-  };
-
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
   };
   
   system.stateVersion = "23.11"; # Did you read the comment?

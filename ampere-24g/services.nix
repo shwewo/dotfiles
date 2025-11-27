@@ -61,26 +61,6 @@
     description = "bots account";
   };
 
-  systemd.services.musicbot = {
-    enable = true;
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
-
-    serviceConfig = {
-      Restart = "always";
-      RestartSec = "30";
-      User = "bots";
-      Group = "bots";
-      Type = "simple";
-      WorkingDirectory = "/home/bots/musicbot";
-      ExecStart = "${pkgs.proxychains-ng}/bin/proxychains4 -f ${pkgs.writeText "proxychains.conf" ''
-        [ProxyList]
-        socks5 127.0.0.1 2080
-      ''} ${pkgs.openjdk}/bin/java -jar musicbot.jar";
-    };
-  };
-
   security.acme = {
     acceptTerms = true;
     defaults.email = "abuse@cloudflare.com";
